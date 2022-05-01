@@ -5,13 +5,13 @@ import { Container, Button, Row, Col } from 'react-bootstrap';
 
 function App() {
   return (
-    <Container fluid className="h-100 bg-warning">
+    <Container fluid className="h-100">
       <Row className="h-100">
-        <Col className="bg-danger" xs={12}>
+        <Col className="bg-danger clickable" xs={12}>
           HEADER
-          <Button>test2</Button>
+          <Button onClick={() => alert('test')}>test2</Button>
         </Col>
-        <Col className="bg-danger align-self-end" xs={12}>
+        <Col className="bg-danger align-self-end clickable" xs={12}>
           FOOTER
         </Col>
       </Row>
