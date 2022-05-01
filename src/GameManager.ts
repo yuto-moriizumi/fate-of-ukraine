@@ -33,8 +33,9 @@ export default class GameManager {
     stage.addListener('click', (e: any) => {
       console.log('clicked!');
     });
+    let num = 0;
     const text = new PIXI.Text(
-      'ウクライナ人民共和国ゲーム',
+      num.toString(),
       new PIXI.TextStyle({
         fontSize: 80,
         fill: 0xffffff,
@@ -43,12 +44,11 @@ export default class GameManager {
       })
     );
     text.anchor.set(0.5, 0.5);
-    text.position.set(renderer.width * 0.5, renderer.height * 0.4);
+    text.position.set(renderer.width * 0.5, renderer.height * 0.7);
+    text.interactive = true;
     text.on('click', (e: any) => {
-      console.log('clicked!');
-    });
-    text.addListener('click', (e: any) => {
-      console.log('clicked!');
+      num += 1;
+      text.text = num.toString();
     });
     stage.addChild(text);
 
