@@ -1,0 +1,12 @@
+@startuml
+class default {
+    +test: string
+}
+class Wheel {
+    +size: number
+}
+class Car {
+    +wheel: Wheel[]
+}
+Car --> "*" Wheel
+@enduml
