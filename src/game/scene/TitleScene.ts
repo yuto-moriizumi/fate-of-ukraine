@@ -1,10 +1,16 @@
 import * as PIXI from 'pixi.js';
 import { GameManager } from '../GameManager';
 import { Scene } from './Scene';
+import { SelectionScene } from './SelectionScene';
 
 export class TitleScene extends Scene {
   private text!: PIXI.Text;
   private readonly textAppealDuration: number = 150;
+
+  constructor() {
+    super();
+    this.onResourceLoaded();
+  }
 
   //リソースリストを作成し返却する
   createInitialResourceList() {
@@ -68,7 +74,7 @@ export class TitleScene extends Scene {
 
   private onPointerDown() {
     //次のシーン
-    // GameManager.loadScene(new SelectScene());
+    GameManager.instance.loadScene(new SelectionScene());
   }
 
   public update(dt: number) {
