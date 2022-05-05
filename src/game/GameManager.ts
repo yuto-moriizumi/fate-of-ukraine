@@ -1,10 +1,12 @@
 import * as PIXI from 'pixi.js';
-import { Country } from './Country';
+import { Country } from './data/Country';
+import { Scene } from './scene/Scene';
 
 export class GameManager {
   public static instance: GameManager;
   public game!: PIXI.Application;
   public countries!: Set<Country>;
+  private scene!: Scene;
 
   constructor(app: PIXI.Application) {
     if (GameManager.instance) {
@@ -80,5 +82,16 @@ export class GameManager {
       },
       false
     );
+  }
+
+  //シーンをロードする
+  //新しいシーンのリソース読み込みと、古いシーンのトランジションを同時に開始する
+  //いずれも完了したら、新しいシーンのトランジションを開始する
+  public loadScene(newScene: Scene): void {
+    if (this.scene) {
+      this.scene.destroy();
+    }
+    this.scene = newScene;
+    this.game.stage.addChild(newScene);
   }
 }

@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { GameManager } from '../data/GameManager';
+import { GameManager } from '../GameManager';
 import { Province } from '../data/Provice';
 
 export class MapSprite extends PIXI.Sprite {

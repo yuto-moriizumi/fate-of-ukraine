@@ -27,7 +27,7 @@ class Province {
     +hasPeaceAccess(country: Country): boolean
     +hasAccess(country: Country): boolean
 }
-class default {
+class Division {
     -currentHp: number
     -location: Province
     -destination: Province
@@ -64,10 +64,11 @@ class MapSprite {
     -{static} BORDER_COLOR: "#000000"
     -{static} BORDER_WIDTH: 5
 }
+Combat --> "1" Division
 Province --> "1" Country
-default --> "1" Province
-default --> "1" Combat
-default --> "1" Country
+Division --> "1" Province
+Division --> "1" Combat
+Division --> "1" Country
 GameManager --> "1" Country
 MapSprite --> "1" Province
 @enduml

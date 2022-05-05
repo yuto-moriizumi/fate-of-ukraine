@@ -4,7 +4,7 @@ import './ui/index.css';
 import App from './ui/App';
 import reportWebVitals from './ui/reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { GameManager } from './game/data/GameManager';
+import { GameManager } from './game/GameManager';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

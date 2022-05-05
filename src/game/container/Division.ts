@@ -3,7 +3,7 @@ import { Combat } from '../data/Combat';
 import { Country } from '../data/Country';
 import { Province } from '../data/Provice';
 
-export default class Division extends PIXI.Container {
+export class Division extends PIXI.Container {
   private currentHp!: number;
   private location!: Province;
   private destination!: Province;
