@@ -1,10 +1,10 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import './ui/index.css';
+import App from './ui/App';
+import reportWebVitals from './ui/reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import GameManager from './GameManager';
+import GameManager from './game/GameManager';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
