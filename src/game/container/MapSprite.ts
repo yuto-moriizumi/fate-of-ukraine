@@ -9,7 +9,7 @@ export class MapSprite extends PIXI.Sprite {
   private pressKeys: Set<string> = new Set<string>();
   //   private mode: MapMode;
 
-  constructor(texture: PIXI.Texture) {
+  constructor(texture: PIXI.Texture | undefined) {
     super(texture);
   }
 
