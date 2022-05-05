@@ -1,8 +1,10 @@
 import * as PIXI from 'pixi.js';
+import { Country } from './Country';
 
-export default class GameManager {
+export class GameManager {
   public static instance: GameManager;
   public game!: PIXI.Application;
+  public countries!: Set<Country>;
 
   constructor(app: PIXI.Application) {
     if (GameManager.instance) {

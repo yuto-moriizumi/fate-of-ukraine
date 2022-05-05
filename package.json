@@ -23,7 +23,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "tplant": "tplant --input ./src/**/*.ts --output ./class.puml -A"
+    "tplant": "tplant --input ./src/game/**/*.ts --output ./class.puml -A"
   },
   "eslintConfig": {
     "extends": [
