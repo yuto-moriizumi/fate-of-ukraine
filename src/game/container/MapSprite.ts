@@ -9,8 +9,32 @@ export class MapSprite extends PIXI.Sprite {
   private pressKeys: Set<string> = new Set<string>();
   //   private mode: MapMode;
 
+  public static from(source: PIXI.TextureSource) {
+    return new MapSprite(PIXI.Texture.from(source));
+  }
+
   constructor(texture: PIXI.Texture | undefined) {
     super(texture);
+
+    // GameManager.instance.game.renderer.addSystem(EventSystem, 'events');
+
+    this.interactive = true;
+    this.on('click', () => {
+      console.log('test2');
+    });
+    //拡大縮小
+
+    const renderer = GameManager.instance.game.renderer;
+    renderer.plugins.interaction.autoPreventDefault = false;
+    renderer.view.style.touchAction = 'auto';
+
+    this.on('wheel', (e: PIXI.FederatedWheelEvent) => {
+      console.log('test');
+      // e.preventDefault();
+      if (e.deltaY > 0) this.scale.set(this.scale.x / 1.25);
+      else this.scale.set(this.scale.x * 1.25);
+    });
+    // document.body.addEventListener();
   }
 
   private getProvinceIdFromPoint(position: PIXI.Point): string {
