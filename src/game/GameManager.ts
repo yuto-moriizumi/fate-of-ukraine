@@ -5,7 +5,6 @@ import { Scene } from './scene/Scene';
 export class GameManager {
   public static instance: GameManager;
   public game!: PIXI.Application;
-  public countries!: Set<Country>;
   private scene!: Scene;
 
   constructor(app: PIXI.Application) {
