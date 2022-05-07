@@ -7,6 +7,10 @@ export class Province {
   private y = 0;
   private neighbours = new Set<Province>();
 
+  constructor(id: string) {
+    this.id = id;
+  }
+
   public isNextTo(province: Province): boolean {
     // return this._neighbours.some((p) => p === province.getId());
     return true;
