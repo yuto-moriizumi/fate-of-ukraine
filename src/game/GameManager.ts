@@ -6,6 +6,7 @@ import { TitleScene } from './scene/TitleScene';
 export class GameManager {
   public static instance: GameManager;
   public game!: PIXI.Application;
+  public countries!: Set<Country>;
   private scene!: Scene;
   private data!: SaveData;
 
