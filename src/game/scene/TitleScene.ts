@@ -10,6 +10,8 @@ export class TitleScene extends Scene {
   constructor() {
     super();
     this.onResourceLoaded();
+    //onResourceLoadedは本来、Pixi.jsが提供するリソースローダがロード終わったときにリソースが呼び出される想定です。
+    //ただここでは簡便のためシーンインスタンス生成時に直接呼び出しています。
   }
 
   //リソースリストを作成し返却する
