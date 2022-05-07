@@ -52,11 +52,7 @@ export class GameManager {
     //タイトル画面をロード
     this.instance.loadScene(new TitleScene());
   }
-  /**
-   * シーンをロードする
-   * @param {Scene} newScene
-   * @memberof GameManager
-   */
+
   public loadScene(newScene: Scene): void {
     if (this.scene) {
       this.scene.destroy();
