@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { Country } from './data/Country';
+import { SaveData } from './data/SaveData';
 import { Scene } from './scene/Scene';
 import { TitleScene } from './scene/TitleScene';
 
@@ -7,6 +7,7 @@ export class GameManager {
   public static instance: GameManager;
   public game!: PIXI.Application;
   private scene!: Scene;
+  private data!: SaveData;
 
   constructor(app: PIXI.Application) {
     if (GameManager.instance) {
@@ -50,6 +51,15 @@ export class GameManager {
 
     //タイトル画面をロード
     this.instance.loadScene(new TitleScene());
+
+    //ゲームデータのロード
+    const PROVINCES_FILE = 'provinces.json';
+    PIXI.Loader.shared.add(PROVINCES_FILE).load(() => {
+      this.instance.data = Object.assign(
+        new SaveData(),
+        PIXI.Loader.shared.resources[PROVINCES_FILE].data
+      );
+    });
   }
 
   public loadScene(newScene: Scene): void {
