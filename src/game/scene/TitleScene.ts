@@ -1,10 +1,18 @@
 import * as PIXI from 'pixi.js';
 import { GameManager } from '../GameManager';
 import { Scene } from './Scene';
+import { SelectionScene } from './SelectionScene';
 
 export class TitleScene extends Scene {
   private text!: PIXI.Text;
   private readonly textAppealDuration: number = 150;
+
+  constructor() {
+    super();
+    this.onResourceLoaded();
+    //onResourceLoadedは本来、Pixi.jsが提供するリソースローダがロード終わったときにリソースが呼び出される想定です。
+    //ただここでは簡便のためシーンインスタンス生成時に直接呼び出しています。
+  }
 
   //リソースリストを作成し返却する
   createInitialResourceList() {
@@ -68,7 +76,7 @@ export class TitleScene extends Scene {
 
   private onPointerDown() {
     //次のシーン
-    // GameManager.loadScene(new SelectScene());
+    GameManager.instance.loadScene(new SelectionScene());
   }
 
   public update(dt: number) {

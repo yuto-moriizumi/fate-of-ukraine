@@ -22,8 +22,8 @@ reportWebVitals();
 
 window.onload = () => {
   GameManager.start({
-    glWidth: document.body.offsetWidth * 0.95,
-    glHeight: document.body.offsetHeight * 0.95,
+    glWidth: document.body.offsetWidth,
+    glHeight: document.body.offsetHeight,
     backgroundColor: 0x222222,
   });
 };
