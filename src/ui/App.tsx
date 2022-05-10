@@ -7,9 +7,13 @@ function App() {
   return (
     <Container fluid className="h-100">
       <Row className="h-100">
-        <Col className="bg-danger clickable" xs={12}>
-          HEADER
-          <Button onClick={() => alert('test')}>test2</Button>
+        <Col xs={12}>
+          <Row>
+            <Col xs={12} className="clickable bg-danger">
+              HEADER
+              <Button onClick={() => alert('test')}>test2</Button>
+            </Col>
+          </Row>
         </Col>
         <Col className="bg-danger align-self-end clickable" xs={12}>
           FOOTER

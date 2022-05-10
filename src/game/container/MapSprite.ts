@@ -1,15 +1,39 @@
 import * as PIXI from 'pixi.js';
 import { GameManager } from '../GameManager';
 import { Province } from '../data/Provice';
+import { Viewport } from 'pixi-viewport';
 
 export class MapSprite extends PIXI.Sprite {
   private static readonly BORDER_COLOR = '#000000'; //プロヴィンス境界の色
   private static readonly BORDER_WIDTH = 5; //境界線のだいたいの太さ
   private provinceMap!: Uint8Array;
   private pressKeys: Set<string> = new Set<string>();
-  //   private mode: MapMode;
+  private static readonly INITIAL_SCALE = 5;
 
-  constructor(texture: PIXI.Texture) {
+  public static createViewport(source: string) {
+    const loader = PIXI.Loader.shared;
+    const viewport = new Viewport();
+    loader.add(source).load(() => {
+      const sprite = new MapSprite(loader.resources[source].texture);
+      viewport.addChild(sprite);
+      const { width, height } = GameManager.instance.game.renderer;
+
+      viewport
+        .drag()
+        .pinch()
+        .wheel()
+        .clampZoom({
+          maxScale: 10,
+          minScale: Math.min(width / sprite.width, height / sprite.height),
+        })
+        .clamp({ direction: 'all' })
+        .setZoom(this.INITIAL_SCALE)
+        .moveCenter(3200, 500);
+    });
+    return viewport;
+  }
+
+  constructor(texture: PIXI.Texture | undefined) {
     super(texture);
   }
 
