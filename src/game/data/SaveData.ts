@@ -10,7 +10,7 @@ export class SaveData {
     if (json) this.load(json);
   }
 
-  public load(json: object) { Object.assign(this, json); };
+  public load(json: object) { Object.assign(this, json); }
 
   private set provinces(provinces: ProvinceScheme) {
     Object.entries(provinces.provinces).forEach(([key, value]) =>
