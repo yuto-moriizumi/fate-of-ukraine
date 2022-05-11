@@ -55,10 +55,12 @@ export class GameManager {
     this.instance.loadScene(new TitleScene());
 
     //ゲームデータのロード
-    const PROVINCES_FILE = 'provinces.json';
-    PIXI.Loader.shared.add(PROVINCES_FILE).load(() =>
-      this.instance.data = new SaveData(PIXI.Loader.shared.resources[PROVINCES_FILE].data)
-    );
+    const PROVINCES_FILE = 'assets/provinces.json';
+    const loader = PIXI.Loader.shared;
+    loader.add(PROVINCES_FILE).load(() => {
+      this.instance.data = new SaveData(loader.resources[PROVINCES_FILE].data);
+      console.log(this.instance.data);
+    });
   }
 
   public loadScene(newScene: Scene): void {
