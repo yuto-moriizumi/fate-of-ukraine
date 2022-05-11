@@ -16,6 +16,10 @@ export class SelectionScene extends Scene {
     this.addChild(this.map);
   }
 
+  public getSelectedProvince(): Observable<Province> {
+    return this.selectedProvince;
+  }
+
   update() {
     return;
   }
