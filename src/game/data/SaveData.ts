@@ -6,9 +6,11 @@ export class SaveData {
   public countries!: Set<Country>;
   private _provinces!: Map<string, Province>;
 
-  constructor(json: object) {
-    Object.assign(this, json);
+  constructor(json?: object) {
+    if (json) this.load(json);
   }
+
+  public load(json: object) { Object.assign(this, json); };
 
   private set provinces(provinces: ProvinceScheme) {
     Object.entries(provinces.provinces).forEach(([key, value]) =>
