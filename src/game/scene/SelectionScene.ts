@@ -1,18 +1,18 @@
 import { Viewport } from 'pixi-viewport';
 import * as PIXI from 'pixi.js';
-import { MapSprite } from '../container/MapSprite';
+import { MapViewport } from '../container/MapViewport';
 import { Scene } from './Scene';
 
 export class SelectionScene extends Scene {
-  private map: Viewport;
+  private map: MapViewport;
   constructor() {
     super();
     const MAP_SRC = 'provinces.bmp';
-    this.map = MapSprite.createViewport(MAP_SRC);
+    this.map = new MapViewport(MAP_SRC);
     this.addChild(this.map);
   }
 
   update() {
-    return;
+    this.map.update();
   }
 }

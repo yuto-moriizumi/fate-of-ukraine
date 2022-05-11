@@ -3,22 +3,22 @@ import { GameManager } from '../GameManager';
 import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
 
-export class MapSprite extends PIXI.Sprite {
+export class MapViewport extends Viewport {
   private static readonly BORDER_COLOR = '#000000'; //プロヴィンス境界の色
   private static readonly BORDER_WIDTH = 5; //境界線のだいたいの太さ
   private provinceMap!: Uint8Array;
   private pressKeys: Set<string> = new Set<string>();
   private static readonly INITIAL_SCALE = 5;
 
-  public static createViewport(source: string) {
+  constructor(source: string) {
+    super();
     const loader = PIXI.Loader.shared;
-    const viewport = new Viewport();
     loader.add(source).load(() => {
-      const sprite = new MapSprite(loader.resources[source].texture);
-      viewport.addChild(sprite);
+      const sprite = new PIXI.Sprite(loader.resources[source].texture);
+      this.addChild(sprite);
       const { width, height } = GameManager.instance.game.renderer;
 
-      viewport
+      this
         .drag()
         .pinch()
         .wheel()
@@ -27,14 +27,11 @@ export class MapSprite extends PIXI.Sprite {
           minScale: Math.min(width / sprite.width, height / sprite.height),
         })
         .clamp({ direction: 'all' })
-        .setZoom(this.INITIAL_SCALE)
+        .setZoom(MapViewport.INITIAL_SCALE)
         .moveCenter(3200, 500);
     });
-    return viewport;
-  }
 
-  constructor(texture: PIXI.Texture | undefined) {
-    super(texture);
+    this.on("click", () => { console.log("hi") });
   }
 
   private getProvinceIdFromPoint(position: PIXI.Point): string {
@@ -72,17 +69,17 @@ export class MapSprite extends PIXI.Sprite {
     return '';
   }
 
-  //   private getClickedProvince(e: PIXI.interaction.InteractionEvent): Province {
-  //     //Uinit8Array上でのインデックスを算出
-  //     const position = e.data.getLocalPosition(this);
-  //     const province = this.getProvince(position);
-  //     if (!province) return null; //プロヴィンスが存在しなければ何もしない
-  //     console.log('clicked point', position.x, position.y);
+  // private getClickedProvince(e: PIXI.interaction.InteractionEvent): Province {
+  //   //Uinit8Array上でのインデックスを算出
+  //   const position = e.data.getLocalPosition(this);
+  //   const province = this.getProvince(position);
+  //   if (!province) return null; //プロヴィンスが存在しなければ何もしない
+  //   console.log('clicked point', position.x, position.y);
 
-  //     console.log('selected province', province);
+  //   console.log('selected province', province);
 
-  //     return province;
-  //   }
+  //   return province;
+  // }
 
   public update() {
     //シーン側から定期的に呼び出すこと
