@@ -11,7 +11,7 @@ export class SelectionScene extends Scene {
 
   constructor() {
     super();
-    const MAP_SRC = 'provinces.bmp';
+    const MAP_SRC = 'assets/provinces.png';
     this.map = new MapViewport(MAP_SRC, this.selectedProvince);
     this.addChild(this.map);
   }

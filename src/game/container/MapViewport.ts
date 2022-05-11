@@ -2,8 +2,6 @@ import * as PIXI from 'pixi.js';
 import { GameManager } from '../GameManager';
 import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
-import { Scene } from '../scene/Scene';
-import { SelectionScene } from '../scene/SelectionScene';
 import { Observable } from '../util/Observable';
 
 export class MapViewport extends Viewport {
