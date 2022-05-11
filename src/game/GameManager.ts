@@ -9,7 +9,7 @@ export class GameManager {
   public game!: PIXI.Application;
   public countries!: Set<Country>;
   private scene!: Scene;
-  private data!: SaveData;
+  public data!: SaveData;
 
   constructor(app: PIXI.Application) {
     if (GameManager.instance) {

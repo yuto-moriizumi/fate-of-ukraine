@@ -2,21 +2,30 @@ import * as PIXI from 'pixi.js';
 import { GameManager } from '../GameManager';
 import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
+import { Scene } from '../scene/Scene';
+import { SelectionScene } from '../scene/SelectionScene';
+import { Observable } from '../util/Observable';
 
 export class MapViewport extends Viewport {
   private static readonly BORDER_COLOR = '#000000'; //プロヴィンス境界の色
   private static readonly BORDER_WIDTH = 5; //境界線のだいたいの太さ
-  private provinceMap!: Uint8Array;
+  private spritePixelArray!: Uint8Array;
   private pressKeys: Set<string> = new Set<string>();
   private static readonly INITIAL_SCALE = 5;
+  private provinceRef!: Observable<Province>;
+  private sprite!: PIXI.Sprite;
 
-  constructor(source: string) {
+  constructor(source: string, provinceRef: Observable<Province>) {
     super();
+    this.provinceRef = provinceRef;
+
     const loader = PIXI.Loader.shared;
     loader.add(source).load(() => {
-      const sprite = new PIXI.Sprite(loader.resources[source].texture);
-      this.addChild(sprite);
-      const { width, height } = GameManager.instance.game.renderer;
+      this.sprite = new PIXI.Sprite(loader.resources[source].texture);
+      const renderer = GameManager.instance.game.renderer;
+      this.spritePixelArray = renderer.plugins.extract.pixels(this.sprite);
+      this.addChild(this.sprite);
+      const { width, height } = renderer;
 
       this
         .drag()
@@ -24,81 +33,60 @@ export class MapViewport extends Viewport {
         .wheel()
         .clampZoom({
           maxScale: 10,
-          minScale: Math.min(width / sprite.width, height / sprite.height),
+          minScale: Math.min(width / this.sprite.width, height / this.sprite.height),
         })
         .clamp({ direction: 'all' })
         .setZoom(MapViewport.INITIAL_SCALE)
         .moveCenter(3200, 500);
     });
 
-    this.on("click", () => { console.log("hi") });
+    // this.interactive = true;
+    this.on("click", this.getClickedProvince);
   }
 
   private getProvinceIdFromPoint(position: PIXI.Point): string {
-    //console.log(position);
+    console.log(position);
 
-    // const idx =
-    //   (Math.floor(Math.max(0, position.y)) * this.defaultWidth +
-    //     Math.floor(Math.max(0, position.x))) *
-    //   4;
+    const idx =
+      (Math.floor(Math.max(0, position.y)) * this.sprite.width +
+        Math.floor(Math.max(0, position.x))) *
+      4;
 
-    // //プロヴィンスIDに変換
-    // //console.log(this.provinceMap[idx + 0]);
-    // let provinceId;
-    // try {
-    //   provinceId = PIXI.utils.hex2string(
-    //     PIXI.utils.rgb2hex([
-    //       this.provinceMap[idx + 0] / 255,
-    //       this.provinceMap[idx + 1] / 255,
-    //       this.provinceMap[idx + 2] / 255,
-    //     ])
-    //   );
-    // } catch (error) {
-    //   console.log(error);
-    //   console.log(
-    //     position.x,
-    //     position.y,
-    //     idx,
-    //     this.provinceMap.length,
-    //     this.defaultWidth,
-    //     this.defaultHeight
-    //   );
-    //   throw new Error('停止');
-    // }
-    // return provinceId;
-    return '';
+    //プロヴィンスIDに変換
+    //console.log(this.provinceMap[idx + 0]);
+    let provinceId;
+    try {
+      provinceId = PIXI.utils.hex2string(
+        PIXI.utils.rgb2hex([
+          this.spritePixelArray[idx + 0] / 255,
+          this.spritePixelArray[idx + 1] / 255,
+          this.spritePixelArray[idx + 2] / 255,
+        ])
+      );
+    } catch (error) {
+      console.log(error);
+      console.log(
+        position.x,
+        position.y,
+        idx,
+        this.spritePixelArray.length,
+        this.sprite.width,
+        this.sprite.height
+      );
+      throw new Error('停止');
+    }
+    return provinceId;
   }
 
-  // private getClickedProvince(e: PIXI.interaction.InteractionEvent): Province {
-  //   //Uinit8Array上でのインデックスを算出
-  //   const position = e.data.getLocalPosition(this);
-  //   const province = this.getProvince(position);
-  //   if (!province) return null; //プロヴィンスが存在しなければ何もしない
-  //   console.log('clicked point', position.x, position.y);
+  private getClickedProvince(e: PIXI.InteractionEvent): void {
+    //Uinit8Array上でのインデックスを算出
+    const position = e.data.getLocalPosition(this);
+    const province = this.getProvinceByPoint(position);
+    console.log('clicked point', position.x, position.y);
+    if (!province) return; //プロヴィンスが存在しなければ何もしない
+    console.log('selected province', province);
 
-  //   console.log('selected province', province);
-
-  //   return province;
-  // }
-
-  public update() {
-    //シーン側から定期的に呼び出すこと
-    this.pressKeys.forEach((key) => {
-      switch (key) {
-        case 'a':
-          this.x += 2;
-          break;
-        case 'd':
-          this.x -= 2;
-          break;
-        case 'w':
-          this.y += 2;
-          break;
-        case 's':
-          this.y -= 2;
-          break;
-      }
-    });
+    this.provinceRef.val = province;
   }
 
   /**
@@ -180,29 +168,30 @@ export class MapViewport extends Viewport {
     // console.log('重心走査終了');
   }
 
-  private getProvince(position: PIXI.Point): Province {
-    // const provinceId = this.getProvinceIdFromPoint(position);
-    // const data = GameManager.instance.data;
+  private getProvinceByPoint(position: PIXI.Point): Province | null {
+    const provinceId = this.getProvinceIdFromPoint(position);
+    const data = GameManager.instance.data;
 
-    // if (!provinceId) return null; //provinceIdがnullの時は何もしない
-    // if (provinceId == Atlas.BORDER_COLOR) return null; //境界線の時は何もしない
+    if (!provinceId) return null; //provinceIdがnullの時は何もしない
 
-    // let province = data.getProvinces().get(provinceId);
+    const provinces = data.getProvinces();
+    let province = provinces.get(provinceId);
 
-    // if (!province) {
-    //   //プロビンスデータが無かったら新規作成
-    //   province = new Province(provinceId);
-    //   province.setOwner(GameManager.instance.data.getCountry('Rebels'));
-    //   data.setProvince(provinceId, province);
-    //   province.setCoord(this.getBarycenter(position));
-    // } else {
-    //   //もし選択したプロヴィンスに座標情報が用意されていなかったら追加する
-    //   const point = province.getCoord();
-    //   if (point.x == 0 && point.y == 0)
-    //     province.setCoord(this.getBarycenter(position));
-    // }
-    // return province;
-    return null as unknown as Province;
+    if (!province) {
+      //プロビンスデータが無かったら新規作成(データを事前に用意したのでここが実行されることはないはず)
+      province = new Province(provinceId);
+      provinces.set(provinceId, province);
+      const countries = data.getCountries();
+      const owner = countries.get('Rebels');
+      if (!owner) return province;
+      province.setOwner(owner);
+    } else {
+      //もし選択したプロヴィンスに座標情報が用意されていなかったら追加する
+      // const point = province.getCoord();
+      // if (point.x == 0 && point.y == 0)
+      //   province.setCoord(this.getBarycenter(position));
+    }
+    return province;
   }
 
   public getNeighborProvinces(province: Province) {

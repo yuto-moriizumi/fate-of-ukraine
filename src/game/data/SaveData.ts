@@ -3,7 +3,7 @@ import { Country } from './Country';
 import { Province } from './Provice';
 
 export class SaveData {
-  public countries!: Set<Country>;
+  private countries!: Map<string, Country>;
   private _provinces!: Map<string, Province>;
 
   constructor(json?: object) {
@@ -17,5 +17,13 @@ export class SaveData {
       this._provinces.set(key, Object.assign(new Province(key), value))
     );
     console.log('gamedata provinces loaded:', this._provinces);
+  }
+
+  public getProvinces() {
+    return this._provinces;
+  }
+
+  public getCountries() {
+    return this.countries;
   }
 }
