@@ -40,4 +40,8 @@ export class Province {
     // return this.hasPeaceAccess(country) || this._owner.getWarInfoWith(country);
     return true;
   }
+
+  public setOwner(owner: Country) {
+    this.owner = owner;
+  }
 }

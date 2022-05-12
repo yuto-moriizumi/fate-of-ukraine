@@ -1,3 +1,3 @@
-export type ProvinceJson = {
-  provinces: { [id: string]: { name: string; x: number; y: number } };
+export type ProvinceScheme = {
+  [id: string]: { name: string; x: number; y: number };
 };

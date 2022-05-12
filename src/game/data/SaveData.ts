@@ -1,12 +1,11 @@
 import { DataType } from '../type/DataType';
-import { ProvinceJson } from '../type/ProvinceJson';
-import { Serializable } from '../util/Serializable';
+import { ProvinceScheme } from '../type/ProvinceJson';
 import { Country } from './Country';
 import { Province } from './Provice';
 
 export class SaveData {
-  public countries!: Set<Country>;
-  private _provinces!: Map<string, Province>;
+  private countries = new Map<string, Country>();
+  private _provinces = new Map<string, Province>();
 
   constructor(json?: object) {
     if (json) this.load(json);
@@ -16,8 +15,8 @@ export class SaveData {
     Object.assign(this, json);
   }
 
-  private set provinces(provinces: ProvinceJson) {
-    Object.entries(provinces.provinces).forEach(([key, value]) =>
+  private set provinces(provinces: ProvinceScheme) {
+    Object.entries(provinces).forEach(([key, value]) =>
       this._provinces.set(key, Object.assign(new Province(key), value))
     );
     console.log('gamedata provinces loaded:', this._provinces);
@@ -29,5 +28,13 @@ export class SaveData {
     } else {
       return JSON.stringify(this);
     }
+  }
+
+  public getProvinces() {
+    return this._provinces;
+  }
+
+  public getCountries() {
+    return this.countries;
   }
 }
