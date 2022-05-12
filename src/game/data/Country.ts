@@ -8,8 +8,11 @@ export class Country {
   private id!: string;
   private color!: number;
   private name!: string;
-  private flagPath!: string;
   private money!: number;
+
+  public get flagPath(): string {
+    return `assets/flags/${this.id}.png`;
+  }
   //   private __diplomaticRelations: Array<DiplomaticTie> = new Array<DiplomaticTie>();
   //   private divisions = new Array<DivisionData>();
 

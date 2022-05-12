@@ -13,6 +13,7 @@ export class SaveData {
 
   public load(json: object) {
     Object.assign(this, json);
+    return this;
   }
 
   private set provinces(provinces: ProvinceScheme) {

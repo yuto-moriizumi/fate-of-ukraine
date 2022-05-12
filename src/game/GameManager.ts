@@ -16,6 +16,37 @@ export class GameManager {
       throw new Error('GameManager can be instantiate only once');
     }
     this.game = app;
+
+    //ゲームデータのロード
+    const PROVINCES_FILE = 'provinces.json';
+    const COUNTRIES_FILE = 'countries.json';
+    const loader = PIXI.Loader.shared;
+    loader
+      .add(PROVINCES_FILE)
+      .add(COUNTRIES_FILE)
+      .load(() => {
+        this.data = new SaveData(loader.resources[PROVINCES_FILE].data).load(
+          loader.resources[COUNTRIES_FILE].data
+        );
+        console.log(this.data);
+      });
+
+    this.game.ticker.add((delta: number) => {
+      if (this.scene) this.scene.update(delta);
+    });
+
+    //右クリックのデフォ動作を力技で止める
+    document.body.addEventListener(
+      'contextmenu',
+      function (ev) {
+        ev.preventDefault();
+        return false;
+      },
+      false
+    );
+
+    //HTMLにcanvasを追加
+    document.body.appendChild(this.game.view);
   }
 
   public static start(params: {
@@ -32,35 +63,8 @@ export class GameManager {
     game.loader.baseUrl = 'assets/';
     GameManager.instance = new GameManager(game);
 
-    game.ticker.add((delta: number) => {
-      if (this.instance.scene) {
-        this.instance.scene.update(delta);
-      }
-    });
-
-    //右クリックのデフォ動作を力技で止める
-    document.body.addEventListener(
-      'contextmenu',
-      function (ev) {
-        ev.preventDefault();
-        return false;
-      },
-      false
-    );
-
-    //HTMLにcanvasを追加
-    document.body.appendChild(game.view);
-
     //タイトル画面をロード
-    this.instance.loadScene(new TitleScene());
-
-    //ゲームデータのロード
-    const PROVINCES_FILE = 'assets/provinces.json';
-    const loader = PIXI.Loader.shared;
-    loader.add(PROVINCES_FILE).load(() => {
-      this.instance.data = new SaveData(loader.resources[PROVINCES_FILE].data);
-      console.log(this.instance.data);
-    });
+    GameManager.instance.loadScene(new TitleScene());
   }
 
   public loadScene(newScene: Scene): void {
