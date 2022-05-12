@@ -18,4 +18,12 @@ export class SaveData {
     );
     console.log('gamedata provinces loaded:', this._provinces);
   }
+
+  public toJson(as: "GameData" | "SaveData") {
+    if (as == "GameData") {
+      return JSON.stringify(this);
+    } else {
+      return JSON.stringify(this);
+    }
+  }
 }
