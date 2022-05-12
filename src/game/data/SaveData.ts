@@ -1,10 +1,11 @@
 import { GameDataJson, JsonType, ProvinceJson } from '../type/JsonType';
 import { Serializable } from '../util/Serializable';
+import { SerializableMap } from '../util/SerializableMap';
 import { Country } from './Country';
 import { Province } from './Provice';
 
 export class SaveData implements Serializable {
-  private countries = new Map<string, Country>();
+  private countries = new SerializableMap<string, Country>();
   private provinces = new Map<string, Province>();
 
   constructor(json?: GameDataJson) {
