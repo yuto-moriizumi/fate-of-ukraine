@@ -13,6 +13,10 @@ export class Country {
   public get flagPath(): string {
     return `assets/flags/${this.id}.png`;
   }
+
+  constructor(id: string) {
+    this.id = id;
+  }
   //   private __diplomaticRelations: Array<DiplomaticTie> = new Array<DiplomaticTie>();
   //   private divisions = new Array<DivisionData>();
 

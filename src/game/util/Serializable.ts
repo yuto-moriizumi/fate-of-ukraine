@@ -1,6 +1,6 @@
-import { DataType } from '../type/DataType';
+import { GameDataJson, JsonType } from '../type/JsonType';
 
 export interface Serializable {
-  toJson(as: DataType): string;
-  loadJson(json: object): string;
+  toJson(as: JsonType): string;
+  loadJson(json: GameDataJson): Serializable;
 }

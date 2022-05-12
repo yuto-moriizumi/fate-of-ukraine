@@ -1,29 +1,17 @@
-import { DataType } from '../type/DataType';
-import { ProvinceScheme } from '../type/ProvinceJson';
+import { GameDataJson, JsonType, ProvinceJson } from '../type/JsonType';
+import { Serializable } from '../util/Serializable';
 import { Country } from './Country';
 import { Province } from './Provice';
 
-export class SaveData {
+export class SaveData implements Serializable {
   private countries = new Map<string, Country>();
-  private _provinces = new Map<string, Province>();
+  private provinces = new Map<string, Province>();
 
-  constructor(json?: object) {
-    if (json) this.load(json);
+  constructor(json?: GameDataJson) {
+    if (json) this.loadJson(json);
   }
 
-  public load(json: object) {
-    Object.assign(this, json);
-    return this;
-  }
-
-  private set provinces(provinces: ProvinceScheme) {
-    Object.entries(provinces).forEach(([key, value]) =>
-      this._provinces.set(key, Object.assign(new Province(key), value))
-    );
-    console.log('gamedata provinces loaded:', this._provinces);
-  }
-
-  public toJson(as: DataType) {
+  public toJson(as: JsonType) {
     if (as == 'GameData') {
       return JSON.stringify(this);
     } else {
@@ -31,8 +19,24 @@ export class SaveData {
     }
   }
 
+  public loadJson(json: GameDataJson) {
+    if (json.provinces) {
+      Object.entries(json.provinces).forEach(([key, value]) =>
+        this.provinces.set(key, Object.assign(new Province(key), value))
+      );
+      console.log('gamedata provinces loaded:', this.provinces);
+    }
+    if (json.countries) {
+      Object.entries(json.countries).forEach(([key, value]) =>
+        this.countries.set(key, Object.assign(new Country(key), value))
+      );
+      console.log('gamedata countries loaded:', this.countries);
+    }
+    return this;
+  }
+
   public getProvinces() {
-    return this._provinces;
+    return this.provinces;
   }
 
   public getCountries() {

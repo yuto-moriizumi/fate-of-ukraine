@@ -20,14 +20,14 @@ export class GameManager {
     //ゲームデータのロード
     const PROVINCES_FILE = 'provinces.json';
     const COUNTRIES_FILE = 'countries.json';
-    const loader = PIXI.Loader.shared;
+    const loader = app.loader;
     loader
       .add(PROVINCES_FILE)
       .add(COUNTRIES_FILE)
       .load(() => {
-        this.data = new SaveData(loader.resources[PROVINCES_FILE].data).load(
-          loader.resources[COUNTRIES_FILE].data
-        );
+        this.data = new SaveData(
+          loader.resources[PROVINCES_FILE].data
+        ).loadJson(loader.resources[COUNTRIES_FILE].data);
         console.log(this.data);
       });
 
