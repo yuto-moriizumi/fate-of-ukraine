@@ -1,5 +1,6 @@
-export interface Serializable {
-    toJson(as: JsonType): string;
-}
+import { DataType } from '../type/DataType';
 
-type JsonType = "GameData" | "SaveData";
+export interface Serializable {
+  toJson(as: DataType): string;
+  loadJson(json: object): string;
+}
