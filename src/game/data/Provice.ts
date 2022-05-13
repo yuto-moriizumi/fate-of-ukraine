@@ -1,7 +1,10 @@
+import { ProvinceJson, SaveDataType } from '../type/JsonType';
+import { Serializable } from '../util/Serializable';
 import { Country } from './Country';
 
-export class Province {
+export class Province implements Serializable {
   private id!: string;
+  private name!: string;
   private owner!: Country;
   private x = 0;
   private y = 0;
@@ -43,5 +46,20 @@ export class Province {
 
   public setOwner(owner: Country) {
     this.owner = owner;
+  }
+
+  public toJson(as: SaveDataType): ProvinceJson {
+    return { name: this.name, x: this.x, y: this.y };
+    // if (as === SAVEDATA_TYPE.GAMEDATA)
+    //   return { name: this.name, color: this.color };
+    // else if (as === SAVEDATA_TYPE.SAVEDATA) return { money: this.money };
+    // return {};
+  }
+
+  public loadJson(json: ProvinceJson) {
+    this.name = json.name;
+    this.x = json.x;
+    this.y = json.y;
+    return this;
   }
 }

@@ -1,6 +1,20 @@
-import { GameDataJson, JsonType } from '../type/JsonType';
+import {
+  CountryDictJson,
+  CountryJson,
+  ProvinceDictJson,
+  ProvinceJson,
+  SaveDataJson,
+  SaveDataType,
+} from '../type/JsonType';
 
 export interface Serializable {
-  toJson(as: JsonType): string;
-  loadJson(json: GameDataJson): Serializable;
+  toJson(as: SaveDataType): object;
+  loadJson(
+    json:
+      | SaveDataJson
+      | CountryDictJson
+      | ProvinceDictJson
+      | CountryJson
+      | ProvinceJson
+  ): Serializable;
 }
