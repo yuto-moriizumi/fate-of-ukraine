@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { GameManager } from '../GameManager';
+import { data, GameManager } from '../GameManager';
 import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
@@ -25,13 +25,15 @@ export class MapViewport extends Viewport {
       this.addChild(this.sprite);
       const { width, height } = renderer;
 
-      this
-        .drag()
+      this.drag()
         .pinch()
         .wheel()
         .clampZoom({
           maxScale: 10,
-          minScale: Math.min(width / this.sprite.width, height / this.sprite.height),
+          minScale: Math.min(
+            width / this.sprite.width,
+            height / this.sprite.height
+          ),
         })
         .clamp({ direction: 'all' })
         .setZoom(MapViewport.INITIAL_SCALE)
@@ -39,7 +41,7 @@ export class MapViewport extends Viewport {
     });
 
     // this.interactive = true;
-    this.on("click", this.getClickedProvince);
+    this.on('click', this.getClickedProvince);
   }
 
   private getProvinceIdFromPoint(position: PIXI.Point): string {
@@ -168,18 +170,17 @@ export class MapViewport extends Viewport {
 
   private getProvinceByPoint(position: PIXI.Point): Province | null {
     const provinceId = this.getProvinceIdFromPoint(position);
-    const data = GameManager.instance.data;
 
     if (!provinceId) return null; //provinceIdがnullの時は何もしない
 
-    const provinces = data.getProvinces();
+    const provinces = data().getProvinces();
     let province = provinces.get(provinceId);
 
     if (!province) {
       //プロビンスデータが無かったら新規作成(データを事前に用意したのでここが実行されることはないはず)
       province = new Province(provinceId);
       provinces.set(provinceId, province);
-      const countries = data.getCountries();
+      const countries = data().getCountries();
       const owner = countries.get('Rebels');
       if (!owner) return province;
       province.setOwner(owner);

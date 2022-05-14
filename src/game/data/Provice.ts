@@ -1,3 +1,4 @@
+import { data } from '../GameManager';
 import { ProvinceJson, SaveDataType } from '../type/JsonType';
 import { Serializable } from '../util/Serializable';
 import { Country } from './Country';
@@ -5,13 +6,20 @@ import { Country } from './Country';
 export class Province implements Serializable {
   private id!: string;
   private name!: string;
-  private owner!: Country;
+  private ownerId!: string | undefined;
   private x = 0;
   private y = 0;
   private neighbours = new Set<Province>();
 
   constructor(id: string) {
     this.id = id;
+  }
+
+  public get owner() {
+    if (this.ownerId) return data().getCountries().get(this.ownerId);
+  }
+  public set owner(owner: Country | undefined) {
+    this.ownerId = owner?.getId();
   }
 
   public isNextTo(province: Province): boolean {
@@ -49,15 +57,17 @@ export class Province implements Serializable {
   }
 
   public toJson(as: SaveDataType): ProvinceJson {
-    return { name: this.name, x: this.x, y: this.y };
-    // if (as === SAVEDATA_TYPE.GAMEDATA)
-    //   return { name: this.name, color: this.color };
-    // else if (as === SAVEDATA_TYPE.SAVEDATA) return { money: this.money };
-    // return {};
+    return {
+      name: this.name,
+      x: this.x,
+      y: this.y,
+      owner: this.ownerId,
+    };
   }
 
   public loadJson(json: ProvinceJson) {
     this.name = json.name;
+    this.ownerId = json.owner;
     this.x = json.x;
     this.y = json.y;
     return this;

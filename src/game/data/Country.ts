@@ -20,6 +20,10 @@ export class Country implements Serializable {
   constructor(id: string) {
     this.id = id;
   }
+
+  public getId() {
+    return this.id;
+  }
   //   private __diplomaticRelations: Array<DiplomaticTie> = new Array<DiplomaticTie>();
   //   private divisions = new Array<DivisionData>();
 

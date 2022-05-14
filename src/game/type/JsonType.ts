@@ -17,6 +17,7 @@ export type ProvinceDictJson = {
 
 export type ProvinceJson = {
   name: string;
+  owner?: string;
   x: number;
   y: number;
 };

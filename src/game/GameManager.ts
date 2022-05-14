@@ -75,3 +75,7 @@ export class GameManager {
     this.game.stage.addChild(newScene);
   }
 }
+
+export const data = () => {
+  return GameManager.instance.data;
+};
