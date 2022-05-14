@@ -15,18 +15,29 @@ export type ProvinceDictJson = {
   [id: string]: ProvinceJson;
 };
 
-export type ProvinceJson = {
+export type ProvinceJson = GameDataProvinceJson | SaveDataProvinceJson;
+
+export type GameDataProvinceJson = {
   name: string;
-  owner?: string;
   x: number;
   y: number;
+};
+
+export type SaveDataProvinceJson = {
+  owner?: string;
 };
 
 export type CountryDictJson = {
   [id: string]: CountryJson;
 };
 
-export type CountryJson = {
+export type CountryJson = GameDataCountryJson | SaveDataCountryJson;
+
+export type GameDataCountryJson = {
   name: string;
   color: string;
+};
+
+export type SaveDataCountryJson = {
+  money: number;
 };

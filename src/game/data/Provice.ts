@@ -1,6 +1,11 @@
 import { MapViewport } from '../container/MapViewport';
 import { data } from '../GameManager';
-import { ProvinceJson, SaveDataType } from '../type/JsonType';
+import {
+  ProvinceJson,
+  SaveDataProvinceJson,
+  SaveDataType,
+  SAVEDATA_TYPE,
+} from '../type/JsonType';
 import { Serializable } from '../util/Serializable';
 import { Country } from './Country';
 
@@ -63,19 +68,22 @@ export class Province implements Serializable {
   }
 
   public toJson(as: SaveDataType): ProvinceJson {
-    return {
-      name: this._name,
-      x: this.x,
-      y: this.y,
-      owner: this.ownerId,
-    };
+    if (as === SAVEDATA_TYPE.GAMEDATA)
+      return {
+        name: this._name,
+        x: this.x,
+        y: this.y,
+      };
+    return { owner: this.ownerId };
   }
 
   public loadJson(json: ProvinceJson) {
-    this._name = json.name;
-    this.ownerId = json.owner;
-    this.x = json.x;
-    this.y = json.y;
+    if ('name' in json) {
+      this._name = json.name;
+      this.x = json.x;
+      this.y = json.y;
+      this.ownerId = (json as SaveDataProvinceJson).owner;
+    } else if ('owner' in json) this.ownerId = json.owner;
     return this;
   }
 }

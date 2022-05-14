@@ -24,16 +24,16 @@ export class GameManager {
     this.game = app;
 
     //ゲームデータのロード
-    const PROVINCES_FILE = 'provinces.json';
-    const COUNTRIES_FILE = 'countries.json';
+    const GAMEDATA_FILE = 'GameData.json';
+    const SAVEDATA_FILE = 'SaveData.json';
     const loader = app.loader;
     loader
-      .add(PROVINCES_FILE)
-      .add(COUNTRIES_FILE)
+      .add(GAMEDATA_FILE)
+      .add(SAVEDATA_FILE)
       .load(() => {
-        this.data = new SaveData(
-          loader.resources[PROVINCES_FILE].data
-        ).loadJson(loader.resources[COUNTRIES_FILE].data);
+        this.data = new SaveData(loader.resources[GAMEDATA_FILE].data).loadJson(
+          loader.resources[SAVEDATA_FILE].data
+        );
         console.log(this.data);
       });
 

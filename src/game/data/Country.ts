@@ -11,7 +11,7 @@ export class Country implements Serializable {
   private _id!: string;
   private _name!: string;
   private _color!: string;
-  private money!: number;
+  private money = 0;
 
   public get flagPath(): string {
     return `assets/flags/${this._id}.png`;
@@ -136,16 +136,16 @@ export class Country implements Serializable {
   }
 
   public toJson(as: SaveDataType): CountryJson {
-    return { name: this._name, color: this._color };
-    // if (as === SAVEDATA_TYPE.GAMEDATA)
-    //   return { name: this.name, color: this.color };
-    // else if (as === SAVEDATA_TYPE.SAVEDATA) return { money: this.money };
-    // return {};
+    if (as === SAVEDATA_TYPE.GAMEDATA)
+      return { name: this._name, color: this._color };
+    return { money: this.money };
   }
 
   public loadJson(json: CountryJson) {
-    this._name = json.name;
-    this._color = json.color;
+    if ('name' in json) {
+      this._name = json.name;
+      this._color = json.color;
+    } else if ('money' in json) this.money = json.money;
     return this;
   }
 }

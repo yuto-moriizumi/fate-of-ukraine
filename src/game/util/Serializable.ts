@@ -4,6 +4,7 @@ import {
   ProvinceDictJson,
   ProvinceJson,
   SaveDataJson,
+  SaveDataProvinceJson,
   SaveDataType,
 } from '../type/JsonType';
 
@@ -15,6 +16,7 @@ export interface Serializable {
       | CountryDictJson
       | ProvinceDictJson
       | CountryJson
+      | SaveDataProvinceJson
       | ProvinceJson
   ): Serializable;
 }
