@@ -9,13 +9,44 @@ export class GameManager {
   public game!: PIXI.Application;
   public countries!: Set<Country>;
   private scene!: Scene;
-  private data!: SaveData;
+  public data!: SaveData;
 
   constructor(app: PIXI.Application) {
     if (GameManager.instance) {
       throw new Error('GameManager can be instantiate only once');
     }
     this.game = app;
+
+    //ゲームデータのロード
+    const PROVINCES_FILE = 'provinces.json';
+    const COUNTRIES_FILE = 'countries.json';
+    const loader = app.loader;
+    loader
+      .add(PROVINCES_FILE)
+      .add(COUNTRIES_FILE)
+      .load(() => {
+        this.data = new SaveData(
+          loader.resources[PROVINCES_FILE].data
+        ).loadJson(loader.resources[COUNTRIES_FILE].data);
+        console.log(this.data);
+      });
+
+    this.game.ticker.add((delta: number) => {
+      if (this.scene) this.scene.update(delta);
+    });
+
+    //右クリックのデフォ動作を力技で止める
+    document.body.addEventListener(
+      'contextmenu',
+      function (ev) {
+        ev.preventDefault();
+        return false;
+      },
+      false
+    );
+
+    //HTMLにcanvasを追加
+    document.body.appendChild(this.game.view);
   }
 
   public static start(params: {
@@ -32,33 +63,8 @@ export class GameManager {
     game.loader.baseUrl = 'assets/';
     GameManager.instance = new GameManager(game);
 
-    game.ticker.add((delta: number) => {
-      if (this.instance.scene) {
-        this.instance.scene.update(delta);
-      }
-    });
-
-    //右クリックのデフォ動作を力技で止める
-    document.body.addEventListener(
-      'contextmenu',
-      function (ev) {
-        ev.preventDefault();
-        return false;
-      },
-      false
-    );
-
-    //HTMLにcanvasを追加
-    document.body.appendChild(game.view);
-
     //タイトル画面をロード
-    this.instance.loadScene(new TitleScene());
-
-    //ゲームデータのロード
-    const PROVINCES_FILE = 'provinces.json';
-    PIXI.Loader.shared.add(PROVINCES_FILE).load(() =>
-      this.instance.data = new SaveData(PIXI.Loader.shared.resources[PROVINCES_FILE].data)
-    );
+    GameManager.instance.loadScene(new TitleScene());
   }
 
   public loadScene(newScene: Scene): void {

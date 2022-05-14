@@ -1,4 +1,7 @@
-export class Country {
+import { CountryJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
+import { Serializable } from '../util/Serializable';
+
+export class Country implements Serializable {
   /**
    * 国を一意に特定するID、基本英数字3文字(INDなど)
    * @private
@@ -6,10 +9,17 @@ export class Country {
    * @memberof Country
    */
   private id!: string;
-  private color!: number;
   private name!: string;
-  private flagPath!: string;
+  private color!: string;
   private money!: number;
+
+  public get flagPath(): string {
+    return `assets/flags/${this.id}.png`;
+  }
+
+  constructor(id: string) {
+    this.id = id;
+  }
   //   private __diplomaticRelations: Array<DiplomaticTie> = new Array<DiplomaticTie>();
   //   private divisions = new Array<DivisionData>();
 
@@ -107,5 +117,19 @@ export class Country {
     //   (d) => d instanceof Alliance && d.getOpponent(this) == target
     // );
     return true;
+  }
+
+  public toJson(as: SaveDataType): CountryJson {
+    return { name: this.name, color: this.color };
+    // if (as === SAVEDATA_TYPE.GAMEDATA)
+    //   return { name: this.name, color: this.color };
+    // else if (as === SAVEDATA_TYPE.SAVEDATA) return { money: this.money };
+    // return {};
+  }
+
+  public loadJson(json: CountryJson) {
+    this.name = json.name;
+    this.color = json.color;
+    return this;
   }
 }
