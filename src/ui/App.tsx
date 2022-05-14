@@ -10,6 +10,7 @@ import { Province } from '../game/data/Provice';
 function App() {
   const [currentScene, setCurrentScene] = useState<Scene>();
   const [selectedProvince, setSelectedProvince] = useState<Province>();
+  const [isDebugSidebarOpen, setIsDebugSidebarOpen] = useState(false);
 
   useEffect(() => {
     GameManager.onLoadEnd = () => {
@@ -25,37 +26,28 @@ function App() {
 
   return (
     <Container fluid className="h-100">
-      <Row className="h-100">
-        <Col xs={12}>
-          <Row>
-            <Col xs={12} className="clickable bg-danger">
-              {currentScene instanceof SelectionScene ? (
-                <Row>
-                  <Col xs="auto">
-                    <img
-                      src={
-                        './assets/flags/' + selectedProvince?.owner?.id + '.png'
-                      }
-                      height="100rem"
-                    ></img>
-                  </Col>
-                  <Col className="d-flex align-items-center">
-                    <h1>{selectedProvince?.owner?.name}</h1>
-                    <Button size="lg" className="ms-auto">
-                      START
-                    </Button>
-                  </Col>
-                </Row>
-              ) : (
-                ''
-              )}
+      <Row style={{ height: '10%' }} className="clickable bg-danger">
+        {currentScene instanceof SelectionScene ? (
+          <>
+            <Col xs="auto" className="mh-100">
+              <img
+                src={'./assets/flags/' + selectedProvince?.owner?.id + '.png'}
+                className="mh-100"
+              ></img>
             </Col>
-          </Row>
-        </Col>
-        <Col className="bg-danger align-self-end clickable" xs={12}>
-          FOOTER
-        </Col>
+            <Col className="d-flex align-items-center">
+              <h1>{selectedProvince?.owner?.name}</h1>
+              <Button size="lg" className="ms-auto">
+                START
+              </Button>
+            </Col>
+          </>
+        ) : (
+          ''
+        )}
       </Row>
+      <Row style={{ height: '85%' }}>CONTENT</Row>
+      <Row style={{ height: '5%' }}>FOOTER</Row>
     </Container>
   );
 }
