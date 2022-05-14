@@ -3,13 +3,19 @@ import { Country } from './data/Country';
 import { SaveData } from './data/SaveData';
 import { Scene } from './scene/Scene';
 import { TitleScene } from './scene/TitleScene';
+import { Observable } from './util/Observable';
 
 export class GameManager {
   public static instance: GameManager;
+  public static onLoadEnd: () => void;
   public game!: PIXI.Application;
   public countries!: Set<Country>;
-  private scene!: Scene;
+  private _scene = new Observable<Scene>();
   public data!: SaveData;
+
+  public get scene() {
+    return this._scene;
+  }
 
   constructor(app: PIXI.Application) {
     if (GameManager.instance) {
@@ -32,7 +38,7 @@ export class GameManager {
       });
 
     this.game.ticker.add((delta: number) => {
-      if (this.scene) this.scene.update(delta);
+      if (this._scene) this._scene.val.update(delta);
     });
 
     //右クリックのデフォ動作を力技で止める
@@ -62,16 +68,17 @@ export class GameManager {
     //PIXI.ApplicationインスタンスのloaderプロパティにbaseUrlを設定
     game.loader.baseUrl = 'assets/';
     GameManager.instance = new GameManager(game);
-
+    //Reactに初期イベントを通知
+    GameManager.onLoadEnd();
     //タイトル画面をロード
     GameManager.instance.loadScene(new TitleScene());
   }
 
   public loadScene(newScene: Scene): void {
-    if (this.scene) {
-      this.scene.destroy();
+    if (this._scene.val) {
+      this._scene.val.destroy();
     }
-    this.scene = newScene;
+    this._scene.val = newScene;
     this.game.stage.addChild(newScene);
   }
 }

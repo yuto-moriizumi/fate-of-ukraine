@@ -8,25 +8,33 @@ export class Country implements Serializable {
    * @type {string}
    * @memberof Country
    */
-  private id!: string;
-  private name!: string;
+  private _id!: string;
+  private _name!: string;
   private _color!: string;
   private money!: number;
 
   public get flagPath(): string {
-    return `assets/flags/${this.id}.png`;
+    return `assets/flags/${this._id}.png`;
+  }
+
+  public get id() {
+    return this._id;
   }
 
   public get color() {
     return this._color;
   }
 
+  public get name() {
+    return this._name;
+  }
+
   constructor(id: string) {
-    this.id = id;
+    this._id = id;
   }
 
   public getId() {
-    return this.id;
+    return this._id;
   }
   //   private __diplomaticRelations: Array<DiplomaticTie> = new Array<DiplomaticTie>();
   //   private divisions = new Array<DivisionData>();
@@ -128,7 +136,7 @@ export class Country implements Serializable {
   }
 
   public toJson(as: SaveDataType): CountryJson {
-    return { name: this.name, color: this._color };
+    return { name: this._name, color: this._color };
     // if (as === SAVEDATA_TYPE.GAMEDATA)
     //   return { name: this.name, color: this.color };
     // else if (as === SAVEDATA_TYPE.SAVEDATA) return { money: this.money };
@@ -136,7 +144,7 @@ export class Country implements Serializable {
   }
 
   public loadJson(json: CountryJson) {
-    this.name = json.name;
+    this._name = json.name;
     this._color = json.color;
     return this;
   }

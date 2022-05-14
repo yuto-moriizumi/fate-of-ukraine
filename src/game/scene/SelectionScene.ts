@@ -5,17 +5,17 @@ import { Scene } from './Scene';
 
 export class SelectionScene extends Scene {
   private map: MapViewport;
-  private selectedProvince = new Observable<Province>();
+  private _selectedProvince = new Observable<Province>();
+
+  public get selectedProvince() {
+    return this._selectedProvince;
+  }
 
   constructor() {
     super();
     const MAP_SRC = 'assets/provinces.png';
-    this.map = new MapViewport(MAP_SRC, this.selectedProvince);
+    this.map = new MapViewport(MAP_SRC, this._selectedProvince);
     this.addChild(this.map);
-  }
-
-  public getSelectedProvince(): Observable<Province> {
-    return this.selectedProvince;
   }
 
   update() {
