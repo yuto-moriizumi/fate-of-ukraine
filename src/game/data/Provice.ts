@@ -4,7 +4,7 @@ import { Serializable } from '../util/Serializable';
 import { Country } from './Country';
 
 export class Province implements Serializable {
-  private id!: string;
+  private _id!: string;
   private name!: string;
   private ownerId!: string | undefined;
   private x = 0;
@@ -12,7 +12,7 @@ export class Province implements Serializable {
   private neighbours = new Set<Province>();
 
   constructor(id: string) {
-    this.id = id;
+    this._id = id;
   }
 
   public get owner() {
@@ -20,6 +20,10 @@ export class Province implements Serializable {
   }
   public set owner(owner: Country | undefined) {
     this.ownerId = owner?.getId();
+  }
+
+  public get id() {
+    return this._id;
   }
 
   public isNextTo(province: Province): boolean {

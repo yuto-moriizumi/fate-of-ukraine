@@ -10,11 +10,15 @@ export class Country implements Serializable {
    */
   private id!: string;
   private name!: string;
-  private color!: string;
+  private _color!: string;
   private money!: number;
 
   public get flagPath(): string {
     return `assets/flags/${this.id}.png`;
+  }
+
+  public get color() {
+    return this._color;
   }
 
   constructor(id: string) {
@@ -124,7 +128,7 @@ export class Country implements Serializable {
   }
 
   public toJson(as: SaveDataType): CountryJson {
-    return { name: this.name, color: this.color };
+    return { name: this.name, color: this._color };
     // if (as === SAVEDATA_TYPE.GAMEDATA)
     //   return { name: this.name, color: this.color };
     // else if (as === SAVEDATA_TYPE.SAVEDATA) return { money: this.money };
@@ -133,7 +137,7 @@ export class Country implements Serializable {
 
   public loadJson(json: CountryJson) {
     this.name = json.name;
-    this.color = json.color;
+    this._color = json.color;
     return this;
   }
 }

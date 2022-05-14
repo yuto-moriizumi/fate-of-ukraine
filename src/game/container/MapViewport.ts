@@ -3,7 +3,7 @@ import { data, GameManager } from '../GameManager';
 import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
-
+import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace';
 export class MapViewport extends Viewport {
   private static readonly BORDER_COLOR = '#000000'; //プロヴィンス境界の色
   private static readonly BORDER_WIDTH = 5; //境界線のだいたいの太さ
@@ -38,10 +38,39 @@ export class MapViewport extends Viewport {
         .clamp({ direction: 'all' })
         .setZoom(MapViewport.INITIAL_SCALE)
         .moveCenter(3200, 500);
+
+      const arr = Array.from(data().getProvinces().values())
+        .filter((p) => p.owner)
+        .map((p) => {
+          if (p.owner)
+            return [
+              PIXI.utils.string2hex(p.id),
+              PIXI.utils.string2hex(p.owner.color),
+            ];
+        }) as [number, number][];
+
+      this.filters = this.getColorReplaceFilters(arr, 0.005);
     });
 
     // this.interactive = true;
     this.on('click', this.getClickedProvince);
+  }
+
+  private getColorReplaceFilters(
+    replacements: [Color, Color][],
+    epsilon?: number
+  ) {
+    const CHUNK_SIZE = 500;
+    const sliceCount = Math.ceil(replacements.length / CHUNK_SIZE);
+    const filters = [];
+    for (let i = 0; i < sliceCount; i++) {
+      const replacement = replacements.slice(
+        CHUNK_SIZE * i,
+        Math.min(CHUNK_SIZE * (i + 1), replacements.length)
+      );
+      filters.push(new MultiColorReplaceFilter(replacement, epsilon ?? 0.005));
+    }
+    return filters;
   }
 
   private getProvinceIdFromPoint(position: PIXI.Point): string {
@@ -301,3 +330,5 @@ export class MapViewport extends Viewport {
   //     });
   //   }
 }
+
+type Color = number | number[] | Float32Array;
