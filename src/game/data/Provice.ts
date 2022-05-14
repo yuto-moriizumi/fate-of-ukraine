@@ -1,3 +1,4 @@
+import { MapViewport } from '../container/MapViewport';
 import { data } from '../GameManager';
 import { ProvinceJson, SaveDataType } from '../type/JsonType';
 import { Serializable } from '../util/Serializable';
@@ -5,7 +6,7 @@ import { Country } from './Country';
 
 export class Province implements Serializable {
   private _id!: string;
-  private name!: string;
+  private _name!: string;
   private ownerId!: string | undefined;
   private x = 0;
   private y = 0;
@@ -20,10 +21,15 @@ export class Province implements Serializable {
   }
   public set owner(owner: Country | undefined) {
     this.ownerId = owner?.getId();
+    MapViewport.instance.updateMap();
   }
 
   public get id() {
     return this._id;
+  }
+
+  public get name() {
+    return this._name;
   }
 
   public isNextTo(province: Province): boolean {
@@ -56,13 +62,9 @@ export class Province implements Serializable {
     return true;
   }
 
-  public setOwner(owner: Country) {
-    this.owner = owner;
-  }
-
   public toJson(as: SaveDataType): ProvinceJson {
     return {
-      name: this.name,
+      name: this._name,
       x: this.x,
       y: this.y,
       owner: this.ownerId,
@@ -70,7 +72,7 @@ export class Province implements Serializable {
   }
 
   public loadJson(json: ProvinceJson) {
-    this.name = json.name;
+    this._name = json.name;
     this.ownerId = json.owner;
     this.x = json.x;
     this.y = json.y;

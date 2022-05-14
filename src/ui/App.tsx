@@ -6,6 +6,7 @@ import { GameManager } from '../game/GameManager';
 import { Scene } from '../game/scene/Scene';
 import { SelectionScene } from '../game/scene/SelectionScene';
 import { Province } from '../game/data/Provice';
+import DebugSidebar from './DebugSidebar';
 
 function App() {
   const [currentScene, setCurrentScene] = useState<Scene>();
@@ -37,6 +38,17 @@ function App() {
             </Col>
             <Col className="d-flex align-items-center">
               <h1>{selectedProvince?.owner?.name}</h1>
+            </Col>
+            <Col className="d-flex align-items-center" xs="auto">
+              <Button
+                size="lg"
+                className="ms-auto"
+                onClick={() => setIsDebugSidebarOpen(!isDebugSidebarOpen)}
+              >
+                DEBUG
+              </Button>
+            </Col>
+            <Col className="d-flex align-items-center" xs="auto">
               <Button size="lg" className="ms-auto">
                 START
               </Button>
@@ -46,7 +58,9 @@ function App() {
           ''
         )}
       </Row>
-      <Row style={{ height: '85%' }}>CONTENT</Row>
+      <Row style={{ height: '85%' }}>
+        {isDebugSidebarOpen ? <DebugSidebar province={selectedProvince} /> : ''}
+      </Row>
       <Row style={{ height: '5%' }}>FOOTER</Row>
     </Container>
   );

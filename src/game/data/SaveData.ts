@@ -53,4 +53,16 @@ export class SaveData implements Serializable {
   public getCountries() {
     return this.countries;
   }
+
+  public download(as: SaveDataType) {
+    const jsonObject = this.toJson(as);
+    const json = JSON.stringify(jsonObject);
+    const blob = new Blob([json], {
+      type: 'application/json',
+    });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = as + '.json';
+    a.click();
+  }
 }

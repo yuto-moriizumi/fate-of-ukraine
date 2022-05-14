@@ -5,6 +5,7 @@ import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
 import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace';
 export class MapViewport extends Viewport {
+  public static instance: MapViewport;
   private static readonly BORDER_COLOR = '#000000'; //プロヴィンス境界の色
   private static readonly BORDER_WIDTH = 5; //境界線のだいたいの太さ
   private spritePixelArray!: Uint8Array;
@@ -15,6 +16,7 @@ export class MapViewport extends Viewport {
 
   constructor(source: string, provinceRef: Observable<Province>) {
     super();
+    MapViewport.instance = this;
     this.provinceRef = provinceRef;
 
     const loader = PIXI.Loader.shared;
@@ -38,22 +40,26 @@ export class MapViewport extends Viewport {
         .clamp({ direction: 'all' })
         .setZoom(MapViewport.INITIAL_SCALE)
         .moveCenter(3200, 500);
-
-      const arr = Array.from(data().getProvinces().values())
-        .filter((p) => p.owner)
-        .map((p) => {
-          if (p.owner)
-            return [
-              PIXI.utils.string2hex(p.id),
-              PIXI.utils.string2hex(p.owner.color),
-            ];
-        }) as [number, number][];
-
-      this.filters = this.getColorReplaceFilters(arr, 0.005);
     });
 
     // this.interactive = true;
     this.on('click', this.getClickedProvince);
+
+    this.updateMap();
+  }
+
+  public updateMap() {
+    const arr = Array.from(data().getProvinces().values())
+      .filter((p) => p.owner)
+      .map((p) => {
+        if (p.owner)
+          return [
+            PIXI.utils.string2hex(p.id),
+            PIXI.utils.string2hex(p.owner.color),
+          ];
+      }) as [number, number][];
+
+    this.filters = this.getColorReplaceFilters(arr, 0.005);
   }
 
   private getColorReplaceFilters(
@@ -212,7 +218,7 @@ export class MapViewport extends Viewport {
       const countries = data().getCountries();
       const owner = countries.get('Rebels');
       if (!owner) return province;
-      province.setOwner(owner);
+      province.owner = owner;
     } else {
       //もし選択したプロヴィンスに座標情報が用意されていなかったら追加する
       // const point = province.getCoord();
