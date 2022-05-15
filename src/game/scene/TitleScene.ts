@@ -30,8 +30,8 @@ export class TitleScene extends Scene {
     // GameManager.instance.game.loader.add('$Hime.png').load(setup);
 
     // super.onResourceLoaded();
-    const resources = GameManager.instance.game.loader.resources;
-    const renderer = GameManager.instance.game.renderer;
+    const resources = GameManager._instance.game.loader.resources;
+    const renderer = GameManager._instance.game.renderer;
 
     //背景
     // const sprite = new PIXI.Sprite(resources[Resource.Title.Bg].texture);
@@ -76,7 +76,7 @@ export class TitleScene extends Scene {
 
   private onPointerDown() {
     //次のシーン
-    GameManager.instance.loadScene(new SelectionScene());
+    GameManager._instance.loadScene(new SelectionScene());
   }
 
   public update(delta: number) {

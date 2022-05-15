@@ -1,8 +1,8 @@
 import { Division } from '../container/Division';
 
 export class Combat {
-  private attackers: Set<Division> = new Set();
-  private defender: Set<Division> = new Set();
+  private readonly attackers: Set<Division> = new Set();
+  private readonly defender: Set<Division> = new Set();
 
   //   public static create(
   //     attackers: Iterable<Division>,

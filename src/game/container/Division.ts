@@ -4,19 +4,19 @@ import { Country } from '../data/Country';
 import { Province } from '../data/Provice';
 
 export class Division extends PIXI.Container {
-  private currentHp!: number;
-  private location!: Province;
-  private destination!: Province;
+  private readonly currentHp!: number;
+  private readonly location!: Province;
+  private readonly destination!: Province;
   /**
    * 移動の完了度合い
    * 0～1の百分率
    * @private
    * @memberof Division
    */
-  private movingProgress = 0;
-  private combats: Set<Combat> = new Set<Combat>();
-  private owner!: Country;
-  private isRetreat = false;
+  private readonly movingProgress = 0;
+  private readonly combats: Set<Combat> = new Set<Combat>();
+  private readonly owner!: Country;
+  private readonly isRetreat = false;
 
   public setPosition(province: Province) {
     return;
