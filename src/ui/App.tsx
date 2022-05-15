@@ -13,10 +13,15 @@ function App() {
   const [selectedProvince, setSelectedProvince] = useState<Province>();
   const [isDebugSidebarOpen, setIsDebugSidebarOpen] = useState(false);
 
+  const addSceneObserver = () => {
+    GameManager.instance.scene.addObserver(setCurrentScene);
+  };
+
   useEffect(() => {
-    GameManager.onLoadEnd = () => {
-      GameManager.instance.scene.addObserver(setCurrentScene);
-    };
+    if (!GameManager.instance)
+      // ゲームのロードが終わって居ない場合はコールバック関数を追加
+      GameManager.onLoadEnd = addSceneObserver;
+    else addSceneObserver(); // ゲームのロードが終わっている場合は即座にオブザーバを追加
   }, []);
 
   useEffect(() => {

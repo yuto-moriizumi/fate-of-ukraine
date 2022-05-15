@@ -73,7 +73,7 @@ export class GameManager {
     game.loader.baseUrl = 'assets/';
     GameManager.instance = new GameManager(game);
     //Reactに初期イベントを通知
-    GameManager.onLoadEnd();
+    if (GameManager.onLoadEnd) GameManager.onLoadEnd();
     //タイトル画面をロード
     GameManager.instance.loadScene(new TitleScene());
   }
