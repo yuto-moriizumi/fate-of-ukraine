@@ -1,15 +1,41 @@
-export class Country {
+import { CountryJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
+import { Serializable } from '../util/Serializable';
+
+export class Country implements Serializable {
   /**
    * 国を一意に特定するID、基本英数字3文字(INDなど)
    * @private
    * @type {string}
    * @memberof Country
    */
-  private id!: string;
-  private color!: number;
-  private name!: string;
-  private flagPath!: string;
-  private money!: number;
+  private _id!: string;
+  private _name!: string;
+  private _color!: string;
+  private money = 0;
+
+  public get flagPath(): string {
+    return `assets/flags/${this._id}.png`;
+  }
+
+  public get id() {
+    return this._id;
+  }
+
+  public get color() {
+    return this._color;
+  }
+
+  public get name() {
+    return this._name;
+  }
+
+  constructor(id: string) {
+    this._id = id;
+  }
+
+  public getId() {
+    return this._id;
+  }
   //   private __diplomaticRelations: Array<DiplomaticTie> = new Array<DiplomaticTie>();
   //   private divisions = new Array<DivisionData>();
 
@@ -107,5 +133,19 @@ export class Country {
     //   (d) => d instanceof Alliance && d.getOpponent(this) == target
     // );
     return true;
+  }
+
+  public toJson(as: SaveDataType): CountryJson {
+    if (as === SAVEDATA_TYPE.GAMEDATA)
+      return { name: this._name, color: this._color };
+    return { money: this.money };
+  }
+
+  public loadJson(json: CountryJson) {
+    if ('name' in json) {
+      this._name = json.name;
+      this._color = json.color;
+    } else if ('money' in json) this.money = json.money;
+    return this;
   }
 }
