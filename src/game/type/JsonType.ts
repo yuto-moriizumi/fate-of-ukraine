@@ -7,12 +7,8 @@ export const SAVEDATA_TYPE = {
 export type SaveDataType = typeof SAVEDATA_TYPE[keyof typeof SAVEDATA_TYPE];
 
 export type SaveDataJson = {
-  provinces?: ProvinceDictJson;
-  countries?: CountryDictJson;
-};
-
-export type ProvinceDictJson = {
-  [id: string]: ProvinceJson;
+  provinces?: Dict<ProvinceJson>;
+  countries?: Dict<CountryJson>;
 };
 
 export type ProvinceJson = GameDataProvinceJson | SaveDataProvinceJson;
@@ -27,8 +23,8 @@ export type SaveDataProvinceJson = {
   owner?: string;
 };
 
-export type CountryDictJson = {
-  [id: string]: CountryJson;
+export type Dict<T> = {
+  [id: string]: T;
 };
 
 export type CountryJson = GameDataCountryJson | SaveDataCountryJson;
