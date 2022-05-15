@@ -1,3 +1,4 @@
+import CountryHandler from '../event/handler/CountryHandler';
 import { CountryJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
 import { Serializable } from '../util/Serializable';
 
@@ -12,6 +13,7 @@ export class Country implements Serializable {
   private _name!: string;
   private _color!: string;
   private money = 0;
+  private readonly handler!: CountryHandler;
 
   public get flagPath(): string {
     return `assets/flags/${this.id}.png`;
@@ -126,6 +128,10 @@ export class Country implements Serializable {
     //   (d) => d instanceof Alliance && d.getOpponent(this) == target
     // );
     return true;
+  }
+
+  public onEvent(event: Event): void {
+    this.handler.onEvent(event);
   }
 
   public toJson(as: SaveDataType): CountryJson {

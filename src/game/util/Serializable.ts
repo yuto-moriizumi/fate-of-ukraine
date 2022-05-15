@@ -1,7 +1,6 @@
 import {
-  CountryDictJson,
   CountryJson,
-  ProvinceDictJson,
+  Dict,
   ProvinceJson,
   SaveDataJson,
   SaveDataProvinceJson,
@@ -13,8 +12,8 @@ export interface Serializable {
   loadJson(
     json:
       | SaveDataJson
-      | CountryDictJson
-      | ProvinceDictJson
+      | Dict<CountryJson>
+      | Dict<ProvinceJson>
       | CountryJson
       | SaveDataProvinceJson
       | ProvinceJson

@@ -1,16 +1,14 @@
-import Effect from "./effect/Effect";
-import Button from "../UI/Button";
-import DeclareWar from "./effect/DeclareWar";
-import JsonObject from "../Utils/JsonObject";
-import SetOwner from "./effect/SetOwner";
-import Annex from "./effect/Annex";
-import Peace from "./effect/Peace";
-import ChangeName from "./effect/ChangeName";
-import GainAccess from "./effect/GainAccess";
-import EffectCreator from "./effect/EffectCreator";
+import Effect from './effect/Effect';
+import DeclareWar from './effect/DeclareWar';
+import SetOwner from './effect/SetOwner';
+import Annex from './effect/Annex';
+import Peace from './effect/Peace';
+import ChangeName from './effect/ChangeName';
+import GainAccess from './effect/GainAccess';
+import EffectCreator from './effect/EffectCreator';
 
-export default class Option extends JsonObject {
-  private title: string;
+export default class Option {
+  private title!: string;
   private _effects: Array<Effect> = new Array<Effect>();
 
   /**
