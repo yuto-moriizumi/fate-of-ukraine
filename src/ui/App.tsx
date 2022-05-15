@@ -37,7 +37,11 @@ function App() {
           <>
             <Col xs="auto" className="mh-100">
               <img
-                src={'./assets/flags/' + selectedProvince?.owner?.id + '.png'}
+                src={
+                  './assets/flags/' +
+                  (selectedProvince ? selectedProvince.owner?.id : 'Rebels') +
+                  '.png'
+                }
                 className="mh-100"
               ></img>
             </Col>
