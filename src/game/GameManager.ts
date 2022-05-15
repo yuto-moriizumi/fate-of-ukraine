@@ -6,23 +6,23 @@ import { TitleScene } from './scene/TitleScene';
 import { Observable } from './util/Observable';
 
 export class GameManager {
-  public static instance: GameManager;
+  public static _instance: GameManager;
   public static onLoadEnd: () => void;
-  public game!: PIXI.Application;
-  public countries!: Set<Country>;
-  private _scene = new Observable<Scene>();
+  public readonly game!: PIXI.Application;
+  public readonly countries!: Set<Country>;
+  public readonly scene = new Observable<Scene>();
   private _data!: SaveData;
-
-  public get scene() {
-    return this._scene;
-  }
 
   public get data() {
     return this._data;
   }
 
+  public static get instance() {
+    return this._instance;
+  }
+
   constructor(app: PIXI.Application) {
-    if (GameManager.instance) {
+    if (GameManager._instance) {
       throw new Error('GameManager can be instantiate only once');
     }
     this.game = app;
@@ -42,7 +42,7 @@ export class GameManager {
       });
 
     this.game.ticker.add((delta: number) => {
-      if (this._scene) this._scene.val.update(delta);
+      if (this.scene) this.scene.val.update(delta);
     });
 
     //右クリックのデフォ動作を力技で止める
@@ -71,22 +71,22 @@ export class GameManager {
     });
     //PIXI.ApplicationインスタンスのloaderプロパティにbaseUrlを設定
     game.loader.baseUrl = 'assets/';
-    GameManager.instance = new GameManager(game);
+    GameManager._instance = new GameManager(game);
     //Reactに初期イベントを通知
     if (GameManager.onLoadEnd) GameManager.onLoadEnd();
     //タイトル画面をロード
-    GameManager.instance.loadScene(new TitleScene());
+    GameManager._instance.loadScene(new TitleScene());
   }
 
   public loadScene(newScene: Scene): void {
-    if (this._scene.val) {
-      this._scene.val.destroy();
+    if (this.scene.val) {
+      this.scene.val.destroy();
     }
-    this._scene.val = newScene;
+    this.scene.val = newScene;
     this.game.stage.addChild(newScene);
   }
 }
 
 export const data = () => {
-  return GameManager.instance.data;
+  return GameManager._instance.data;
 };

@@ -4,8 +4,8 @@ import { Country } from './Country';
 import { Province } from './Provice';
 
 export class SaveData implements Serializable {
-  private countries = new Map<string, Country>();
-  private provinces = new Map<string, Province>();
+  public readonly countries = new Map<string, Country>();
+  public readonly provinces = new Map<string, Province>();
 
   constructor(json?: SaveDataJson) {
     if (json) this.loadJson(json);
@@ -48,14 +48,6 @@ export class SaveData implements Serializable {
       console.log('gamedata provinces loaded:', this.provinces);
     }
     return this;
-  }
-
-  public getProvinces() {
-    return this.provinces;
-  }
-
-  public getCountries() {
-    return this.countries;
   }
 
   public download(as: SaveDataType) {
