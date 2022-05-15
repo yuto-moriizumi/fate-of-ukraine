@@ -1,0 +1,74 @@
+@startuml
+class Combat {
+    -attackers: Set<Division>
+    -defender: Set<Division>
+    +update(): void
+    -endCombat(): void
+}
+class Country {
+    -id: string
+    -color: number
+    -name: string
+    -flagPath: string
+    -money: number
+    +calcBalance(): number
+    +update(): void
+    +hasWar(): boolean
+    +hasAccessTo(country: Country): boolean
+    +isAlliedWith(target: Country): boolean
+}
+class Province {
+    -id: string
+    -owner: Country
+    -x: number
+    -y: number
+    -neighbours: Set<Province>
+    +isNextTo(province: Province): boolean
+    +hasPeaceAccess(country: Country): boolean
+    +hasAccess(country: Country): boolean
+}
+class Division {
+    -currentHp: number
+    -location: Province
+    -destination: Province
+    -movingProgress: number
+    -combats: Set<Combat>
+    -owner: Country
+    -isRetreat: boolean
+    +setPosition(province: Province): void
+    +attack(target: Division): void
+    +moveTo(destination: Province): void
+    +destroy(): void
+    +stopMove(): void
+    +isMoving(): boolean
+    +isFighting(): boolean
+    +retreat(): void
+    +update(): void
+}
+class GameManager {
+    +game: PIXI.Application
+    +countries: Set<Country>
+    +{static} instance: GameManager
+    +{static} start(params: { glWidth: number; glHeight: number; backgroundColor: number; }): void
+}
+class MapSprite {
+    -provinceMap: Uint8Array
+    -pressKeys: Set<string>
+    -getProvinceIdFromPoint(position: PIXI.Point): string
+    +update(): void
+    -getBarycenter(point: PIXI.Point): PIXI.Point
+    +calculateBarycenterOfAll(): void
+    -getProvince(position: PIXI.Point): Province
+    +getNeighborProvinces(province: Province): void
+    +isNextTo(province1: Province, province2: Province): boolean
+    -{static} BORDER_COLOR: "#000000"
+    -{static} BORDER_WIDTH: 5
+}
+Combat --> "1" Division
+Province --> "1" Country
+Division --> "1" Province
+Division --> "1" Combat
+Division --> "1" Country
+GameManager --> "1" Country
+MapSprite --> "1" Province
+@enduml
