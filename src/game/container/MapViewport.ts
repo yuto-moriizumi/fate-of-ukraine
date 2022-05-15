@@ -4,6 +4,7 @@ import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
 import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace';
+import { Simple } from 'pixi-cull';
 export class MapViewport extends Viewport {
   public static instance: MapViewport;
   private static readonly BORDER_COLOR = '#000000'; //プロヴィンス境界の色
@@ -40,12 +41,28 @@ export class MapViewport extends Viewport {
         .clamp({ direction: 'all' })
         .setZoom(MapViewport.INITIAL_SCALE)
         .moveCenter(3200, 500);
+
+      const cull = new Simple();
+      cull.addList(
+        (this.children as PIXI.Container[])
+          .map((layer) => {
+            return layer.children;
+          })
+          .flat()
+      );
+      cull.cull(this.getVisibleBounds());
+
+      this.on('moved', () => {
+        if (this.dirty) {
+          cull.cull(this.getVisibleBounds());
+          this.dirty = false;
+        }
+      });
+
+      this.updateMap();
     });
 
-    // this.interactive = true;
     this.on('click', this.getClickedProvince);
-
-    this.updateMap();
   }
 
   public updateMap() {
@@ -59,7 +76,7 @@ export class MapViewport extends Viewport {
           ];
       }) as [number, number][];
 
-    this.filters = this.getColorReplaceFilters(arr, 0.005);
+    this.sprite.filters = this.getColorReplaceFilters(arr, 0.005);
   }
 
   private getColorReplaceFilters(
@@ -88,28 +105,13 @@ export class MapViewport extends Viewport {
       4;
 
     //プロヴィンスIDに変換
-    //console.log(this.provinceMap[idx + 0]);
-    let provinceId;
-    try {
-      provinceId = PIXI.utils.hex2string(
-        PIXI.utils.rgb2hex([
-          this.spritePixelArray[idx + 0] / 255,
-          this.spritePixelArray[idx + 1] / 255,
-          this.spritePixelArray[idx + 2] / 255,
-        ])
-      );
-    } catch (error) {
-      console.log(error);
-      console.log(
-        position.x,
-        position.y,
-        idx,
-        this.spritePixelArray.length,
-        this.sprite.width,
-        this.sprite.height
-      );
-      throw new Error('停止');
-    }
+    const provinceId = PIXI.utils.hex2string(
+      PIXI.utils.rgb2hex([
+        this.spritePixelArray[idx + 0] / 255,
+        this.spritePixelArray[idx + 1] / 255,
+        this.spritePixelArray[idx + 2] / 255,
+      ])
+    );
     return provinceId;
   }
 
