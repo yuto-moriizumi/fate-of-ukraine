@@ -1,8 +1,11 @@
 import * as PIXI from 'pixi.js';
 
 export abstract class Scene extends PIXI.Container {
+  elapsedFrameCount = 0;
   //GameManagerによって、requestAnimationFrame毎に呼び出されるメソッド
-  public abstract update(delta: number): void;
+  public update(delta: number) {
+    this.elapsedFrameCount++;
+  }
 
   //UI Graph意外に利用するリソースがある場合に派生クラスで実装する
   //   protected createInitialResourceList(): (LoaderAddParam | string)[] {

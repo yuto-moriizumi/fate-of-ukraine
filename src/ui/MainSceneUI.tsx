@@ -5,6 +5,7 @@ import { SelectionScene } from '../game/scene/SelectionScene';
 import { Province } from '../game/data/Provice';
 import DebugSidebar from './DebugSidebar';
 import { MainScene } from '../game/scene/MainScene';
+import Timer from './Timer';
 
 export default function MainSceneUI(props: { scene: MainScene }) {
   const [selectedProvince, setSelectedProvince] = useState<Province>();
@@ -34,6 +35,9 @@ export default function MainSceneUI(props: { scene: MainScene }) {
           >
             DEBUG
           </Button>
+        </Col>
+        <Col className="d-flex align-items-center" xs="auto">
+          <Timer scene={props.scene}></Timer>
         </Col>
       </Row>
       <Row style={{ height: '85%' }}>

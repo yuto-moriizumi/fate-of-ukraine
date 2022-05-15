@@ -2,6 +2,10 @@ export class Observable<T> {
   private value!: T;
   private observers = new Set<(val: T) => void>();
 
+  constructor(initial?: T) {
+    if (initial) this.val = initial;
+  }
+
   public get val() {
     return this.value;
   }

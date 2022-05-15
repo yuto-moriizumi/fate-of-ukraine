@@ -19,8 +19,8 @@ export class SelectionScene extends Scene {
     this.addChild(this.map);
   }
 
-  update() {
-    return;
+  update(delta: number) {
+    super.update(delta);
   }
 
   public play() {
