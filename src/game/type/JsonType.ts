@@ -150,3 +150,10 @@ export type OptionJson = {
   title: string;
   effects: EffectJson[];
 };
+
+export type DiplomacyJson = {
+  type: 'Access' | 'Alliance' | 'War';
+  root: string;
+  target: string;
+  active: boolean;
+};
