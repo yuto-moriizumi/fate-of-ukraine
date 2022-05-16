@@ -1,7 +1,7 @@
 import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
 import { CountryHandler } from './CountryHandler';
-import { Event } from '../Event';
+import { EventBase } from '../EventBase';
 import Util from '../../Utils/Util';
 
 export class CountryAI extends CountryHandler {
@@ -12,16 +12,16 @@ export class CountryAI extends CountryHandler {
   }
 
   dispatchEvents() {
-    Array.from(data().events.values()).forEach((event: Event) => {
+    Array.from(data().events.values()).forEach((event: EventBase) => {
       // event.dispatch(this, MainScene.instance.getDate());
     });
   }
 
-  onEvent(event: Event) {
+  onEvent(event: EventBase) {
     //ランダムな選択肢を実行する
-    if (event.getOptions() === undefined) return;
-    const optionNumber = Util.getRandomInt(0, event.getOptions().length - 1);
-    event.getOptions()[optionNumber].takeEffects();
+    if (event.options === undefined) return;
+    const optionNumber = Util.getRandomInt(0, event.options.length - 1);
+    event.options[optionNumber].takeEffects();
   }
 
   public update() {

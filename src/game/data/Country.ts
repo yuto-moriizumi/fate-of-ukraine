@@ -1,6 +1,6 @@
 import { CountryJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
 import { Serializable } from '../util/Serializable';
-import { Event } from '../event/Event';
+import { EventBase } from '../event/EventBase';
 import { CountryHandler } from '../event/handler/CountryHandler';
 
 export class Country implements Serializable {
@@ -131,7 +131,7 @@ export class Country implements Serializable {
     return true;
   }
 
-  public onEvent(event: Event): void {
+  public onEvent(event: EventBase): void {
     this.handler.onEvent(event);
   }
 

@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { MapViewport } from '../container/MapViewport';
 import { Country } from '../data/Country';
 import { Province } from '../data/Provice';
-import { GameManager } from '../GameManager';
+import { data, GameManager } from '../GameManager';
 import { Observable } from '../util/Observable';
 import { Scene } from './Scene';
 
@@ -33,5 +33,6 @@ export class MainScene extends Scene {
     )
       return;
     this.datetime.val = this.datetime.val.add(1, 'hour');
+    data().countries.forEach((c) => c.update());
   }
 }

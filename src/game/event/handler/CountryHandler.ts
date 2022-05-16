@@ -1,5 +1,5 @@
 import { Country } from '../../data/Country';
-import { Event } from '../Event';
+import { EventBase } from '../EventBase';
 
 export abstract class CountryHandler {
   country!: Country;
@@ -13,5 +13,5 @@ export abstract class CountryHandler {
 
   abstract dispatchEvents(): void;
 
-  abstract onEvent(event: Event): void;
+  abstract onEvent(event: EventBase): void;
 }

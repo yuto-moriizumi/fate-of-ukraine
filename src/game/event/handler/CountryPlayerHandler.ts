@@ -1,7 +1,7 @@
 import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
 import { CountryHandler } from './CountryHandler';
-import { Event } from '../Event';
+import { EventBase } from '../EventBase';
 import { MainScene } from '../../scene/MainScene';
 
 export class CountryPlayerHandler extends CountryHandler {
@@ -14,12 +14,12 @@ export class CountryPlayerHandler extends CountryHandler {
 
   dispatchEvents() {
     //イベント発火処理
-    data().events.forEach((event: Event) => {
+    data().events.forEach((event: EventBase) => {
       // event.dispatch(this, MainScene.);
     });
   }
 
-  onEvent(event: Event) {
+  onEvent(event: EventBase) {
     // event.showDialog();
   }
 
