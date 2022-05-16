@@ -3,6 +3,7 @@ import { data } from '../../GameManager';
 import { CountryHandler } from './CountryHandler';
 import { EventBase } from '../EventBase';
 import Util from '../../Utils/Util';
+import { Dayjs } from 'dayjs';
 
 export class CountryAI extends CountryHandler {
   country: Country;
@@ -11,7 +12,7 @@ export class CountryAI extends CountryHandler {
     this.country = country;
   }
 
-  dispatchEvents() {
+  dispatchEvents(date: Dayjs) {
     Array.from(data().events.values()).forEach((event: EventBase) => {
       // event.dispatch(this, MainScene.instance.getDate());
     });

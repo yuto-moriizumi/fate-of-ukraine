@@ -1,18 +1,23 @@
+import { Dayjs } from 'dayjs';
 import { Country } from '../../data/Country';
+import { SaveDataType } from '../../type/JsonType';
 import Condition from './Condition';
 
 export default class DateCondition extends Condition {
-  // private _when: DateAdapter;
+  private date!: Dayjs;
 
-  public set when(date: string) {
-    if (typeof date === 'string') {
-      // this._when = new DateAdapter(date);
-      return;
-    }
-    // this._when = date;
+  public isValid(country: Country, date: Dayjs): boolean {
+    return date.isAfter(this.date);
   }
-  public isValid(country: Country, date: Date): boolean {
-    // return date.getTime() >= this._when.getTime();
-    return true;
+
+  public toJson(as: SaveDataType) {
+    return {
+      ...super.toJson(as),
+      date: this.date.format('YYYY-MM-DD'),
+    };
+  }
+
+  public loadJson(json: any) {
+    this.date = new Dayjs(json.date);
   }
 }

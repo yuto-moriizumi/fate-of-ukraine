@@ -2,6 +2,7 @@ import { CountryJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
 import { Serializable } from '../util/Serializable';
 import { EventBase } from '../event/EventBase';
 import { CountryHandler } from '../event/handler/CountryHandler';
+import { Dayjs } from 'dayjs';
 
 export class Country implements Serializable {
   /**
@@ -63,7 +64,8 @@ export class Country implements Serializable {
     return 0;
   }
 
-  public update() {
+  public update(date: Dayjs) {
+    this.handler.update(date);
     //金を更新
     // this.__money.setMoney(this.__money.getMoney() + this.calcBalance());
     // this._divisions.forEach((division) => division.update());

@@ -2,6 +2,8 @@ import Condition from './Condition';
 import JsonType from '../../Utils/JsonType';
 import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
+import { Dayjs } from 'dayjs';
+import { SaveDataType } from '../../type/JsonType';
 
 /**
  * イベント発火者が指定した国であることを確認します
@@ -11,22 +13,24 @@ import { data } from '../../GameManager';
  * @extends {Condition}
  */
 export default class CountryIs extends Condition {
-  private _country!: Country;
+  private country!: Country;
 
-  public isValid(country: Country, date: Date): boolean {
+  public isValid(country: Country, date: Dayjs): boolean {
     return (
-      this._country == country &&
+      this.country == country &&
       Array.from(data().provinces.values()).some((p) => p.owner == country)
     );
   }
 
-  private set country(countryId: string) {
-    const country = data().countries.get(countryId);
-    if (country) this._country = country;
+  public toJson(as: SaveDataType) {
+    return {
+      ...super.toJson(as),
+      country: this.country.id,
+    };
   }
 
-  replacer(key: string, value: any, type: JsonType) {
-    if (value instanceof Country) value = value.id;
-    return [key, value];
+  public loadJson(json: any) {
+    const country = data().countries.get(json.country);
+    if (country) this.country = country;
   }
 }

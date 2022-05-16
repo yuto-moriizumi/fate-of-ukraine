@@ -1,11 +1,15 @@
+import { Dayjs } from 'dayjs';
 import { Country } from '../../data/Country';
-import JsonConverter from '../../Utils/JsonConverter';
-import JsonObject from '../../Utils/JsonObject';
+import { CountryJson, SaveDataType } from '../../type/JsonType';
+import { Serializable } from '../../util/Serializable';
 
-export default abstract class Condition extends JsonObject {
-  type = this.constructor.name;
-  public abstract isValid(root: Country, date: Date): boolean;
-  public toJSON() {
-    return JsonConverter.toJSON(this);
+export default abstract class Condition implements Serializable {
+  readonly type = this.constructor.name;
+  public abstract isValid(root: Country, date: Dayjs): boolean;
+
+  public toJson(as: SaveDataType): any {
+    return { type: this.constructor.name };
   }
+
+  public abstract loadJson(json: CountryJson): any;
 }

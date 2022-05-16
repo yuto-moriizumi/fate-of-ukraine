@@ -5,6 +5,7 @@ import JsonObject from '../../Utils/JsonObject';
 import { Country } from '../../data/Country';
 import { Province } from '../../data/Provice';
 import { data } from '../../GameManager';
+import { SaveDataType } from '../../type/JsonType';
 
 export default class SetOwner extends Effect {
   private type = this.constructor.name;
@@ -17,22 +18,6 @@ export default class SetOwner extends Effect {
     });
   }
 
-  set root(countryId: string) {
-    const country = data().countries.get(countryId);
-    if (country) this._root = country;
-  }
-
-  set provinces(provinceIds: Array<string>) {
-    this._provinces = provinceIds
-      .map((provinceId) => {
-        if (provinceId.substr(0, 1) != '#') provinceId = '#' + provinceId; //#ついてないやつにつける data.json更新後削除
-        const province = data().provinces.get(provinceId);
-        //console.log(province);
-        return province;
-      })
-      .filter((p) => p !== undefined) as Province[];
-  }
-
   replacer(key: string, value: any, type: JsonType) {
     if (value instanceof Country) return [key, value.id];
     if (value instanceof Array) {
@@ -40,5 +25,18 @@ export default class SetOwner extends Effect {
         if (value[i] instanceof Province) value[i] = value[i].getId();
     }
     return [key, value];
+  }
+
+  public toJson(as: SaveDataType) {
+    return {
+      ...super.toJson(as),
+      root: this._root.id,
+      provinces: this._provinces,
+    };
+  }
+
+  public loadJson(json: any) {
+    this._root = json.root;
+    this._provinces = json.provinces;
   }
 }

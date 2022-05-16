@@ -33,6 +33,6 @@ export class MainScene extends Scene {
     )
       return;
     this.datetime.val = this.datetime.val.add(1, 'hour');
-    data().countries.forEach((c) => c.update());
+    data().countries.forEach((c) => c.update(this.datetime.val));
   }
 }
