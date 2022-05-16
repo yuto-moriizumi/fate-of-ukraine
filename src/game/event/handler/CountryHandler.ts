@@ -1,4 +1,5 @@
 import { Country } from '../../data/Country';
+import { Event } from '../Event';
 
 export abstract class CountryHandler {
   country!: Country;

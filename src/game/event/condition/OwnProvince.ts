@@ -1,14 +1,12 @@
-import Condition from "./Condition";
-import GameManager from "../../GameManager";
-import Country from "../../Country";
+import { Country } from '../../data/Country';
+import { data } from '../../GameManager';
+import Condition from './Condition';
 
 export default class OwnProvince extends Condition {
-  private province: string;
+  private province!: string;
 
   public isValid(country: Country, date: Date): boolean {
-    const province = GameManager.instance.data
-      .getProvinces()
-      .get(this.province);
-    return province.getOwner() == country;
+    const province = data().provinces.get(this.province);
+    return province?.owner == country;
   }
 }

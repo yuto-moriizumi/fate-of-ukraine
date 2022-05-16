@@ -1,7 +1,6 @@
-import Condition from "./Condition";
-import DateAdapter from "../../DateAdapter";
-import Country from "../../Country";
-import ConditionCreator from "./ConditionCreator";
+import { Country } from '../../data/Country';
+import Condition from './Condition';
+import ConditionCreator from './ConditionCreator';
 
 export default class Always extends Condition {
   private always = true;

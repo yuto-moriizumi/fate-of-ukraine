@@ -1,36 +1,34 @@
-import DateAdapter from "../../DateAdapter";
-import JsonConverter from "../../Utils/JsonConverter";
-import Country from "../../Country";
-import DateCondition from "./DateCondition";
-import EventFired from "./EventFired";
-import CountryIs from "./CountryIs";
-import And from "./And";
-import Always from "./Always";
-import OwnProvince from "./OwnProvince";
-import AtWarWith from "./AtWarWith";
+import JsonConverter from '../../Utils/JsonConverter';
+import DateCondition from './DateCondition';
+import EventFired from './EventFired';
+import CountryIs from './CountryIs';
+import And from './And';
+import Always from './Always';
+import OwnProvince from './OwnProvince';
+import AtWarWith from './AtWarWith';
 
 export default abstract class ConditionCreator {
-  public static createCondition(condition: object) {
-    switch (condition["type"]) {
-      case "DateCondition":
+  public static createCondition(condition: { type: string }) {
+    switch (condition['type']) {
+      case 'DateCondition':
         return Object.assign(new DateCondition(), condition);
-      case "EventFired":
+      case 'EventFired':
         return Object.assign(new EventFired(), condition);
-      case "CountryIs":
+      case 'CountryIs':
         return Object.assign(new CountryIs(), condition);
-      case "And":
+      case 'And':
         return Object.assign(new And(), condition);
-      case "Always":
+      case 'Always':
         return Object.assign(new Always(), condition);
-      case "OwnProvince":
+      case 'OwnProvince':
         return Object.assign(new OwnProvince(), condition);
-      case "AtWarWith":
+      case 'AtWarWith':
         return Object.assign(new AtWarWith(), condition);
       default:
         console.log(condition);
 
         throw new Error(
-          "一致する条件クラスが見つかりませんでした:" + condition["type"]
+          '一致する条件クラスが見つかりませんでした:' + condition['type']
         );
     }
   }

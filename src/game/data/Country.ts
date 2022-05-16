@@ -1,6 +1,7 @@
-import CountryHandler from '../event/handler/CountryHandler';
 import { CountryJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
 import { Serializable } from '../util/Serializable';
+import { Event } from '../event/Event';
+import { CountryHandler } from '../event/handler/CountryHandler';
 
 export class Country implements Serializable {
   /**

@@ -3,8 +3,8 @@ import Condition from './condition/Condition';
 import { data } from '../GameManager';
 import ConditionCreator from './condition/ConditionCreator';
 import { Country } from '../data/Country';
-import CountryHandler from './handler/CountryHandler';
 import Effect from './effect/Effect';
+import { CountryHandler } from './handler/CountryHandler';
 
 export class Event {
   private id!: string;
@@ -44,7 +44,7 @@ export class Event {
     } else dispatcher.onEvent(this); //そうでない場合は発火国でのみ発火します
   }
 
-  set condition(condition: object) {
+  set condition(condition: { type: string }) {
     this._condition = ConditionCreator.createCondition(condition);
   }
 
@@ -60,17 +60,6 @@ export class Event {
 
   public getId() {
     return this.id;
-  }
-
-  public setTime2happen(time2happen: number) {
-    this.time2happen =
-      isNaN(this.time2happen) || this.time2happen == undefined
-        ? time2happen
-        : Math.min(this.time2happen, time2happen);
-  }
-
-  public countFoward() {
-    if (!this.fired && this.time2happen) this.time2happen -= 1; //未発火ならカウントを進める
   }
 
   public isFired() {

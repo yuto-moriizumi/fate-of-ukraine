@@ -1,20 +1,20 @@
-import Effect from "./Effect";
-import Country from "../../Country";
-import GameManager from "../../GameManager";
-import MainScene from "../../Scenes/MainScene";
-import JsonType from "../../Utils/JsonType";
+import Effect from './Effect';
+import JsonType from '../../Utils/JsonType';
+import { Country } from '../../data/Country';
+import { data } from '../../GameManager';
 
 export default class ChangeName extends Effect {
   private type = this.constructor.name;
-  private _country: Country;
-  private name: string;
+  private _country!: Country;
+  private name!: string;
 
   public activate() {
-    this._country.name = this.name;
+    // this._country.name = this.name;
   }
 
   set country(countryId: string) {
-    this._country = GameManager.instance.data.getCountry(countryId);
+    const country = data().countries.get(countryId);
+    if (country) this._country = country;
   }
 
   replacer(key: string, value: any, type: JsonType) {

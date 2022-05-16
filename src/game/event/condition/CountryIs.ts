@@ -1,8 +1,7 @@
-import Condition from "./Condition";
-import DateAdapter from "../../DateAdapter";
-import Country from "../../Country";
-import GameManager from "../../GameManager";
-import JsonType from "../../Utils/JsonType";
+import Condition from './Condition';
+import JsonType from '../../Utils/JsonType';
+import { Country } from '../../data/Country';
+import { data } from '../../GameManager';
 
 /**
  * イベント発火者が指定した国であることを確認します
@@ -12,19 +11,18 @@ import JsonType from "../../Utils/JsonType";
  * @extends {Condition}
  */
 export default class CountryIs extends Condition {
-  private _country: Country;
+  private _country!: Country;
 
   public isValid(country: Country, date: Date): boolean {
     return (
       this._country == country &&
-      GameManager.instance.data
-        .getProvinces()
-        .some((p) => p.getOwner() == country)
+      Array.from(data().provinces.values()).some((p) => p.owner == country)
     );
   }
 
   private set country(countryId: string) {
-    this._country = GameManager.instance.data.getCountry(countryId);
+    const country = data().countries.get(countryId);
+    if (country) this._country = country;
   }
 
   replacer(key: string, value: any, type: JsonType) {

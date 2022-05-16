@@ -1,27 +1,28 @@
-import Effect from "./Effect";
-import Country from "../../Country";
-import GameManager from "../../GameManager";
-import MainScene from "../../Scenes/MainScene";
-import JsonType from "../../Utils/JsonType";
+import Effect from './Effect';
+import JsonType from '../../Utils/JsonType';
+import { Country } from '../../data/Country';
+import { data } from '../../GameManager';
 
 export default class Annex extends Effect {
   private type = this.constructor.name;
-  private _root: Country;
-  private _target: Country;
+  private _root!: Country;
+  private _target!: Country;
 
   public activate() {
-    GameManager.instance.data.getProvinces().forEach((province) => {
-      if (province.getOwner() !== this._target) return;
-      province.setOwner(this._root);
+    data().provinces.forEach((province) => {
+      if (province.owner !== this._target) return;
+      province.owner = this._root;
     });
   }
 
   set root(countryId: string) {
-    this._root = GameManager.instance.data.getCountry(countryId);
+    const country = data().countries.get(countryId);
+    if (country) this._root = country;
   }
 
   set target(countryId: string) {
-    this._target = GameManager.instance.data.getCountry(countryId);
+    const country = data().countries.get(countryId);
+    if (country) this._target = country;
   }
 
   replacer(key: string, value: any, type: JsonType) {

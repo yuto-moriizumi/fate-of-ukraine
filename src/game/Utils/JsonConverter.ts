@@ -1,4 +1,4 @@
-import JsonType from "./JsonType";
+import JsonType from './JsonType';
 
 /**
  * オブジェクトをJSONに変換するためのユーティリティクラス
@@ -9,11 +9,14 @@ import JsonType from "./JsonType";
  * @class JsonConverter
  */
 export default class JsonConverter {
-  public static toJSON(object: any, replacer?: (key, value) => Array<any>) {
+  public static toJSON(
+    object: any,
+    replacer?: (key: any, value: any) => Array<any>
+  ) {
     return Object.fromEntries(
       Object.entries(object).map(([key, value]) => {
-        if (key.startsWith("__")) return [];
-        if (key.startsWith("_")) key = key.substr(1);
+        if (key.startsWith('__')) return [];
+        if (key.startsWith('_')) key = key.substr(1);
         if (value instanceof Map) value = Object.fromEntries(value);
         if (replacer) [key, value] = replacer(key, value);
         return [key, value];
