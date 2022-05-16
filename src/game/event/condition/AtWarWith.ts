@@ -4,7 +4,7 @@ import { data } from '../../GameManager';
 import { SaveDataType } from '../../type/JsonType';
 import Condition from './Condition';
 
-export default class AtWarWith extends Condition {
+export class AtWarWith extends Condition {
   private country!: string; //Country
 
   public isValid(country: Country, date: Dayjs): boolean {
