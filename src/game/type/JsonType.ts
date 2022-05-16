@@ -6,6 +6,13 @@ export const SAVEDATA_TYPE = {
 // type SizeType = "small" | "medium" | "large"
 export type SaveDataType = typeof SAVEDATA_TYPE[keyof typeof SAVEDATA_TYPE];
 
+export type Json =
+  | SaveDataJson
+  | DictJson
+  | CountryJson
+  | SaveDataProvinceJson
+  | ProvinceJson;
+
 export type SaveDataJson = {
   provinces?: Dict<ProvinceJson>;
   countries?: Dict<CountryJson>;
@@ -27,6 +34,8 @@ export type SaveDataProvinceJson = {
 export type Dict<T> = {
   [id: string]: T;
 };
+
+export type DictJson = Dict<ProvinceJson> | Dict<CountryJson> | Dict<EventJson>;
 
 export type CountryJson = GameDataCountryJson | SaveDataCountryJson;
 

@@ -4,9 +4,10 @@ import { Country } from './Country';
 import { Province } from './Provice';
 import { EventBase } from '../event/EventBase';
 import DiplomaticTie from '../DiplomaticTies/DiplomaticTie';
+import { CountryMap } from '../util/CountryMap';
 
 export class SaveData implements Serializable {
-  public readonly countries = new Map<string, Country>();
+  public readonly countries = new CountryMap();
   public readonly provinces = new Map<string, Province>();
   public readonly events = new Map<string, EventBase>();
   public readonly diplomacy = new Set<DiplomaticTie>();
@@ -17,16 +18,17 @@ export class SaveData implements Serializable {
 
   public toJson(as: SaveDataType): SaveDataJson {
     return {
-      countries: Object.fromEntries(
-        Array.from(this.countries).map(([id, country]: [string, Country]) => [
-          id,
-          country.toJson(as),
-        ])
-      ),
+      countries: this.countries.toJson(as),
       provinces: Object.fromEntries(
         Array.from(this.provinces).map(([id, province]: [string, Province]) => [
           id,
           province.toJson(as),
+        ])
+      ),
+      events: Object.fromEntries(
+        Array.from(this.events).map(([id, event]: [string, EventBase]) => [
+          id,
+          event.toJson(as),
         ])
       ),
     };

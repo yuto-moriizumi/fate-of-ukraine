@@ -5,7 +5,7 @@ import CountryIs from './CountryIs';
 import And from './And';
 import Always from './Always';
 import OwnProvince from './OwnProvince';
-import AtWarWith from './AtWarWith';
+import { AtWarWith } from './AtWarWith';
 
 export default abstract class ConditionCreator {
   public static createCondition(condition: { type: string }) {
