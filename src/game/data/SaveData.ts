@@ -3,11 +3,13 @@ import { Serializable } from '../util/Serializable';
 import { Country } from './Country';
 import { Province } from './Provice';
 import { EventBase } from '../event/EventBase';
+import DiplomaticTie from '../DiplomaticTies/DiplomaticTie';
 
 export class SaveData implements Serializable {
   public readonly countries = new Map<string, Country>();
   public readonly provinces = new Map<string, Province>();
   public readonly events = new Map<string, EventBase>();
+  public readonly diplomacy = new Set<DiplomaticTie>();
 
   constructor(json?: SaveDataJson) {
     if (json) this.loadJson(json);
