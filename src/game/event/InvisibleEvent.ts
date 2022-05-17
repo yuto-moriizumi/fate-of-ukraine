@@ -21,7 +21,7 @@ export class InvisibleEvent extends EventBase {
     if (!this.isDispatchable(country, date)) return; //発火可能でないなら発火しない
     this.fired = true;
     console.log('invisible event dispatched', { id: this.id, at: country });
-    if (this.immediate) this.immediate.forEach((e) => e.activate());
+    this.immediate.forEach((e) => e.activate());
     if (this.isGlobal) {
       //グローバルイベントの場合は全ての国で発火します
       data().countries.forEach((country) => country.onEvent(this));

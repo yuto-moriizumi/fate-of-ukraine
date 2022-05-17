@@ -35,6 +35,7 @@ export class MainScene extends Scene {
     )
       return;
     this.datetime.val = this.datetime.val.add(1, 'hour');
-    data().countries.forEach((c) => c.update(this.datetime.val));
+    data().countries.forEach((c) => c.update(this.datetime.val)); //国ハンドラを稼働させる
+    data().events.forEach((e) => e.countFoward()); //イベントタイマーを進める
   }
 }

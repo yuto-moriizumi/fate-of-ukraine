@@ -17,7 +17,7 @@ export default class DateCondition extends Condition {
   public toJson(as: SaveDataType): DateConditionJson {
     return {
       type: CONDITION_TYPE.DATE_CONDITION,
-      date: this.date.format('YYYY-MM-DD'),
+      date: this.date.format('YYYY-MM-DD hh:00'),
     };
   }
 

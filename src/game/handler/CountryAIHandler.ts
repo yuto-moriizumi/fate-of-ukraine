@@ -3,6 +3,7 @@ import { EventBase } from '../event/EventBase';
 import Util from '../util/Util';
 import { InvisibleEvent } from '../event/InvisibleEvent';
 import { VisibleEvent } from '../event/VisibleEvent';
+import { Dayjs } from 'dayjs';
 
 export class CountryAIHandler extends CountryHandler {
   onEvent(event: VisibleEvent | InvisibleEvent) {
@@ -13,7 +14,8 @@ export class CountryAIHandler extends CountryHandler {
     event.options[optionNumber].takeEffects();
   }
 
-  public update() {
+  public update(date: Dayjs) {
+    super.update(date);
     // //イベント発火処理
     // this.dispatchEvents();
     // //師団の生産

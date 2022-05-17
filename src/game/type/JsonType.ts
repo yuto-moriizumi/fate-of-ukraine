@@ -178,7 +178,7 @@ export type DeclareWarJson = {
 export type DispatchEventJson = {
   type: 'DispatchEvent';
   id: string;
-  time2happen: number;
+  hours2happen?: number;
 };
 
 export type GainAccessJson = {

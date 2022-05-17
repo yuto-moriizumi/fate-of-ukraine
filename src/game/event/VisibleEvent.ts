@@ -43,11 +43,25 @@ export class VisibleEvent extends EventBase {
     const base = super.toCommonJson(as);
     if (base === undefined) return;
     if ('fired' in base) return base;
+    const res = {
+      ...base,
+      title: this.title,
+      desc: this.desc,
+      immediate:
+        this.immediate && this.immediate.length > 0
+          ? this.immediate.map((i) => i.toJson(as))
+          : undefined,
+      options: this._options.map((o) => o.toJson(as)),
+    };
+    console.log(this, this.immediate ? this.immediate.length : undefined);
     return {
       ...base,
       title: this.title,
       desc: this.desc,
-      immediate: this.immediate?.map((i) => i.toJson(as)),
+      immediate:
+        this.immediate && this.immediate.length > 0
+          ? this.immediate.map((i) => i.toJson(as))
+          : undefined,
       options: this._options.map((o) => o.toJson(as)),
     };
   }
