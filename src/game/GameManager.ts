@@ -30,7 +30,7 @@ export class GameManager {
     //ゲームデータのロード
     const GAMEDATA_FILE = 'GameData.json';
     const SAVEDATA_FILE = 'SaveData.json';
-    const EVENT_FILE = 'events.json';
+    const EVENT_FILE = 'EventData.json';
     const loader = app.loader;
     loader
       .add(GAMEDATA_FILE)

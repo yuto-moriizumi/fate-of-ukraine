@@ -54,16 +54,26 @@ export type SaveDataCountryJson = {
   money: number;
 };
 
-export type EventJson = GameDataEventJson | SaveDataEventJson;
+export type EventJson =
+  | VisibleEventJson
+  | InvisibleEventJson
+  | SaveDataEventJson;
 
-export type GameDataEventJson = {
-  title?: string;
-  desc?: string;
-  hidden: boolean;
+export type EventBaseJson = {
   triggeredOnly: boolean;
   condition: ConditionJson;
-  immediate?: EffectJson[] | OptionJson;
-  options?: OptionJson[];
+  isGlobal: boolean;
+};
+
+export type VisibleEventJson = EventBaseJson & {
+  title: string;
+  desc: string;
+  immediate?: EffectJson[];
+  options: OptionJson[];
+};
+
+export type InvisibleEventJson = EventBaseJson & {
+  immediate: EffectJson[];
 };
 
 export type SaveDataEventJson = {

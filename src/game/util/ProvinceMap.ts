@@ -1,9 +1,15 @@
 import { Province } from '../data/Provice';
-import { Dict, ProvinceJson, SaveDataType } from '../type/JsonType';
+import {
+  Dict,
+  ProvinceJson,
+  SaveDataType,
+  SAVEDATA_TYPE,
+} from '../type/JsonType';
 import { SerializableMap } from './SerializableMap';
 
 export class ProvinceMap extends SerializableMap<Province> {
-  public toJson(as: SaveDataType): Dict<ProvinceJson> {
+  public toJson(as: SaveDataType): Dict<ProvinceJson> | undefined {
+    if (as === SAVEDATA_TYPE.EVENTDATA) return undefined;
     return super.toJson(as) as Dict<ProvinceJson>;
   }
   public loadJson(json: Dict<ProvinceJson>) {

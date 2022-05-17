@@ -1,9 +1,15 @@
 import { Country } from '../data/Country';
-import { CountryJson, Dict, SaveDataType } from '../type/JsonType';
+import {
+  CountryJson,
+  Dict,
+  SaveDataType,
+  SAVEDATA_TYPE,
+} from '../type/JsonType';
 import { SerializableMap } from './SerializableMap';
 
 export class CountryMap extends SerializableMap<Country> {
-  public toJson(as: SaveDataType): Dict<CountryJson> {
+  public toJson(as: SaveDataType): Dict<CountryJson> | undefined {
+    if (as === SAVEDATA_TYPE.EVENTDATA) return undefined;
     return super.toJson(as) as Dict<CountryJson>;
   }
   public loadJson(json: Dict<CountryJson>) {

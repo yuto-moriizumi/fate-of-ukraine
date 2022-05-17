@@ -13,7 +13,6 @@ export class EventBase implements Serializable {
   private readonly id: string;
   private title: string | undefined;
   private desc: string | undefined;
-  private hidden = false;
   private triggeredOnly = false;
   private fired = false;
   private condition!: Condition;
@@ -26,7 +25,7 @@ export class EventBase implements Serializable {
    * @private
    * @memberof Event
    */
-  private readonly isGlobal = false;
+  private isGlobal = false;
 
   public get options() {
     return this._options;
@@ -60,11 +59,11 @@ export class EventBase implements Serializable {
         return {
           title: this.title,
           desc: this.desc,
-          hidden: this.hidden,
           triggeredOnly: this.triggeredOnly,
           condition: this.condition.toJson(as),
           immediate: this.immediate.map((i) => i.toJson(as)),
           options: this._options.map((o) => o.toJson(as)),
+          isGlobal: this.isGlobal,
         };
       case SAVEDATA_TYPE.SAVEDATA:
         return { fired: this.fired };
@@ -74,21 +73,22 @@ export class EventBase implements Serializable {
   }
 
   public loadJson(json: EventJson) {
-    if ('title' in json) {
-      this.title = json.title;
-      this.desc = json.desc;
-      this.hidden = json.hidden;
+    if ('fired' in json) {
+      this.fired = json.fired;
+    } else {
       this.triggeredOnly = json.triggeredOnly;
       this.condition = ConditionFactory.fromJson(json.condition);
-      if (json.immediate) {
-        const immediate = json.immediate;
-        this.immediate = (
-          immediate instanceof Array ? immediate : immediate.effects
-        ).map((i) => EffectFactory.fromJson(i));
-      }
-      if (json.options)
+      if ('isGlobal' in json) this.isGlobal = json.isGlobal;
+      else this.isGlobal = false;
+      if (json.immediate)
+        this.immediate = json.immediate.map((i) => EffectFactory.fromJson(i));
+      if ('title' in json) {
+        this.title = json.title;
+        this.desc = json.desc;
         this._options = json.options.map((o) => new Option().loadJson(o));
+      }
     }
+
     return this;
   }
 }
