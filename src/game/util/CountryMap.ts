@@ -10,7 +10,7 @@ export class CountryMap extends SerializableMap<Country> {
     Object.entries(json).forEach(([key, value]) =>
       this.set(key, (this.get(key) ?? new Country(key)).loadJson(value))
     );
-    console.log('gamedata countries loaded:', this);
+    console.log('countries loaded:', this);
     return this;
   }
 }
