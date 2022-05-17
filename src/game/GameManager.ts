@@ -30,14 +30,16 @@ export class GameManager {
     //ゲームデータのロード
     const GAMEDATA_FILE = 'GameData.json';
     const SAVEDATA_FILE = 'SaveData.json';
+    const EVENT_FILE = 'events.json';
     const loader = app.loader;
     loader
       .add(GAMEDATA_FILE)
       .add(SAVEDATA_FILE)
+      .add(EVENT_FILE)
       .load(() => {
-        this._data = new SaveData(
-          loader.resources[GAMEDATA_FILE].data
-        ).loadJson(loader.resources[SAVEDATA_FILE].data);
+        this._data = new SaveData(loader.resources[GAMEDATA_FILE].data)
+          .loadJson(loader.resources[SAVEDATA_FILE].data)
+          .loadJson(loader.resources[EVENT_FILE].data);
         console.log(this._data);
       });
 
@@ -89,4 +91,8 @@ export class GameManager {
 
 export const data = () => {
   return GameManager._instance.data;
+};
+
+export const loader = () => {
+  return GameManager._instance.game.loader;
 };

@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { data, GameManager } from '../GameManager';
+import { data, GameManager, loader } from '../GameManager';
 import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
@@ -7,7 +7,7 @@ import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace';
 import { Simple } from 'pixi-cull';
 export class MapViewport extends Viewport {
   public static _instance: MapViewport;
-  private static readonly MAP_SRC = 'assets/provinces.png';
+  private static readonly MAP_SRC = 'provinces.png';
   private spritePixelArray!: Uint8Array;
   private static readonly INITIAL_SCALE = 5;
   private provinceRef!: Observable<Province>;
@@ -22,11 +22,10 @@ export class MapViewport extends Viewport {
     MapViewport._instance = this;
     this.provinceRef = provinceRef;
 
-    const loader = PIXI.Loader.shared;
-    const resource = loader.resources[MapViewport.MAP_SRC];
+    const resource = loader().resources[MapViewport.MAP_SRC];
     const onLoaded = () => {
       this.sprite = new PIXI.Sprite(
-        loader.resources[MapViewport.MAP_SRC].texture
+        loader().resources[MapViewport.MAP_SRC].texture
       );
       const renderer = GameManager._instance.game.renderer;
       this.spritePixelArray = renderer.plugins.extract.pixels(this.sprite);
@@ -66,7 +65,7 @@ export class MapViewport extends Viewport {
 
       this.updateMap();
     };
-    if (!resource) loader.add(MapViewport.MAP_SRC).load(onLoaded);
+    if (!resource) loader().add(MapViewport.MAP_SRC).load(onLoaded);
     else onLoaded();
 
     this.on('click', this.getClickedProvince);

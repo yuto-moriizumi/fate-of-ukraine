@@ -1,6 +1,7 @@
 export const SAVEDATA_TYPE = {
   GAMEDATA: 'GameData',
   SAVEDATA: 'SaveData',
+  EVENTDATA: 'EventData',
 } as const;
 
 export type SaveDataType = typeof SAVEDATA_TYPE[keyof typeof SAVEDATA_TYPE];
@@ -56,13 +57,13 @@ export type SaveDataCountryJson = {
 export type EventJson = GameDataEventJson | SaveDataEventJson;
 
 export type GameDataEventJson = {
-  title: string;
-  desc: string;
+  title?: string;
+  desc?: string;
   hidden: boolean;
   triggeredOnly: boolean;
   condition: ConditionJson;
-  immediate: EffectJson[];
-  options: OptionJson[];
+  immediate?: EffectJson[] | OptionJson;
+  options?: OptionJson[];
 };
 
 export type SaveDataEventJson = {

@@ -11,13 +11,13 @@ import ConditionFactory from './condition/ConditionFactory';
 
 export class EventBase implements Serializable {
   private readonly id: string;
-  private title!: string;
-  private desc!: string;
+  private title: string | undefined;
+  private desc: string | undefined;
   private hidden = false;
   private triggeredOnly = false;
   private fired = false;
   private condition!: Condition;
-  private immediate!: Effect[];
+  private immediate = new Array<Effect>();
   private _options = new Array<Option>();
   /**
    * グローバルイベントであるかどうか
@@ -54,18 +54,23 @@ export class EventBase implements Serializable {
     } else country.onEvent(this); //そうでない場合は発火国でのみ発火します
   }
 
-  public toJson(as: SaveDataType): EventJson {
-    if (as === SAVEDATA_TYPE.GAMEDATA)
-      return {
-        title: this.title,
-        desc: this.desc,
-        hidden: this.hidden,
-        triggeredOnly: this.triggeredOnly,
-        condition: this.condition.toJson(as),
-        immediate: this.immediate.map((i) => i.toJson(as)),
-        options: this._options.map((o) => o.toJson(as)),
-      };
-    return { fired: this.fired };
+  public toJson(as: SaveDataType): EventJson | undefined {
+    switch (as) {
+      case SAVEDATA_TYPE.EVENTDATA:
+        return {
+          title: this.title,
+          desc: this.desc,
+          hidden: this.hidden,
+          triggeredOnly: this.triggeredOnly,
+          condition: this.condition.toJson(as),
+          immediate: this.immediate.map((i) => i.toJson(as)),
+          options: this._options.map((o) => o.toJson(as)),
+        };
+      case SAVEDATA_TYPE.SAVEDATA:
+        return { fired: this.fired };
+      default:
+        return undefined;
+    }
   }
 
   public loadJson(json: EventJson) {
@@ -75,8 +80,14 @@ export class EventBase implements Serializable {
       this.hidden = json.hidden;
       this.triggeredOnly = json.triggeredOnly;
       this.condition = ConditionFactory.fromJson(json.condition);
-      this.immediate = json.immediate.map((i) => EffectFactory.fromJson(i));
-      this._options = json.options.map((o) => new Option().loadJson(o));
+      if (json.immediate) {
+        const immediate = json.immediate;
+        this.immediate = (
+          immediate instanceof Array ? immediate : immediate.effects
+        ).map((i) => EffectFactory.fromJson(i));
+      }
+      if (json.options)
+        this._options = json.options.map((o) => new Option().loadJson(o));
     }
     return this;
   }

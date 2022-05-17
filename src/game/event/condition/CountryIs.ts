@@ -16,7 +16,11 @@ import {
  * @extends {Condition}
  */
 export default class CountryIs extends Condition {
-  private country!: Country;
+  private id!: string;
+
+  private get country() {
+    return data().countries.get(this.id);
+  }
 
   public isValid(country: Country, date: Dayjs): boolean {
     return (
@@ -28,13 +32,12 @@ export default class CountryIs extends Condition {
   public toJson(as: SaveDataType): CountryIsJson {
     return {
       type: CONDITION_TYPE.COUNTRY_IS,
-      country: this.country.id,
+      country: this.id,
     };
   }
 
   public loadJson(json: CountryIsJson) {
-    const country = data().countries.get(json.country);
-    if (country) this.country = country;
+    this.id = json.country;
     return this;
   }
 }

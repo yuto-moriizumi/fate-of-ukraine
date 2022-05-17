@@ -142,10 +142,14 @@ export class Country implements Serializable {
     this._handler.onEvent(event);
   }
 
-  public toJson(as: SaveDataType): CountryJson {
-    if (as === SAVEDATA_TYPE.GAMEDATA)
-      return { name: this._name, color: this._color };
-    return { money: this.money };
+  public toJson(as: SaveDataType): CountryJson | undefined {
+    switch (as) {
+      case SAVEDATA_TYPE.GAMEDATA:
+        return { name: this._name, color: this._color };
+      case SAVEDATA_TYPE.SAVEDATA:
+        return { money: this.money };
+    }
+    return undefined;
   }
 
   public loadJson(json: CountryJson) {

@@ -4,8 +4,8 @@ import { Container } from 'react-bootstrap';
 import { GameManager } from '../game/GameManager';
 import { Scene } from '../game/scene/Scene';
 import { SelectionScene } from '../game/scene/SelectionScene';
-import SelectionSceneUI from './SelectionSceneUI';
-import MainSceneUI from './MainSceneUI';
+import SelectionSceneUI from './component/SelectionSceneUI';
+import MainSceneUI from './component/MainSceneUI';
 import { MainScene } from '../game/scene/MainScene';
 
 function App() {

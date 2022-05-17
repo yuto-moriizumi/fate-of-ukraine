@@ -62,14 +62,18 @@ export class Province implements Serializable {
     return true;
   }
 
-  public toJson(as: SaveDataType): ProvinceJson {
-    if (as === SAVEDATA_TYPE.GAMEDATA)
-      return {
-        name: this._name,
-        x: this.x,
-        y: this.y,
-      };
-    return { owner: this.ownerId };
+  public toJson(as: SaveDataType): ProvinceJson | undefined {
+    switch (as) {
+      case SAVEDATA_TYPE.GAMEDATA:
+        return {
+          name: this._name,
+          x: this.x,
+          y: this.y,
+        };
+      case SAVEDATA_TYPE.SAVEDATA:
+        return { owner: this.ownerId };
+    }
+    return undefined;
   }
 
   public loadJson(json: ProvinceJson) {
