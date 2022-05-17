@@ -1,10 +1,13 @@
 import { CountryHandler } from './CountryHandler';
 import { EventBase } from '../event/EventBase';
 import Util from '../util/Util';
+import { InvisibleEvent } from '../event/InvisibleEvent';
+import { VisibleEvent } from '../event/VisibleEvent';
 
 export class CountryAIHandler extends CountryHandler {
-  onEvent(event: EventBase) {
+  onEvent(event: VisibleEvent | InvisibleEvent) {
     //ランダムな選択肢を実行する
+    if (event instanceof InvisibleEvent) return;
     if (event.options === undefined) return;
     const optionNumber = Util.getRandomInt(0, event.options.length - 1);
     event.options[optionNumber].takeEffects();

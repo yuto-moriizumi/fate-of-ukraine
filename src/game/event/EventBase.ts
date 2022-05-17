@@ -5,11 +5,17 @@ import { Country } from '../data/Country';
 import Effect from './effect/Effect';
 import { Dayjs } from 'dayjs';
 import { Serializable } from '../util/Serializable';
-import { EventJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
+import {
+  EventBaseJson,
+  EventJson,
+  SaveDataEventJson,
+  SaveDataType,
+  SAVEDATA_TYPE,
+} from '../type/JsonType';
 import EffectFactory from './effect/EffectFactory';
 import ConditionFactory from './condition/ConditionFactory';
 
-export class EventBase implements Serializable {
+export abstract class EventBase implements Serializable {
   readonly id: string;
   triggeredOnly = false;
   fired = false;
@@ -34,24 +40,18 @@ export class EventBase implements Serializable {
     return false; //基本は発火しない
   }
 
-  public dispatch(country: Country, date: Dayjs) {
-    if (!this.isDispatchable(country, date)) return; //発火可能でないなら発火しない
-    this.fired = true;
-    console.log('event dispatched', this.id);
-    if (this.immediate) this.immediate.forEach((e) => e.activate());
-    if (this.isGlobal) {
-      //グローバルイベントの場合は全ての国で発火します
-      data().countries.forEach((country) => country.onEvent(this));
-    } else country.onEvent(this); //そうでない場合は発火国でのみ発火します
-  }
+  public abstract dispatch(country: Country, date: Dayjs): void;
 
-  public toJson(as: SaveDataType): EventJson | undefined {
+  public abstract toJson(as: SaveDataType): EventJson | undefined;
+
+  toCommonJson(
+    as: SaveDataType
+  ): EventBaseJson | SaveDataEventJson | undefined {
     switch (as) {
       case SAVEDATA_TYPE.EVENTDATA:
         return {
           triggeredOnly: this.triggeredOnly,
           condition: this.condition.toJson(as),
-          immediate: this.immediate.map((i) => i.toJson(as)),
           isGlobal: this.isGlobal,
         };
       case SAVEDATA_TYPE.SAVEDATA:
@@ -69,15 +69,7 @@ export class EventBase implements Serializable {
       this.condition = ConditionFactory.fromJson(json.condition);
       if ('isGlobal' in json) this.isGlobal = json.isGlobal;
       else this.isGlobal = false;
-      if (json.immediate)
-        this.immediate = json.immediate.map((i) => EffectFactory.fromJson(i));
-      if ('title' in json) {
-        this.title = json.title;
-        this.desc = json.desc;
-        this._options = json.options.map((o) => new Option().loadJson(o));
-      }
     }
-
     return this;
   }
 }

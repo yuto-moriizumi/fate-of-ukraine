@@ -10,37 +10,40 @@ import EffectFactory from './effect/EffectFactory';
 import ConditionFactory from './condition/ConditionFactory';
 import { EventBase } from './EventBase';
 import Effect from './effect/Effect';
+import { Country } from '../data/Country';
+import { Dayjs } from 'dayjs';
+import { data } from '../GameManager';
 
 export class InvisibleEvent extends EventBase {
   immediate = new Array<Effect>();
+
+  public dispatch(country: Country, date: Dayjs) {
+    if (!this.isDispatchable(country, date)) return; //発火可能でないなら発火しない
+    this.fired = true;
+    console.log('invisible event dispatched', { id: this.id, at: country });
+    if (this.immediate) this.immediate.forEach((e) => e.activate());
+    if (this.isGlobal) {
+      //グローバルイベントの場合は全ての国で発火します
+      data().countries.forEach((country) => country.onEvent(this));
+    } else country.onEvent(this); //そうでない場合は発火国でのみ発火します
+  }
+
   public toJson(
     as: SaveDataType
   ): InvisibleEventJson | SaveDataEventJson | undefined {
-    switch (as) {
-      case SAVEDATA_TYPE.EVENTDATA:
-        return {
-          triggeredOnly: this.triggeredOnly,
-          condition: this.condition.toJson(as),
-          immediate: this.immediate.map((i) => i.toJson(as)),
-          isGlobal: this.isGlobal,
-        };
-      case SAVEDATA_TYPE.SAVEDATA:
-        return { fired: this.fired };
-      default:
-        return undefined;
-    }
+    const base = super.toCommonJson(as);
+    if (base === undefined) return;
+    if ('fired' in base) return base;
+    return {
+      ...base,
+      immediate: this.immediate.map((i) => i.toJson(as)),
+    };
   }
 
   public loadJson(json: InvisibleEventJson | SaveDataEventJson) {
-    if ('fired' in json) {
-      this.fired = json.fired;
-    } else {
-      this.triggeredOnly = json.triggeredOnly;
-      this.condition = ConditionFactory.fromJson(json.condition);
-      this.isGlobal = json.isGlobal;
-      if (json.immediate)
-        this.immediate = json.immediate.map((i) => EffectFactory.fromJson(i));
-    }
+    super.loadJson(json);
+    if ('immediate' in json)
+      this.immediate = json.immediate.map((i) => EffectFactory.fromJson(i));
     return this;
   }
 }
