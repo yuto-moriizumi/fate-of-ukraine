@@ -1,14 +1,12 @@
-import { Dayjs } from 'dayjs';
-import { Country } from '../../data/Country';
-import { AlwaysJson, SaveDataType, SAVEDATA_TYPE } from '../../type/JsonType';
+import { AlwaysJson } from '../../type/JsonType';
 import Condition from './Condition';
 
 export class Always extends Condition {
   private always = true;
-  public isValid(country: Country, date: Dayjs): boolean {
+  public isValid(): boolean {
     return this.always;
   }
-  public toJson(as: SaveDataType): AlwaysJson {
+  public toJson(): AlwaysJson {
     return { type: 'Always', always: this.always };
   }
 

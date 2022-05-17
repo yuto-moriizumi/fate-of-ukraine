@@ -1,8 +1,6 @@
-import { data } from '../../GameManager';
 import {
   DispatchEventJson,
   EFFECT_TYPE,
-  SaveDataType,
 } from '../../type/JsonType';
 import Effect from './Effect';
 
@@ -16,7 +14,7 @@ export default class DispatchEvent extends Effect {
     console.log('dispatch event:', this.id, 'in', this.time2happen, 'days');
   }
 
-  public toJson(as: SaveDataType): DispatchEventJson {
+  public toJson(): DispatchEventJson {
     return {
       type: EFFECT_TYPE.DISPATCH_EVENT,
       id: this.id,

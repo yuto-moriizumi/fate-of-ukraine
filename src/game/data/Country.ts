@@ -116,14 +116,14 @@ export class Country implements Serializable {
    * @param {Country} country
    * @memberof Country
    */
-  public hasAccessTo(country: Country) {
-    // return this.__diplomaticTies.some((d) => {
-    //   return (
-    //     d instanceof Access && d.getRoot() == this && d.getTarget() == country
-    //   );
-    // });
-    return true;
-  }
+  // public hasAccessTo(country: Country) {
+  //   // return this.__diplomaticTies.some((d) => {
+  //   //   return (
+  //   //     d instanceof Access && d.getRoot() == this && d.getTarget() == country
+  //   //   );
+  //   // });
+  //   return true;
+  // }
 
   /**
    * この国が引数の国と同盟しているか
@@ -131,12 +131,12 @@ export class Country implements Serializable {
    * @returns
    * @memberof Country
    */
-  public isAlliedWith(target: Country): boolean {
-    // return this.__diplomaticTies.some(
-    //   (d) => d instanceof Alliance && d.getOpponent(this) == target
-    // );
-    return true;
-  }
+  // public isAlliedWith(target: Country): boolean {
+  //   // return this.__diplomaticTies.some(
+  //   //   (d) => d instanceof Alliance && d.getOpponent(this) == target
+  //   // );
+  //   return true;
+  // }
 
   public onEvent(event: EventBase): void {
     this._handler.onEvent(event);

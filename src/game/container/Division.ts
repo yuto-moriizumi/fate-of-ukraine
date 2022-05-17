@@ -18,20 +18,20 @@ export class Division extends PIXI.Container {
   private readonly owner!: Country;
   private readonly isRetreat = false;
 
-  public setPosition(province: Province) {
-    return;
-  }
+  // public setPosition(province: Province) {
+  //   return;
+  // }
 
-  public attack(target: Division) {
-    // target.setOrganization(
-    //   target.getOrganization() -
-    //     this._template.getAttack() / this.__combats.length //攻撃に参加している数だけ弱くなる
-    // );
-    // this.setOrganization(
-    //   this.getOrganization() -
-    //     target._template.getAttack() / target.__combats.length //攻撃に参加している数だけ弱くなる
-    // );
-  }
+  // public attack(target: Division) {
+  //   // target.setOrganization(
+  //   //   target.getOrganization() -
+  //   //     this._template.getAttack() / this.__combats.length //攻撃に参加している数だけ弱くなる
+  //   // );
+  //   // this.setOrganization(
+  //   //   this.getOrganization() -
+  //   //     target._template.getAttack() / target.__combats.length //攻撃に参加している数だけ弱くなる
+  //   // );
+  // }
 
   //   public getOrganization() {
   //     // return this.organization;
@@ -50,33 +50,33 @@ export class Division extends PIXI.Container {
   //     }
   //   }
 
-  public moveTo(destination: Province) {
-    //移動先が変更なければ何もしない
-    // if (this._destination == destination) return;
-    // if (destination == this.getPosition()) {
-    //   //目的地が今いる場所であれば移動停止
-    //   this.stopMove();
-    //   return;
-    // }
-    // //移動可能かチェック
-    // if (
-    //   (!MainScene.instance.cheat_move && //移動チートが無効で
-    //     !this._position.isNextTo(destination)) || //隣接していないか
-    //   !destination.hasAccess(this.owner) || //進入不可か
-    //   this.isRetreat //撤退中の場合は
-    // )
-    //   return; //何もしない
-    // this.stopMove(); //一度移動を停止
-    // this._destination = destination;
-    // this.movingProgress = 0;
-    // this.__progressBar = new ArrowProgress(this.getPosition(), destination);
-    // MainScene.instance.getMap().arrowLayer.addChild(this.__progressBar);
-    // if (MainScene.instance.cheat_move) {
-    //   //移動チート有効な場合は直ちに移動
-    //   this.setPosition(this._destination);
-    //   this.stopMove();
-    // }
-  }
+  // public moveTo(destination: Province) {
+  //移動先が変更なければ何もしない
+  // if (this._destination == destination) return;
+  // if (destination == this.getPosition()) {
+  //   //目的地が今いる場所であれば移動停止
+  //   this.stopMove();
+  //   return;
+  // }
+  // //移動可能かチェック
+  // if (
+  //   (!MainScene.instance.cheat_move && //移動チートが無効で
+  //     !this._position.isNextTo(destination)) || //隣接していないか
+  //   !destination.hasAccess(this.owner) || //進入不可か
+  //   this.isRetreat //撤退中の場合は
+  // )
+  //   return; //何もしない
+  // this.stopMove(); //一度移動を停止
+  // this._destination = destination;
+  // this.movingProgress = 0;
+  // this.__progressBar = new ArrowProgress(this.getPosition(), destination);
+  // MainScene.instance.getMap().arrowLayer.addChild(this.__progressBar);
+  // if (MainScene.instance.cheat_move) {
+  //   //移動チート有効な場合は直ちに移動
+  //   this.setPosition(this._destination);
+  //   this.stopMove();
+  // }
+  // }
 
   //   private hasCombatWith(target: DivisionInfo) {
   //     return GameManager.instance.data.getCombats().find((combat) => {

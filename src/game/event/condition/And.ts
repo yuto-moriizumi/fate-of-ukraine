@@ -5,7 +5,6 @@ import {
   ConditionJson,
   CONDITION_TYPE,
   SaveDataType,
-  SAVEDATA_TYPE,
 } from '../../type/JsonType';
 import Condition from './Condition';
 import ConditionFactory from './ConditionFactory';

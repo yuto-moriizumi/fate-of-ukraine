@@ -1,6 +1,6 @@
 import Effect from './Effect';
 import { data } from '../../GameManager';
-import { AnnexJson, EFFECT_TYPE, SaveDataType } from '../../type/JsonType';
+import { AnnexJson, EFFECT_TYPE } from '../../type/JsonType';
 
 export default class Annex extends Effect {
   private _root!: string;
@@ -20,7 +20,7 @@ export default class Annex extends Effect {
     });
   }
 
-  public toJson(as: SaveDataType): AnnexJson {
+  public toJson(): AnnexJson {
     return {
       type: EFFECT_TYPE.ANNEX,
       root: this._root,

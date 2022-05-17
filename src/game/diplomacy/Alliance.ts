@@ -1,4 +1,4 @@
-import { DiplomacyJson, DIPLOMACY_TYPE, SaveDataType } from '../type/JsonType';
+import { DiplomacyJson, DIPLOMACY_TYPE } from '../type/JsonType';
 import { Diplomacy } from './Diplomacy';
 
 export class Alliance extends Diplomacy {
@@ -11,7 +11,7 @@ export class Alliance extends Diplomacy {
   public getTargetIcon() {
     return Alliance.target_icon;
   }
-  toJson(as: SaveDataType): DiplomacyJson {
+  toJson(): DiplomacyJson {
     return {
       type: DIPLOMACY_TYPE.ALLIANCE,
       root: this._root,

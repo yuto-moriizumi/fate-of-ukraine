@@ -1,6 +1,6 @@
 import Effect from './Effect';
 import { data } from '../../GameManager';
-import { EFFECT_TYPE, GainAccessJson, SaveDataType } from '../../type/JsonType';
+import { EFFECT_TYPE, GainAccessJson } from '../../type/JsonType';
 
 export default class GainAccess extends Effect {
   private _root!: string;
@@ -18,7 +18,7 @@ export default class GainAccess extends Effect {
     // access.activate();
   }
 
-  public toJson(as: SaveDataType): GainAccessJson {
+  public toJson(): GainAccessJson {
     return {
       type: EFFECT_TYPE.GAIN_ACCESS,
       root: this._root,

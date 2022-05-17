@@ -1,6 +1,6 @@
 import Effect from './Effect';
 import { data } from '../../GameManager';
-import { EFFECT_TYPE, SaveDataType, SetOwnerJson } from '../../type/JsonType';
+import { EFFECT_TYPE, SetOwnerJson } from '../../type/JsonType';
 
 export default class SetOwner extends Effect {
   private _root!: string;
@@ -17,7 +17,7 @@ export default class SetOwner extends Effect {
     });
   }
 
-  public toJson(as: SaveDataType): SetOwnerJson {
+  public toJson(): SetOwnerJson {
     return {
       type: EFFECT_TYPE.SET_OWNER,
       root: this._root,

@@ -1,6 +1,6 @@
 import Effect from './Effect';
 import { data } from '../../GameManager';
-import { EFFECT_TYPE, PeaceJson, SaveDataType } from '../../type/JsonType';
+import { EFFECT_TYPE, PeaceJson } from '../../type/JsonType';
 
 export default class Peace extends Effect {
   private _root!: string;
@@ -20,7 +20,7 @@ export default class Peace extends Effect {
     // }
   }
 
-  public toJson(as: SaveDataType): PeaceJson {
+  public toJson(): PeaceJson {
     return {
       type: EFFECT_TYPE.PEACE,
       root: this._root,

@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { MapViewport } from '../container/MapViewport';
 import { Country } from '../data/Country';
 import { Province } from '../data/Provice';
-import { data, GameManager } from '../GameManager';
+import { data } from '../GameManager';
 import { CountryPlayerHandler } from '../handler/CountryPlayerHandler';
 import { Observable } from '../util/Observable';
 import { Scene } from './Scene';
