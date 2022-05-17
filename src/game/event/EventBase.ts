@@ -10,14 +10,10 @@ import EffectFactory from './effect/EffectFactory';
 import ConditionFactory from './condition/ConditionFactory';
 
 export class EventBase implements Serializable {
-  private readonly id: string;
-  private title: string | undefined;
-  private desc: string | undefined;
-  private triggeredOnly = false;
-  private fired = false;
-  private condition!: Condition;
-  private immediate = new Array<Effect>();
-  private _options = new Array<Option>();
+  readonly id: string;
+  triggeredOnly = false;
+  fired = false;
+  condition!: Condition;
   /**
    * グローバルイベントであるかどうか
    * グローバルイベントは、いずれかの国で発火されたときに、全ての国で発火します
@@ -25,11 +21,7 @@ export class EventBase implements Serializable {
    * @private
    * @memberof Event
    */
-  private isGlobal = false;
-
-  public get options() {
-    return this._options;
-  }
+  isGlobal = false;
 
   constructor(id: string) {
     this.id = id;
@@ -57,12 +49,9 @@ export class EventBase implements Serializable {
     switch (as) {
       case SAVEDATA_TYPE.EVENTDATA:
         return {
-          title: this.title,
-          desc: this.desc,
           triggeredOnly: this.triggeredOnly,
           condition: this.condition.toJson(as),
           immediate: this.immediate.map((i) => i.toJson(as)),
-          options: this._options.map((o) => o.toJson(as)),
           isGlobal: this.isGlobal,
         };
       case SAVEDATA_TYPE.SAVEDATA:
