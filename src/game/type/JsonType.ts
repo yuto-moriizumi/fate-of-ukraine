@@ -14,12 +14,14 @@ export type Json =
   | EventJson
   | ConditionJson
   | EffectJson
-  | OptionJson;
+  | OptionJson
+  | DiplomacyJson;
 
 export type SaveDataJson = {
   provinces?: Dict<ProvinceJson>;
   countries?: Dict<CountryJson>;
   events?: Dict<EventJson>;
+  diplomacy?: DiplomacyJson[];
 };
 
 export type ProvinceJson = GameDataProvinceJson | SaveDataProvinceJson;
@@ -68,7 +70,6 @@ export type SaveDataEventJson = {
 };
 
 export type ConditionJson =
-  | ConditionBaseJson
   | AlwaysJson
   | AndJson
   | AtWarWithJson
@@ -88,10 +89,6 @@ export const CONDITION_TYPE = {
 } as const;
 
 export type ConditionType = typeof CONDITION_TYPE[keyof typeof CONDITION_TYPE];
-
-export type ConditionBaseJson = {
-  type: ConditionType;
-};
 
 export type AlwaysJson = {
   type: 'Always';
@@ -196,9 +193,16 @@ export type OptionJson = {
   effects: EffectJson[];
 };
 
+export const DIPLOMACY_TYPE = {
+  ACCESS: 'Access',
+  ALLIANCE: 'Alliance',
+  WAR: 'War',
+} as const;
+
+export type DiplomacyType = typeof DIPLOMACY_TYPE[keyof typeof DIPLOMACY_TYPE];
+
 export type DiplomacyJson = {
-  type: 'Access' | 'Alliance' | 'War';
+  type: DiplomacyType;
   root: string;
   target: string;
-  active: boolean;
 };

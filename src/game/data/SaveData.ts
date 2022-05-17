@@ -9,7 +9,11 @@ export class SaveData implements Serializable {
   public readonly countries = new CountryMap();
   public readonly provinces = new ProvinceMap();
   public readonly events = new EventMap();
-  public readonly diplomacy = new Set<DiplomaticTie>();
+  private _diplomacy = new Set<DiplomaticTie>();
+
+  public get diplomacy() {
+    return this._diplomacy;
+  }
 
   constructor(json?: SaveDataJson) {
     if (json) this.loadJson(json);
@@ -20,6 +24,7 @@ export class SaveData implements Serializable {
       countries: this.countries.toJson(as),
       provinces: this.provinces.toJson(as),
       events: this.events.toJson(as),
+      diplomacy: Array.from(this.diplomacy).map((d) => d.toJson(as)),
     };
   }
 
@@ -27,6 +32,10 @@ export class SaveData implements Serializable {
     if (json.countries) this.countries.loadJson(json.countries);
     if (json.provinces) this.provinces.loadJson(json.provinces);
     if (json.events) this.events.loadJson(json.events);
+    if (json.diplomacy)
+      this._diplomacy = new Set<DiplomaticTie>(
+        json.diplomacy.map((j) => DiplomaticTie.fromJson(j))
+      );
     return this;
   }
 

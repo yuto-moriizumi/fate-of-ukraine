@@ -1,3 +1,4 @@
+import { DiplomacyJson, DIPLOMACY_TYPE, SaveDataType } from '../type/JsonType';
 import { DiplomaticTie } from './DiplomaticTie';
 
 /**
@@ -15,5 +16,13 @@ export class Access extends DiplomaticTie {
   }
   public getTargetIcon() {
     return Access.target_icon;
+  }
+
+  toJson(as: SaveDataType): DiplomacyJson {
+    return {
+      type: DIPLOMACY_TYPE.ACCESS,
+      root: this._root,
+      target: this._target,
+    };
   }
 }
