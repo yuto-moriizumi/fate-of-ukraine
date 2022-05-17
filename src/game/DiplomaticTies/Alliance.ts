@@ -1,6 +1,6 @@
-import DiplomaticTie from './DiplomaticTie';
+import { DiplomaticTie } from './DiplomaticTie';
 
-export default class Alliance extends DiplomaticTie {
+export class Alliance extends DiplomaticTie {
   public static readonly root_icon = 'assets/access_root.png';
   public static readonly target_icon = 'assets/access_root.png';
 

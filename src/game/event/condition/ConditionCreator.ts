@@ -2,7 +2,7 @@ import DateCondition from './DateCondition';
 import EventFired from './EventFired';
 import CountryIs from './CountryIs';
 import And from './And';
-import Always from './Always';
+import { Always } from './Always';
 import OwnProvince from './OwnProvince';
 import { AtWarWith } from './AtWarWith';
 

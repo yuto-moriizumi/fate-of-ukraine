@@ -1,7 +1,7 @@
 import { Country } from '../data/Country';
 import { data } from '../GameManager';
 
-export default abstract class DiplomaticTie {
+export abstract class DiplomaticTie {
   private type = this.constructor.name;
   public static readonly root_icon: string;
   public static readonly target_icon: string;

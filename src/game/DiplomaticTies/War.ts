@@ -1,7 +1,7 @@
 import { Country } from '../data/Country';
-import DiplomaticTie from './DiplomaticTie';
+import { DiplomaticTie } from './DiplomaticTie';
 
-export default class War extends DiplomaticTie {
+export class War extends DiplomaticTie {
   public static readonly root_icon = 'assets/access_root.png';
   public static readonly target_icon = 'assets/access_target.png';
 

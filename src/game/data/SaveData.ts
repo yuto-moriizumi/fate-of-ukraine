@@ -1,9 +1,6 @@
 import { SaveDataJson, SaveDataType } from '../type/JsonType';
 import { Serializable } from '../util/Serializable';
-import { Country } from './Country';
-import { Province } from './Provice';
-import { EventBase } from '../event/EventBase';
-import DiplomaticTie from '../DiplomaticTies/DiplomaticTie';
+import { DiplomaticTie } from '../DiplomaticTies/DiplomaticTie';
 import { CountryMap } from '../util/CountryMap';
 import { ProvinceMap } from '../util/ProvinceMap';
 import { EventMap } from '../util/EventMap';
@@ -22,16 +19,14 @@ export class SaveData implements Serializable {
     return {
       countries: this.countries.toJson(as),
       provinces: this.provinces.toJson(as),
-      events: this.events.toJson(as)
+      events: this.events.toJson(as),
     };
   }
 
   public loadJson(json: SaveDataJson) {
-    if (json.countries)
-      this.countries.loadJson(json.countries)
-    if (json.provinces)
-      this.provinces.loadJson(json.provinces)
-    if (json.events) this.events.loadJson(json.events)
+    if (json.countries) this.countries.loadJson(json.countries);
+    if (json.provinces) this.provinces.loadJson(json.provinces);
+    if (json.events) this.events.loadJson(json.events);
     return this;
   }
 
