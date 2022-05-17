@@ -1,13 +1,13 @@
 import { DiplomacyJson, DIPLOMACY_TYPE, SaveDataType } from '../type/JsonType';
-import { DiplomaticTie } from './DiplomaticTie';
+import { Diplomacy } from './Diplomacy';
 
 /**
  * root国がtarget国に軍事通行権を持つことを表す
  * @export
  * @class Access
- * @extends {DiplomaticTie}
+ * @extends {Diplomacy}
  */
-export class Access extends DiplomaticTie {
+export class Access extends Diplomacy {
   public static readonly root_icon = 'assets/access_root.png';
   public static readonly target_icon = 'assets/access_target.png';
 

@@ -1,8 +1,14 @@
 import { Dayjs } from 'dayjs';
 import { Country } from '../../data/Country';
-import { AndJson, CONDITION_TYPE, SaveDataType, SAVEDATA_TYPE } from '../../type/JsonType';
+import {
+  AndJson,
+  ConditionJson,
+  CONDITION_TYPE,
+  SaveDataType,
+  SAVEDATA_TYPE,
+} from '../../type/JsonType';
 import Condition from './Condition';
-import ConditionCreator from './ConditionCreator';
+import ConditionFactory from './ConditionFactory';
 
 export default class And extends Condition {
   private conditions: Condition[] = [];
@@ -20,8 +26,8 @@ export default class And extends Condition {
   }
 
   public loadJson(json: AndJson) {
-    this.conditions = json.conditions.map((condition: any) =>
-      ConditionCreator.createCondition(condition)
+    this.conditions = json.conditions.map((condition: ConditionJson) =>
+      ConditionFactory.fromJson(condition)
     );
     return this;
   }

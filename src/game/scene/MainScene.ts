@@ -3,6 +3,7 @@ import { MapViewport } from '../container/MapViewport';
 import { Country } from '../data/Country';
 import { Province } from '../data/Provice';
 import { data, GameManager } from '../GameManager';
+import { CountryPlayerHandler } from '../handler/CountryPlayerHandler';
 import { Observable } from '../util/Observable';
 import { Scene } from './Scene';
 
@@ -20,6 +21,7 @@ export class MainScene extends Scene {
   constructor(playAs: Country) {
     super();
     this.playAs = playAs;
+    playAs.handler = new CountryPlayerHandler(playAs);
     this.map = new MapViewport(this.selectedProvince);
     this.addChild(this.map);
   }

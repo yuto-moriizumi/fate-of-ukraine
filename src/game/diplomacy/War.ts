@@ -1,8 +1,8 @@
 import { Country } from '../data/Country';
 import { DiplomacyJson, DIPLOMACY_TYPE, SaveDataType } from '../type/JsonType';
-import { DiplomaticTie } from './DiplomaticTie';
+import { Diplomacy } from './Diplomacy';
 
-export class War extends DiplomaticTie {
+export class War extends Diplomacy {
   public static readonly root_icon = 'assets/access_root.png';
   public static readonly target_icon = 'assets/access_target.png';
 

@@ -3,7 +3,6 @@ import { data } from '../../GameManager';
 import { EFFECT_TYPE, PeaceJson, SaveDataType } from '../../type/JsonType';
 
 export default class Peace extends Effect {
-  private type = this.constructor.name;
   private _root!: string;
   private _target!: string;
 

@@ -1,17 +1,11 @@
-import { Country } from '../../data/Country';
-import { data } from '../../GameManager';
+import { Country } from '../data/Country';
+import { data } from '../GameManager';
 import { CountryHandler } from './CountryHandler';
-import { EventBase } from '../EventBase';
-import Util from '../../util/Util';
+import { EventBase } from '../event/EventBase';
+import Util from '../util/Util';
 import { Dayjs } from 'dayjs';
 
-export class CountryAI extends CountryHandler {
-  country: Country;
-  constructor(country: Country) {
-    super();
-    this.country = country;
-  }
-
+export class CountryAIHandler extends CountryHandler {
   dispatchEvents(date: Dayjs) {
     Array.from(data().events.values()).forEach((event: EventBase) => {
       // event.dispatch(this, MainScene.instance.getDate());

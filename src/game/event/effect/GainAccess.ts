@@ -3,7 +3,6 @@ import { data } from '../../GameManager';
 import { EFFECT_TYPE, GainAccessJson, SaveDataType } from '../../type/JsonType';
 
 export default class GainAccess extends Effect {
-  private type = this.constructor.name;
   private _root!: string;
   private _target!: string;
 

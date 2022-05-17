@@ -5,7 +5,6 @@ import { data } from '../../GameManager';
 import { DeclareWarJson, EFFECT_TYPE, SaveDataType } from '../../type/JsonType';
 
 export default class DeclareWar extends Effect {
-  private type = this.constructor.name;
   private _root!: string;
   private _target!: string;
   public get root() {

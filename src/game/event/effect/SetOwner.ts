@@ -1,11 +1,8 @@
 import Effect from './Effect';
-import { Country } from '../../data/Country';
-import { Province } from '../../data/Provice';
 import { data } from '../../GameManager';
 import { EFFECT_TYPE, SaveDataType, SetOwnerJson } from '../../type/JsonType';
 
 export default class SetOwner extends Effect {
-  private type = this.constructor.name;
   private _root!: string;
   private _provinces = new Array<string>();
 

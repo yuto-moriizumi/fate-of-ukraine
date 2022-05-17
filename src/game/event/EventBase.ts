@@ -6,6 +6,8 @@ import Effect from './effect/Effect';
 import { Dayjs } from 'dayjs';
 import { Serializable } from '../util/Serializable';
 import { EventJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
+import EffectFactory from './effect/EffectFactory';
+import ConditionFactory from './condition/ConditionFactory';
 
 export class EventBase implements Serializable {
   private readonly id: string;
@@ -14,9 +16,9 @@ export class EventBase implements Serializable {
   private hidden = false;
   private triggeredOnly = false;
   private fired = false;
-  private readonly condition!: Condition;
-  private readonly immediate!: Effect[];
-  public readonly options = new Array<Option>();
+  private condition!: Condition;
+  private immediate!: Effect[];
+  private _options = new Array<Option>();
   /**
    * グローバルイベントであるかどうか
    * グローバルイベントは、いずれかの国で発火されたときに、全ての国で発火します
@@ -25,6 +27,10 @@ export class EventBase implements Serializable {
    * @memberof Event
    */
   private readonly isGlobal = false;
+
+  public get options() {
+    return this._options;
+  }
 
   constructor(id: string) {
     this.id = id;
@@ -56,18 +62,21 @@ export class EventBase implements Serializable {
         hidden: this.hidden,
         triggeredOnly: this.triggeredOnly,
         condition: this.condition.toJson(as),
-        immediate: this.immediate.map(i => i.toJson(as)),
-        options: this.options.map(o => o.toJson(as)),
+        immediate: this.immediate.map((i) => i.toJson(as)),
+        options: this._options.map((o) => o.toJson(as)),
       };
     return { fired: this.fired };
   }
 
   public loadJson(json: EventJson) {
-    if ("title" in json) {
+    if ('title' in json) {
       this.title = json.title;
       this.desc = json.desc;
       this.hidden = json.hidden;
       this.triggeredOnly = json.triggeredOnly;
+      this.condition = ConditionFactory.fromJson(json.condition);
+      this.immediate = json.immediate.map((i) => EffectFactory.fromJson(i));
+      this._options = json.options.map((o) => new Option().loadJson(o));
     }
     return this;
   }

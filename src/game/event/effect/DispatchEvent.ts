@@ -7,7 +7,6 @@ import {
 import Effect from './Effect';
 
 export default class DispatchEvent extends Effect {
-  private type = this.constructor.name;
   private id!: string;
   private time2happen!: number;
 

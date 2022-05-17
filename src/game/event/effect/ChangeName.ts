@@ -4,7 +4,6 @@ import { data } from '../../GameManager';
 import { ChangeNameJson, EFFECT_TYPE, SaveDataType } from '../../type/JsonType';
 
 export default class ChangeName extends Effect {
-  private type = this.constructor.name;
   private _country!: string;
   private name!: string;
 

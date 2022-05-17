@@ -1,7 +1,7 @@
 import Effect from './effect/Effect';
-import EffectCreator from './effect/EffectCreator';
 import { Serializable } from '../util/Serializable';
-import { OptionJson, SaveDataType } from '../type/JsonType';
+import { EffectJson, OptionJson, SaveDataType } from '../type/JsonType';
+import EffectFactory from './effect/EffectFactory';
 
 export default class Option implements Serializable {
   private title!: string;
@@ -24,8 +24,8 @@ export default class Option implements Serializable {
 
   public loadJson(json: OptionJson) {
     this.title = json.title;
-    this.effects = json.effects.map((effect: any) =>
-      EffectCreator.createEffect(effect)
+    this.effects = json.effects.map((effect: EffectJson) =>
+      EffectFactory.fromJson(effect)
     );
     return this;
   }

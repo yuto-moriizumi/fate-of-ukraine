@@ -1,10 +1,14 @@
 import { Dayjs } from 'dayjs';
-import { Country } from '../../data/Country';
-import { data } from '../../GameManager';
-import { EventBase } from '../EventBase';
+import { Country } from '../data/Country';
+import { data } from '../GameManager';
+import { EventBase } from '../event/EventBase';
 
 export abstract class CountryHandler {
-  country!: Country;
+  readonly country: Country;
+  constructor(country: Country) {
+    this.country = country;
+  }
+
   update(date: Dayjs) {
     this.dispatchEvents(date);
   }

@@ -3,7 +3,6 @@ import { data } from '../../GameManager';
 import { AnnexJson, EFFECT_TYPE, SaveDataType } from '../../type/JsonType';
 
 export default class Annex extends Effect {
-  private type = this.constructor.name;
   private _root!: string;
   private _target!: string;
 

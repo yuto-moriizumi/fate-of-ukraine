@@ -1,8 +1,9 @@
 import { CountryJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
 import { Serializable } from '../util/Serializable';
 import { EventBase } from '../event/EventBase';
-import { CountryHandler } from '../event/handler/CountryHandler';
+import { CountryHandler } from '../handler/CountryHandler';
 import { Dayjs } from 'dayjs';
+import { CountryAIHandler } from '../handler/CountryAIHandler';
 
 export class Country implements Serializable {
   /**
@@ -15,7 +16,7 @@ export class Country implements Serializable {
   private _name!: string;
   private _color!: string;
   private money = 0;
-  private readonly handler!: CountryHandler;
+  private _handler: CountryHandler = new CountryAIHandler(this);
 
   public get flagPath(): string {
     return `assets/flags/${this.id}.png`;
@@ -27,6 +28,10 @@ export class Country implements Serializable {
 
   public get name() {
     return this._name;
+  }
+
+  public set handler(handler: CountryHandler) {
+    this._handler = handler;
   }
 
   constructor(id: string) {
@@ -65,7 +70,7 @@ export class Country implements Serializable {
   }
 
   public update(date: Dayjs) {
-    this.handler.update(date);
+    this._handler.update(date);
     //金を更新
     // this.__money.setMoney(this.__money.getMoney() + this.calcBalance());
     // this._divisions.forEach((division) => division.update());
@@ -134,7 +139,7 @@ export class Country implements Serializable {
   }
 
   public onEvent(event: EventBase): void {
-    this.handler.onEvent(event);
+    this._handler.onEvent(event);
   }
 
   public toJson(as: SaveDataType): CountryJson {
