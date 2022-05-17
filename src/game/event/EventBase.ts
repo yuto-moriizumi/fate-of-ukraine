@@ -58,7 +58,7 @@ export abstract class EventBase implements Serializable {
         return {
           triggeredOnly: this.triggeredOnly,
           condition: this.condition.toJson(as),
-          isGlobal: this.isGlobal,
+          isGlobal: this.isGlobal ? true : undefined,
         };
       case SAVEDATA_TYPE.SAVEDATA:
         return { fired: this.fired };
@@ -73,8 +73,7 @@ export abstract class EventBase implements Serializable {
     } else {
       this.triggeredOnly = json.triggeredOnly;
       this.condition = ConditionFactory.fromJson(json.condition);
-      if ('isGlobal' in json) this.isGlobal = json.isGlobal;
-      else this.isGlobal = false;
+      if (json.isGlobal) this.isGlobal = json.isGlobal;
     }
     return this;
   }

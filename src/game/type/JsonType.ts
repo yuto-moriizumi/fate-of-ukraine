@@ -62,7 +62,7 @@ export type EventJson =
 export type EventBaseJson = {
   triggeredOnly: boolean;
   condition: ConditionJson;
-  isGlobal: boolean;
+  isGlobal?: boolean;
 };
 
 export type VisibleEventJson = EventBaseJson & {
