@@ -9,20 +9,24 @@ export class MapViewport extends Viewport {
   public static instance: MapViewport;
   private static readonly BORDER_COLOR = '#000000'; //プロヴィンス境界の色
   private static readonly BORDER_WIDTH = 5; //境界線のだいたいの太さ
+  private static readonly MAP_SRC = 'assets/provinces.png';
   private spritePixelArray!: Uint8Array;
   private pressKeys: Set<string> = new Set<string>();
   private static readonly INITIAL_SCALE = 5;
   private provinceRef!: Observable<Province>;
   private sprite!: PIXI.Sprite;
 
-  constructor(source: string, provinceRef: Observable<Province>) {
+  constructor(provinceRef: Observable<Province>) {
     super();
     MapViewport.instance = this;
     this.provinceRef = provinceRef;
 
     const loader = PIXI.Loader.shared;
-    loader.add(source).load(() => {
-      this.sprite = new PIXI.Sprite(loader.resources[source].texture);
+    const resource = loader.resources[MapViewport.MAP_SRC];
+    const onLoaded = () => {
+      this.sprite = new PIXI.Sprite(
+        loader.resources[MapViewport.MAP_SRC].texture
+      );
       const renderer = GameManager.instance.game.renderer;
       this.spritePixelArray = renderer.plugins.extract.pixels(this.sprite);
       this.addChild(this.sprite);
@@ -60,7 +64,9 @@ export class MapViewport extends Viewport {
       });
 
       this.updateMap();
-    });
+    };
+    if (!resource) loader.add(MapViewport.MAP_SRC).load(onLoaded);
+    else onLoaded();
 
     this.on('click', this.getClickedProvince);
   }

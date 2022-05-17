@@ -79,9 +79,7 @@ export class TitleScene extends Scene {
     GameManager.instance.loadScene(new SelectionScene());
   }
 
-  public update(dt: number) {
-    // super.update(dt);
-    // if (this.elapsedFrameCount % this.textAppealDuration === 0)
-    //   this.text.visible = !this.text.visible;
+  public update(delta: number) {
+    super.update(delta);
   }
 }
