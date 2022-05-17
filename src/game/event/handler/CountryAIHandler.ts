@@ -2,7 +2,7 @@ import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
 import { CountryHandler } from './CountryHandler';
 import { EventBase } from '../EventBase';
-import Util from '../../Utils/Util';
+import Util from '../../util/Util';
 import { Dayjs } from 'dayjs';
 
 export class CountryAI extends CountryHandler {

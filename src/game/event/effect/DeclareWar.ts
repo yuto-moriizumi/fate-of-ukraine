@@ -1,5 +1,5 @@
 import Effect from './Effect';
-import JsonType from '../../Utils/JsonType';
+
 import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
 import { DeclareWarJson, EFFECT_TYPE, SaveDataType } from '../../type/JsonType';

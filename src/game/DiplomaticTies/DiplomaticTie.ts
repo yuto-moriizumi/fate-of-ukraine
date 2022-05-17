@@ -1,4 +1,3 @@
-import JsonType from '../Utils/JsonType';
 import { Country } from '../data/Country';
 import { data } from '../GameManager';
 
@@ -41,10 +40,4 @@ export default abstract class DiplomaticTie {
   public abstract getRootIcon(): any;
 
   public abstract getTargetIcon(): any;
-
-  replacer(key: string, value: any, type: JsonType) {
-    if (value instanceof Country) return [key, value.id];
-    if (key == 'active') return [key, false];
-    return [key, value];
-  }
 }

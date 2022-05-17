@@ -1,9 +1,12 @@
 import Condition from './Condition';
-import JsonType from '../../Utils/JsonType';
 import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
 import { Dayjs } from 'dayjs';
-import { CONDITION_TYPE, CountryIsJson, SaveDataType } from '../../type/JsonType';
+import {
+  CONDITION_TYPE,
+  CountryIsJson,
+  SaveDataType,
+} from '../../type/JsonType';
 
 /**
  * イベント発火者が指定した国であることを確認します

@@ -1,4 +1,3 @@
-import JsonConverter from '../../Utils/JsonConverter';
 import DateCondition from './DateCondition';
 import EventFired from './EventFired';
 import CountryIs from './CountryIs';

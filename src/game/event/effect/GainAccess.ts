@@ -1,6 +1,4 @@
 import Effect from './Effect';
-import JsonType from '../../Utils/JsonType';
-import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
 import { EFFECT_TYPE, GainAccessJson, SaveDataType } from '../../type/JsonType';
 
