@@ -3,7 +3,6 @@ export const SAVEDATA_TYPE = {
   SAVEDATA: 'SaveData',
 } as const;
 
-// type SizeType = "small" | "medium" | "large"
 export type SaveDataType = typeof SAVEDATA_TYPE[keyof typeof SAVEDATA_TYPE];
 
 export type Json =
@@ -11,7 +10,11 @@ export type Json =
   | DictJson
   | CountryJson
   | SaveDataProvinceJson
-  | ProvinceJson;
+  | ProvinceJson
+  | EventJson
+  | ConditionJson
+  | EffectJson
+  | OptionJson;
 
 export type SaveDataJson = {
   provinces?: Dict<ProvinceJson>;
@@ -48,18 +51,24 @@ export type SaveDataCountryJson = {
   money: number;
 };
 
-export type EventJson = {
+export type EventJson = GameDataEventJson | SaveDataEventJson;
+
+export type GameDataEventJson = {
   title: string;
   desc: string;
   hidden: boolean;
   triggeredOnly: boolean;
-  fired: boolean;
-  condition: ConditionJson[];
+  condition: ConditionJson;
   immediate: EffectJson[];
   options: OptionJson[];
 };
 
+export type SaveDataEventJson = {
+  fired: boolean;
+};
+
 export type ConditionJson =
+  | ConditionBaseJson
   | AlwaysJson
   | AndJson
   | AtWarWithJson
@@ -67,6 +76,22 @@ export type ConditionJson =
   | DateConditionJson
   | EventFiredJson
   | OwnProvinceJson;
+
+export const CONDITION_TYPE = {
+  ALWAYS: 'Always',
+  AND: 'And',
+  AT_WAR_WITH: 'AtWarWith',
+  COUNTRY_IS: 'CountryIs',
+  DATE_CONDITION: 'DateCondition',
+  EVENT_FIRED: 'EventFired',
+  OWN_PROVINCE: 'OwnProvince',
+} as const;
+
+export type ConditionType = typeof CONDITION_TYPE[keyof typeof CONDITION_TYPE];
+
+export type ConditionBaseJson = {
+  type: ConditionType;
+};
 
 export type AlwaysJson = {
   type: 'Always';
@@ -112,6 +137,18 @@ export type EffectJson =
   | PeaceJson
   | SetOwnerJson;
 
+export const EFFECT_TYPE = {
+  ANNEX: 'Annex',
+  CHANGE_NAME: 'ChangeName',
+  DECLARE_WAR: 'DeclareWar',
+  DISPATCH_EVENT: 'DispatchEvent',
+  GAIN_ACCESS: 'GainAccess',
+  PEACE: 'Peace',
+  SET_OWNER: 'SetOwner',
+} as const;
+
+export type EffectType = typeof EFFECT_TYPE[keyof typeof EFFECT_TYPE];
+
 export type AnnexJson = {
   type: 'Annex';
   root: string;
@@ -155,7 +192,6 @@ export type SetOwnerJson = {
 };
 
 export type OptionJson = {
-  type: 'Option';
   title: string;
   effects: EffectJson[];
 };

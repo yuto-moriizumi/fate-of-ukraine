@@ -1,7 +1,7 @@
 import { Dayjs } from 'dayjs';
 import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
-import { SaveDataType } from '../../type/JsonType';
+import { AtWarWithJson, CONDITION_TYPE, SaveDataType } from '../../type/JsonType';
 import Condition from './Condition';
 
 export class AtWarWith extends Condition {
@@ -13,14 +13,15 @@ export class AtWarWith extends Condition {
     return true;
   }
 
-  public toJson(as: SaveDataType) {
+  public toJson(as: SaveDataType): AtWarWithJson {
     return {
-      ...super.toJson(as),
+      type: CONDITION_TYPE.AT_WAR_WITH,
       country: this.country,
     };
   }
 
-  public loadJson(json: any) {
+  public loadJson(json: AtWarWithJson) {
     this.country = json.country;
+    return this;
   }
 }

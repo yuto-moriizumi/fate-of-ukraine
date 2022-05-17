@@ -1,6 +1,6 @@
 import { Dayjs } from 'dayjs';
 import { Country } from '../../data/Country';
-import { SaveDataType, SAVEDATA_TYPE } from '../../type/JsonType';
+import { AndJson, CONDITION_TYPE, SaveDataType, SAVEDATA_TYPE } from '../../type/JsonType';
 import Condition from './Condition';
 import ConditionCreator from './ConditionCreator';
 
@@ -12,16 +12,17 @@ export default class And extends Condition {
       condition.isValid(country, date)
     );
   }
-  public toJson(as: SaveDataType) {
+  public toJson(as: SaveDataType): AndJson {
     return {
-      ...super.toJson(as),
+      type: CONDITION_TYPE.AND,
       conditions: this.conditions.map((c) => c.toJson(as)),
     };
   }
 
-  public loadJson(json: any) {
+  public loadJson(json: AndJson) {
     this.conditions = json.conditions.map((condition: any) =>
       ConditionCreator.createCondition(condition)
     );
+    return this;
   }
 }

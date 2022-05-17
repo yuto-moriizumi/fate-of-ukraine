@@ -5,16 +5,21 @@ import JsonObject from '../../Utils/JsonObject';
 import { Country } from '../../data/Country';
 import { Province } from '../../data/Provice';
 import { data } from '../../GameManager';
-import { SaveDataType } from '../../type/JsonType';
+import { EFFECT_TYPE, SaveDataType, SetOwnerJson } from '../../type/JsonType';
 
 export default class SetOwner extends Effect {
   private type = this.constructor.name;
-  private _root!: Country;
-  private _provinces = new Array<Province>();
+  private _root!: string;
+  private _provinces = new Array<string>();
+
+  public get root() {
+    return data().countries.get(this._root);
+  }
 
   public activate() {
     this._provinces.forEach((province) => {
-      province.owner = this._root;
+      const p = data().provinces.get(province);
+      if (p) p.owner = this.root;
     });
   }
 
@@ -27,16 +32,17 @@ export default class SetOwner extends Effect {
     return [key, value];
   }
 
-  public toJson(as: SaveDataType) {
+  public toJson(as: SaveDataType): SetOwnerJson {
     return {
-      ...super.toJson(as),
-      root: this._root.id,
+      type: EFFECT_TYPE.SET_OWNER,
+      root: this._root,
       provinces: this._provinces,
     };
   }
 
-  public loadJson(json: any) {
+  public loadJson(json: SetOwnerJson) {
     this._root = json.root;
     this._provinces = json.provinces;
+    return this;
   }
 }

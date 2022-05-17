@@ -1,7 +1,7 @@
 import { Dayjs } from 'dayjs';
 import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
-import { SaveDataType } from '../../type/JsonType';
+import { CONDITION_TYPE, EventFiredJson, SaveDataType } from '../../type/JsonType';
 import Condition from './Condition';
 
 export default class EventFired extends Condition {
@@ -16,14 +16,15 @@ export default class EventFired extends Condition {
     return ans;
   }
 
-  public toJson(as: SaveDataType) {
+  public toJson(as: SaveDataType): EventFiredJson {
     return {
-      ...super.toJson(as),
+      type: CONDITION_TYPE.EVENT_FIRED,
       id: this.id,
     };
   }
 
-  public loadJson(json: any) {
+  public loadJson(json: EventFiredJson) {
     this.id = json.id;
+    return this;
   }
 }

@@ -3,7 +3,7 @@ import JsonType from '../../Utils/JsonType';
 import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
 import { Dayjs } from 'dayjs';
-import { SaveDataType } from '../../type/JsonType';
+import { CONDITION_TYPE, CountryIsJson, SaveDataType } from '../../type/JsonType';
 
 /**
  * イベント発火者が指定した国であることを確認します
@@ -22,15 +22,16 @@ export default class CountryIs extends Condition {
     );
   }
 
-  public toJson(as: SaveDataType) {
+  public toJson(as: SaveDataType): CountryIsJson {
     return {
-      ...super.toJson(as),
+      type: CONDITION_TYPE.COUNTRY_IS,
       country: this.country.id,
     };
   }
 
-  public loadJson(json: any) {
+  public loadJson(json: CountryIsJson) {
     const country = data().countries.get(json.country);
     if (country) this.country = country;
+    return this;
   }
 }

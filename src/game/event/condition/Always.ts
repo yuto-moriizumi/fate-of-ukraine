@@ -1,6 +1,6 @@
 import { Dayjs } from 'dayjs';
 import { Country } from '../../data/Country';
-import { SaveDataType, SAVEDATA_TYPE } from '../../type/JsonType';
+import { AlwaysJson, SaveDataType, SAVEDATA_TYPE } from '../../type/JsonType';
 import Condition from './Condition';
 import ConditionCreator from './ConditionCreator';
 
@@ -9,11 +9,12 @@ export default class Always extends Condition {
   public isValid(country: Country, date: Dayjs): boolean {
     return this.always;
   }
-  public toJson(as: SaveDataType) {
-    return { ...super.toJson(as), always: this.always };
+  public toJson(as: SaveDataType): AlwaysJson {
+    return { type: "Always", always: this.always };
   }
 
-  public loadJson(json: any) {
+  public loadJson(json: AlwaysJson) {
     this.always = json.always;
+    return this;
   }
 }

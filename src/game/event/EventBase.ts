@@ -5,7 +5,7 @@ import { Country } from '../data/Country';
 import Effect from './effect/Effect';
 import { Dayjs } from 'dayjs';
 import { Serializable } from '../util/Serializable';
-import { SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
+import { EventJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
 
 export class EventBase implements Serializable {
   private readonly id: string;
@@ -48,22 +48,27 @@ export class EventBase implements Serializable {
     } else country.onEvent(this); //そうでない場合は発火国でのみ発火します
   }
 
-  public toJson(as: SaveDataType): any {
+  public toJson(as: SaveDataType): EventJson {
     if (as === SAVEDATA_TYPE.GAMEDATA)
       return {
         title: this.title,
         desc: this.desc,
         hidden: this.hidden,
         triggeredOnly: this.triggeredOnly,
+        condition: this.condition.toJson(as),
+        immediate: this.immediate.map(i => i.toJson(as)),
+        options: this.options.map(o => o.toJson(as)),
       };
     return { fired: this.fired };
   }
 
-  public loadJson(json: any) {
-    this.title = json.title;
-    this.desc = json.desc;
-    this.hidden = json.hidden;
-    this.triggeredOnly = json.triggeredOnly;
+  public loadJson(json: EventJson) {
+    if ("title" in json) {
+      this.title = json.title;
+      this.desc = json.desc;
+      this.hidden = json.hidden;
+      this.triggeredOnly = json.triggeredOnly;
+    }
     return this;
   }
 }

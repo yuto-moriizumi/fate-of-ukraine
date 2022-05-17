@@ -2,37 +2,32 @@ import Effect from './Effect';
 import JsonType from '../../Utils/JsonType';
 import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
-import { SaveDataType } from '../../type/JsonType';
+import { ChangeNameJson, EFFECT_TYPE, SaveDataType } from '../../type/JsonType';
 
 export default class ChangeName extends Effect {
   private type = this.constructor.name;
-  private _country!: Country;
+  private _country!: string;
   private name!: string;
+
+  public get country() {
+    return data().countries.get(this._country);
+  }
 
   public activate() {
     // this._country.name = this.name;
   }
 
-  set country(countryId: string) {
-    const country = data().countries.get(countryId);
-    if (country) this._country = country;
-  }
-
-  replacer(key: string, value: any, type: JsonType) {
-    if (value instanceof Country) return [key, value.id];
-    return [key, value];
-  }
-
-  public toJson(as: SaveDataType) {
+  public toJson(as: SaveDataType): ChangeNameJson {
     return {
-      ...super.toJson(as),
+      type: EFFECT_TYPE.CHANGE_NAME,
       country: this._country,
       name: this.name,
     };
   }
 
-  public loadJson(json: any) {
+  public loadJson(json: ChangeNameJson) {
     this._country = json.country;
     this.name = json.name;
+    return this;
   }
 }

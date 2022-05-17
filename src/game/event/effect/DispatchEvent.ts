@@ -1,5 +1,9 @@
 import { data } from '../../GameManager';
-import { SaveDataType } from '../../type/JsonType';
+import {
+  DispatchEventJson,
+  EFFECT_TYPE,
+  SaveDataType,
+} from '../../type/JsonType';
 import Effect from './Effect';
 
 export default class DispatchEvent extends Effect {
@@ -13,16 +17,17 @@ export default class DispatchEvent extends Effect {
     console.log('dispatch event:', this.id, 'in', this.time2happen, 'days');
   }
 
-  public toJson(as: SaveDataType) {
+  public toJson(as: SaveDataType): DispatchEventJson {
     return {
-      ...super.toJson(as),
+      type: EFFECT_TYPE.DISPATCH_EVENT,
       id: this.id,
       time2happen: this.time2happen,
     };
   }
 
-  public loadJson(json: any) {
+  public loadJson(json: DispatchEventJson) {
     this.id = json.id;
     this.time2happen = json.time2happen;
+    return this;
   }
 }

@@ -1,6 +1,6 @@
 import { Dayjs } from 'dayjs';
 import { Country } from '../../data/Country';
-import { SaveDataType } from '../../type/JsonType';
+import { CONDITION_TYPE, DateConditionJson, SaveDataType } from '../../type/JsonType';
 import Condition from './Condition';
 
 export default class DateCondition extends Condition {
@@ -10,14 +10,15 @@ export default class DateCondition extends Condition {
     return date.isAfter(this.date);
   }
 
-  public toJson(as: SaveDataType) {
+  public toJson(as: SaveDataType): DateConditionJson {
     return {
-      ...super.toJson(as),
+      type: CONDITION_TYPE.DATE_CONDITION,
       date: this.date.format('YYYY-MM-DD'),
     };
   }
 
-  public loadJson(json: any) {
+  public loadJson(json: DateConditionJson) {
     this.date = new Dayjs(json.date);
+    return this;
   }
 }

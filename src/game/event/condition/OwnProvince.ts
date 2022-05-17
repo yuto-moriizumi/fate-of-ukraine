@@ -1,7 +1,7 @@
 import { Dayjs } from 'dayjs';
 import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
-import { SaveDataType } from '../../type/JsonType';
+import { CONDITION_TYPE, OwnProvinceJson, SaveDataType } from '../../type/JsonType';
 import Condition from './Condition';
 
 export default class OwnProvince extends Condition {
@@ -12,14 +12,15 @@ export default class OwnProvince extends Condition {
     return province?.owner == country;
   }
 
-  public toJson(as: SaveDataType) {
+  public toJson(as: SaveDataType): OwnProvinceJson {
     return {
-      ...super.toJson(as),
+      type: CONDITION_TYPE.OWN_PROVINCE,
       province: this.province,
     };
   }
 
-  public loadJson(json: any) {
+  public loadJson(json: OwnProvinceJson) {
     this.province = json.province;
+    return this;
   }
 }
