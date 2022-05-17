@@ -7,6 +7,7 @@ import { SelectionScene } from '../game/scene/SelectionScene';
 import SelectionSceneUI from './component/SelectionSceneUI';
 import MainSceneUI from './component/MainSceneUI';
 import { MainScene } from '../game/scene/MainScene';
+import EventDialog from './component/EventDialog';
 
 function App() {
   const [currentScene, setCurrentScene] = useState<Scene>();
@@ -23,15 +24,18 @@ function App() {
   }, []);
 
   return (
-    <Container fluid className="h-100">
-      {currentScene instanceof SelectionScene ? (
-        <SelectionSceneUI scene={currentScene} />
-      ) : currentScene instanceof MainScene ? (
-        <MainSceneUI scene={currentScene} />
-      ) : (
-        ''
-      )}
-    </Container>
+    <>
+      <Container fluid className="h-100">
+        {currentScene instanceof SelectionScene ? (
+          <SelectionSceneUI scene={currentScene} />
+        ) : currentScene instanceof MainScene ? (
+          <MainSceneUI scene={currentScene} />
+        ) : (
+          ''
+        )}
+      </Container>
+      <EventDialog></EventDialog>
+    </>
   );
 }
 

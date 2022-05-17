@@ -3,7 +3,7 @@ import { Row, Col, Button } from 'react-bootstrap';
 import { Province } from '../../game/data/Provice';
 import DebugSidebar from './DebugSidebar';
 import { MainScene } from '../../game/scene/MainScene';
-import Timer from '../Timer';
+import Timer from './Timer';
 
 export default function MainSceneUI(props: { scene: MainScene }) {
   const [selectedProvince, setSelectedProvince] = useState<Province>();
