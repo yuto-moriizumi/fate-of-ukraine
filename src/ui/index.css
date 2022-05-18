@@ -26,3 +26,8 @@ canvas {
 .clickable {
   pointer-events: auto;
 }
+
+.dialog {
+  position: absolute;
+  top: 0px;
+}

@@ -42,6 +42,7 @@ export class MainScene extends Scene {
     )
       return;
     this.datetime.val = this.datetime.val.add(1, 'hour');
+    // console.log(data().events.get('russian_civilwar_begins_news'));
     data().countries.forEach((c) => c.update(this.datetime.val)); //国ハンドラを稼働させる
     data().events.forEach((e) => e.countFoward()); //イベントタイマーを進める
   }

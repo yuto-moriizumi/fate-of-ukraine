@@ -19,6 +19,7 @@ export class InvisibleEvent extends EventBase {
 
   public dispatch(country: Country, date: Dayjs) {
     if (!this.isDispatchable(country, date)) return; //発火可能でないなら発火しない
+    console.log('hihi');
     this.fired = true;
     console.log('invisible event dispatched', { id: this.id, at: country });
     this.immediate.forEach((e) => e.activate());

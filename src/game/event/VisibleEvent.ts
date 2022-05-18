@@ -34,6 +34,7 @@ export class VisibleEvent extends EventBase {
 
   public dispatch(country: Country, date: Dayjs) {
     if (!this.isDispatchable(country, date)) return; //発火可能でないなら発火しない
+    console.log('hihi22');
     this.fired = true;
     console.log('visible event dispatched', { id: this.id, at: country });
     if (this.immediate) this.immediate.forEach((e) => e.activate());

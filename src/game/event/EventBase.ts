@@ -36,6 +36,7 @@ export abstract class EventBase implements Serializable {
 
   public isDispatchable(country: Country, date: Dayjs): boolean {
     if (this.fired) return false; //発火済なら発火しない
+    if (this.hours2happen) console.log(this.id, this.hours2happen);
     if (this.hours2happen && this.hours2happen <= 0) return true; //発火期限な発火
     if (this.triggeredOnly) return false; //受動的イベントなら発火しない
     if (this.condition.isValid(country, date)) return true; //条件を満たしている場合は発火
@@ -45,7 +46,9 @@ export abstract class EventBase implements Serializable {
   public abstract dispatch(country: Country, date: Dayjs): void;
 
   public countFoward() {
-    if (!this.fired && this.hours2happen) this.hours2happen -= 1; //未発火ならカウントを進める
+    if (!this.fired && this.hours2happen != undefined) {
+      this.hours2happen -= 1;
+    } //未発火ならカウントを進める
   }
 
   public abstract toJson(as: SaveDataType): EventJson | undefined;

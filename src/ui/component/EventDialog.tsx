@@ -8,14 +8,9 @@ export default function EventDialog(props: {
 }) {
   const { event, onClose } = props;
   return (
-    <Container fluid className="h-100 d-flex">
+    <Container fluid className="h-100 d-flex dialog">
       <Modal.Dialog className="align-self-center">
-        <Modal.Header
-          closeButton
-          onClick={() => {
-            onClose();
-          }}
-        >
+        <Modal.Header closeButton>
           <Modal.Title>{event.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -25,7 +20,13 @@ export default function EventDialog(props: {
           <Container fluid>
             {event.options.map((o, i) => (
               <Row key={i}>
-                <Button variant="primary" onClick={o.takeEffects}>
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    o.takeEffects();
+                    onClose();
+                  }}
+                >
                   {o.title}
                 </Button>
               </Row>

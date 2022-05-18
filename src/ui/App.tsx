@@ -9,6 +9,7 @@ import MainSceneUI from './component/MainSceneUI';
 import { MainScene } from '../game/scene/MainScene';
 import EventDialog from './component/EventDialog';
 import { VisibleEvent } from '../game/event/VisibleEvent';
+import Test from './component/Test';
 
 function App() {
   const [currentScene, setCurrentScene] = useState<Scene>();
@@ -26,8 +27,10 @@ function App() {
   }, []);
 
   const addEvent = (e: VisibleEvent) => {
-    setEvents(events.concat([e]));
+    setEvents([...events, e]);
     console.log('App');
+    console.log(e);
+    console.log(events);
   };
 
   return (
@@ -41,12 +44,14 @@ function App() {
           ''
         )}
       </Container>
-      {events.map((e) => {
+
+      {events.map((e) => (
         <EventDialog
+          key={e.id}
           event={e}
           onClose={() => setEvents(events.filter((d) => d != e))}
-        ></EventDialog>;
-      })}
+        ></EventDialog>
+      ))}
     </>
   );
 }
