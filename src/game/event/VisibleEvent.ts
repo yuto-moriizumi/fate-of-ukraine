@@ -17,11 +17,17 @@ import ConditionFactory from './condition/ConditionFactory';
 import { EventBase } from './EventBase';
 
 export class VisibleEvent extends EventBase {
-  private title!: string;
-  private desc!: string;
+  private _title!: string;
+  private _desc!: string;
   private immediate?: Effect[] | undefined;
   private _options!: Option[];
 
+  public get title() {
+    return this._title;
+  }
+  public get desc() {
+    return this._desc;
+  }
   public get options() {
     return this._options;
   }
@@ -45,8 +51,8 @@ export class VisibleEvent extends EventBase {
     if ('fired' in base) return base;
     const res = {
       ...base,
-      title: this.title,
-      desc: this.desc,
+      title: this._title,
+      desc: this._desc,
       immediate:
         this.immediate && this.immediate.length > 0
           ? this.immediate.map((i) => i.toJson(as))
@@ -56,8 +62,8 @@ export class VisibleEvent extends EventBase {
     console.log(this, this.immediate ? this.immediate.length : undefined);
     return {
       ...base,
-      title: this.title,
-      desc: this.desc,
+      title: this._title,
+      desc: this._desc,
       immediate:
         this.immediate && this.immediate.length > 0
           ? this.immediate.map((i) => i.toJson(as))
@@ -71,8 +77,8 @@ export class VisibleEvent extends EventBase {
     if ('title' in json) {
       if ('immediate' in json)
         this.immediate = json.immediate?.map((i) => EffectFactory.fromJson(i));
-      this.title = json.title;
-      this.desc = json.desc;
+      this._title = json.title;
+      this._desc = json.desc;
       this._options = json.options.map((o) => new Option().loadJson(o));
     }
     return this;

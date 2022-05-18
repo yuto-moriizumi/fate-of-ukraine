@@ -8,9 +8,11 @@ import SelectionSceneUI from './component/SelectionSceneUI';
 import MainSceneUI from './component/MainSceneUI';
 import { MainScene } from '../game/scene/MainScene';
 import EventDialog from './component/EventDialog';
+import { VisibleEvent } from '../game/event/VisibleEvent';
 
 function App() {
   const [currentScene, setCurrentScene] = useState<Scene>();
+  const [events, setEvents] = useState<VisibleEvent[]>([]);
 
   const addSceneObserver = () => {
     GameManager._instance.scene.addObserver(setCurrentScene);
@@ -23,18 +25,28 @@ function App() {
     else addSceneObserver(); // ゲームのロードが終わっている場合は即座にオブザーバを追加
   }, []);
 
+  const addEvent = (e: VisibleEvent) => {
+    setEvents(events.concat([e]));
+    console.log('App');
+  };
+
   return (
     <>
       <Container fluid className="h-100">
         {currentScene instanceof SelectionScene ? (
           <SelectionSceneUI scene={currentScene} />
         ) : currentScene instanceof MainScene ? (
-          <MainSceneUI scene={currentScene} />
+          <MainSceneUI scene={currentScene} onEvent={addEvent} />
         ) : (
           ''
         )}
       </Container>
-      <EventDialog></EventDialog>
+      {events.map((e) => {
+        <EventDialog
+          event={e}
+          onClose={() => setEvents(events.filter((d) => d != e))}
+        ></EventDialog>;
+      })}
     </>
   );
 }
