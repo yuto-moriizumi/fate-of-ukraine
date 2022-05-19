@@ -29,7 +29,8 @@
     "test2": "react-scripts test",
     "eject": "react-scripts eject",
     "tplant": "tplant --input ./src/game/**/*.ts --output ./class.puml -A",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "test:coverage": "npm run test -- --coverage --silent --testLocationInResults --ci --json --outputFile=\"report.json\""
   },
   "eslintConfig": {
     "extends": [
