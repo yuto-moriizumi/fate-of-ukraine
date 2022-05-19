@@ -1,0 +1,22 @@
+﻿name: CI
+
+# タイミングを指定
+on: push
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: yarn install
+        run: yarn install
+      # - name: Run eslint
+      #   run: yarn lint
+      - name: Run Jest
+        run: yarn test
+      - name: Show coverage in comments
+        uses: ziishaned/jest-reporter-action@v0.0.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          test-command: 'yarn jest --coverage'
