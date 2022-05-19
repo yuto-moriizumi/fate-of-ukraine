@@ -2,6 +2,7 @@
 import { jest } from '@jest/globals';
 import { SaveData } from './game/data/SaveData';
 import { SAVEDATA_TYPE } from './game/type/JsonType';
+import { Observable } from './game/util/Observable';
 
 const testCountry = {
   ABU: { name: 'Abu Dhabi', color: '#717060' },
@@ -45,4 +46,16 @@ describe('データのダウンロード', () => {
       SAVEDATA_TYPE.GAMEDATA
     );
   });
+});
+
+test('汎用オブザーバブルのテスト', () => {
+  const observable = new Observable(0);
+  const myMockFn = jest.fn((num: number) => console.log(num));
+  observable.addObserver(myMockFn);
+  observable.val = 2;
+  expect(observable.val).toBe(2);
+  expect(myMockFn).toBeCalledWith(2);
+  observable.removeObserver(myMockFn);
+  observable.val = 1;
+  expect(myMockFn).not.lastCalledWith(1);
 });
