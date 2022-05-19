@@ -1,7 +1,8 @@
 ﻿name: 'coverage'
 on:
-  - push
-  # - pull_request
+  pull_request
+  # - push
+
   # branches:
   #   - master
   #   - main

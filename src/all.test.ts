@@ -1,6 +1,7 @@
 import jest from 'jest';
 import { SaveData } from './game/data/SaveData';
 import { Test } from './game/Test';
+import { SAVEDATA_TYPE } from './game/type/JsonType';
 // import * as PIXI from 'pixi.js-legacy';
 
 test('fizzbuzzのユニットテスト', () => {
@@ -27,4 +28,6 @@ test('プロヴィンスのロードができる', () => {
   const countries = data.getProvinces();
   expect(countries.get('#cce598')).not.toBeNull();
   expect(countries.get('#cce598')?.name).toBe(testProvince['#cce598'].name);
+  const output = data.toJson(SAVEDATA_TYPE.GAMEDATA);
+  expect(output.provinces).toStrictEqual(testProvince);
 });
