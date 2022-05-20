@@ -11,7 +11,7 @@ export class GameManager {
   public game!: PIXI.Application;
   public countries!: Set<Country>;
   private _scene = new Observable<Scene>();
-  private _data!: SaveData;
+  private _data = new SaveData();
 
   public get scene() {
     return this._scene;
@@ -35,9 +35,9 @@ export class GameManager {
       .add(GAMEDATA_FILE)
       .add(SAVEDATA_FILE)
       .load(() => {
-        this._data = new SaveData(
-          loader.resources[GAMEDATA_FILE].data
-        ).loadJson(loader.resources[SAVEDATA_FILE].data);
+        this._data = this._data
+          .loadJson(loader.resources[GAMEDATA_FILE].data)
+          .loadJson(loader.resources[SAVEDATA_FILE].data);
         console.log(this._data);
       });
 

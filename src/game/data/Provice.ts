@@ -22,8 +22,16 @@ export class Province implements Serializable {
   }
 
   public get owner() {
-    if (this.ownerId) return data().getCountries().get(this.ownerId);
+    if (this.ownerId != undefined)
+      return data().getCountries().get(this.ownerId);
   }
+
+  public getOwner() {
+    return this.ownerId;
+    // if (this.ownerId != undefined)
+    //   return data().getCountries().get(this.ownerId);
+  }
+
   public set owner(owner: Country | undefined) {
     this.ownerId = owner?.getId();
     MapViewport.instance.updateMap();

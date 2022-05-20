@@ -17,7 +17,7 @@ export class MapViewport extends Viewport {
   private sprite!: PIXI.Sprite;
 
   constructor(provinceRef: Observable<Province>) {
-    super();
+    super(undefined);
     MapViewport.instance = this;
     this.provinceRef = provinceRef;
 
