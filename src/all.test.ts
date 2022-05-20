@@ -88,10 +88,13 @@ describe('pixi.jsのテスト', () => {
     });
   });
 
+  test('タイトル画面が表示されている', () => {
+    expect(GameManager.instance.scene.val).toBeInstanceOf(TitleScene);
+  });
+
   test('国選択画面をロードできる', () => {
-    const game = GameManager.instance;
-    const scene = new SelectionScene();
-    game.loadScene(scene);
+    (GameManager.instance.scene.val as any).onPointerDown();
+    expect(GameManager.instance.scene.val).toBeInstanceOf(SelectionScene);
   });
 
   test('国を選択してメイン画面に遷移する', () => {
