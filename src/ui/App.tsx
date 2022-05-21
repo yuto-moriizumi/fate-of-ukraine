@@ -12,11 +12,11 @@ function App() {
   const [currentScene, setCurrentScene] = useState<Scene>();
 
   const addSceneObserver = () => {
-    GameManager._instance.scene.addObserver(setCurrentScene);
+    GameManager.instance.scene.addObserver(setCurrentScene);
   };
 
   useEffect(() => {
-    if (!GameManager._instance)
+    if (!GameManager.instance)
       // ゲームのロードが終わって居ない場合はコールバック関数を追加
       GameManager.onLoadEnd = addSceneObserver;
     else addSceneObserver(); // ゲームのロードが終わっている場合は即座にオブザーバを追加
