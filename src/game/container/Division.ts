@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import { Combat } from '../data/Combat';
 import { Country } from '../data/Country';
 import { Province } from '../data/Provice';
+import { data } from '../GameManager';
 
 export class Division extends PIXI.Container {
   private readonly currentHp!: number;
@@ -15,8 +16,12 @@ export class Division extends PIXI.Container {
    */
   private readonly movingProgress = 0;
   private readonly combats: Set<Combat> = new Set<Combat>();
-  private readonly owner!: Country;
+  private readonly ownerId!: string;
   private readonly isRetreat = false;
+
+  public get owner() {
+    return data().countries.get(this.ownerId);
+  }
 
   public setPosition(province: Province) {
     return;
