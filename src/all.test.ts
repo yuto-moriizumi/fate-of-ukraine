@@ -20,14 +20,14 @@ const testProvincesSaveData = { provinces: { ...testProvinceSaveData } };
 
 test('国データのロードができる', () => {
   const data = new SaveData(testCountries);
-  const countries = data.getCountries();
+  const countries = data.countries;
   expect(countries.get('ABU')).not.toBeNull();
   expect(countries.get('ABU')?.name).toBe(testCountry.ABU.name);
   expect(data.toJson(SAVEDATA_TYPE.GAMEDATA).countries).toStrictEqual(
     testCountry
   );
   data.loadJson(testProvincesSaveData);
-  const provinces = data.getProvinces();
+  const provinces = data.provinces;
   const province = provinces.get('#cce598');
   expect(province).not.toBeUndefined();
   if (province == undefined) return;
@@ -38,7 +38,7 @@ test('国データのロードができる', () => {
 test('プロヴィンスのロードができる', () => {
   const data = new SaveData();
   data.loadJson(testProvinces);
-  const provinces = data.getProvinces();
+  const provinces = data.provinces;
   expect(provinces.get('#cce598')).not.toBeNull();
   expect(provinces.get('#cce598')?.name).toBe(testProvince['#cce598'].name);
   const output = data.toJson(SAVEDATA_TYPE.GAMEDATA);
@@ -106,7 +106,7 @@ describe('pixi.jsのテスト', () => {
     data.loadJson(testProvinces);
     data.loadJson(testProvincesSaveData);
     data.loadJson(testCountries);
-    const selectProvince = game.data.getProvinces().get('#cce598');
+    const selectProvince = game.data.provinces.get('#cce598');
     expect(selectProvince).not.toBeUndefined();
     if (selectProvince == undefined) return;
     scene.selectedProvince.val = selectProvince;

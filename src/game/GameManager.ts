@@ -31,7 +31,7 @@ export class GameManager {
       .add(GAMEDATA_FILE)
       .add(SAVEDATA_FILE)
       .load(() => {
-        this.data = this.data
+        this.data
           .loadJson(loader.resources[GAMEDATA_FILE].data)
           .loadJson(loader.resources[SAVEDATA_FILE].data);
         console.log(this.data);
