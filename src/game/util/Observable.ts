@@ -1,6 +1,6 @@
 export class Observable<T> {
   private value!: T;
-  private observers = new Set<(val: T) => void>();
+  private readonly observers = new Set<(val: T) => void>();
 
   constructor(initial?: T) {
     if (initial) this.val = initial;

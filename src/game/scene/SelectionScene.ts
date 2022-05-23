@@ -6,16 +6,12 @@ import { MainScene } from './MainScene';
 import { Scene } from './Scene';
 
 export class SelectionScene extends Scene {
-  private map: MapViewport;
-  private _selectedProvince = new Observable<Province>();
-
-  public get selectedProvince() {
-    return this._selectedProvince;
-  }
+  private readonly map: MapViewport;
+  public readonly selectedProvince = new Observable<Province>();
 
   constructor() {
     super();
-    this.map = new MapViewport(this._selectedProvince);
+    this.map = new MapViewport(this.selectedProvince);
     this.addChild(this.map);
   }
 
@@ -24,7 +20,7 @@ export class SelectionScene extends Scene {
   }
 
   public play() {
-    const playAs = this._selectedProvince.val.owner;
+    const playAs = this.selectedProvince.val.owner;
     if (playAs) GameManager.instance.loadScene(new MainScene(playAs));
   }
 }

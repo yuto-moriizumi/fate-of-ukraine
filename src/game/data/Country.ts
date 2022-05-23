@@ -8,17 +8,13 @@ export class Country implements Serializable {
    * @type {string}
    * @memberof Country
    */
-  private _id!: string;
+  public readonly id!: string;
   private _name!: string;
   private _color!: string;
   private money = 0;
 
   public get flagPath(): string {
-    return `assets/flags/${this._id}.png`;
-  }
-
-  public get id() {
-    return this._id;
+    return `assets/flags/${this.id}.png`;
   }
 
   public get color() {
@@ -30,12 +26,9 @@ export class Country implements Serializable {
   }
 
   constructor(id: string) {
-    this._id = id;
+    this.id = id;
   }
 
-  public getId() {
-    return this._id;
-  }
   //   private __diplomaticRelations: Array<DiplomaticTie> = new Array<DiplomaticTie>();
   //   private divisions = new Array<DivisionData>();
 
