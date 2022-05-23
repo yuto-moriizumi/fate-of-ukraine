@@ -20,7 +20,10 @@ export default function Timer(props: { scene: MainScene }) {
     <Container fluid>
       <Row>
         <Col xs={2}>
-          <Button onClick={() => (scene.speed.val = Math.max(1, speed - 1))}>
+          <Button
+            onClick={() => (scene.speed.val = Math.max(1, speed - 1))}
+            disabled={scene.speed.val == 1}
+          >
             <h3>-</h3>
           </Button>
         </Col>
@@ -49,6 +52,7 @@ export default function Timer(props: { scene: MainScene }) {
             onClick={() =>
               (scene.speed.val = Math.min(scene.MAX_SPEED, speed + 1))
             }
+            disabled={scene.speed.val == scene.MAX_SPEED}
           >
             <h3>+</h3>
           </Button>

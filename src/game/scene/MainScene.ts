@@ -9,7 +9,7 @@ import { Scene } from './Scene';
 export class MainScene extends Scene {
   private readonly map: MapViewport;
   public readonly playAs: Country;
-  private readonly _selectedProvince = new Observable<Province>();
+  public readonly selectedProvince = new Observable<Province>();
   public readonly datetime = new Observable<dayjs.Dayjs>(
     dayjs('1917/11/07 1:00')
   );
@@ -17,14 +17,10 @@ export class MainScene extends Scene {
   public readonly speed = new Observable<number>(3);
   public readonly pause = new Observable<boolean>(true);
 
-  public get selectedProvince() {
-    return this._selectedProvince;
-  }
-
   constructor(playAs: Country) {
     super();
     this.playAs = playAs;
-    this.map = new MapViewport(this._selectedProvince);
+    this.map = new MapViewport(this.selectedProvince);
     this.addChild(this.map);
   }
 

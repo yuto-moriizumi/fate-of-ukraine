@@ -10,20 +10,18 @@ import { Serializable } from '../util/Serializable';
 import { Country } from './Country';
 
 export class Province implements Serializable {
-  private _id!: string;
+  public readonly id!: string;
   private _name!: string;
   private ownerId!: string | undefined;
   private x = 0;
   private y = 0;
-  private neighbours = new Set<Province>();
 
   constructor(id: string) {
-    this._id = id;
+    this.id = id;
   }
 
   public get owner() {
-    if (this.ownerId != undefined)
-      return data().getCountries().get(this.ownerId);
+    if (this.ownerId) return data().countries.get(this.ownerId);
   }
 
   public getOwner() {
@@ -33,12 +31,8 @@ export class Province implements Serializable {
   }
 
   public set owner(owner: Country | undefined) {
-    this.ownerId = owner?.getId();
-    MapViewport.instance.updateMap();
-  }
-
-  public get id() {
-    return this._id;
+    this.ownerId = owner?.id;
+    MapViewport._instance.updateMap();
   }
 
   public get name() {
