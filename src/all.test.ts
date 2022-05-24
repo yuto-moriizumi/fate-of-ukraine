@@ -80,12 +80,10 @@ import exp from 'constants';
 PIXI.settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT = false;
 
 describe('pixi.jsのテスト', () => {
-  test('GameManager startは問題なく起動する', () => {
-    GameManager.start({
-      glWidth: document.body.offsetWidth,
-      glHeight: document.body.offsetHeight,
-      backgroundColor: 0x222222,
-    });
+  GameManager.start({
+    glWidth: document.body.offsetWidth,
+    glHeight: document.body.offsetHeight,
+    backgroundColor: 0x222222,
   });
 
   test('タイトル画面が表示されている', () => {
