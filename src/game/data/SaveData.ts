@@ -1,6 +1,6 @@
-import { SaveDataJson, SaveDataType } from '../type/JsonType';
-import { Serializable } from '../util/Serializable';
-import { Diplomacy } from '../diplomacy/Diplomacy';
+import type { SaveDataJson, SaveDataType } from '../type/JsonType';
+import type { Serializable } from '../util/Serializable';
+import type { Diplomacy } from '../diplomacy/Diplomacy';
 import { CountryMap } from '../util/CountryMap';
 import { ProvinceMap } from '../util/ProvinceMap';
 import { EventMap } from '../util/EventMap';

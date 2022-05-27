@@ -1,9 +1,10 @@
-import { CountryJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
-import { Serializable } from '../util/Serializable';
-import { EventBase } from '../event/EventBase';
-import { CountryHandler } from '../handler/CountryHandler';
-import { Dayjs } from 'dayjs';
-import { CountryAIHandler } from '../handler/CountryAIHandler';
+import type { CountryJson, SaveDataType } from '../type/JsonType';
+import { SAVEDATA_TYPE } from '../type/JsonType';
+import type { Serializable } from '../util/Serializable';
+import type { EventBase } from '../event/EventBase';
+import type { Dayjs } from 'dayjs';
+import type { CountryHandler } from '../handler/CountryHandler';
+import { CountryAIHandler } from '../handler/CountryHandler';
 
 export class Country implements Serializable {
   /**

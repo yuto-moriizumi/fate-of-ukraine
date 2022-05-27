@@ -1,10 +1,6 @@
 import { Country } from '../data/Country';
-import {
-  CountryJson,
-  Dict,
-  SaveDataType,
-  SAVEDATA_TYPE,
-} from '../type/JsonType';
+import type { CountryJson, Dict, SaveDataType } from '../type/JsonType';
+import { SAVEDATA_TYPE } from '../type/JsonType';
 import { SerializableMap } from './SerializableMap';
 
 export class CountryMap extends SerializableMap<Country> {

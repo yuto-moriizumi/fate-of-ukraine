@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
-import { Country } from './data/Country';
+import type { Country } from './data/Country';
 import { SaveData } from './data/SaveData';
-import { Scene } from './scene/Scene';
+import type { Scene } from './scene/Scene';
 import { TitleScene } from './scene/TitleScene';
 import { Observable } from './util/Observable';
 

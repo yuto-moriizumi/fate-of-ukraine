@@ -1,14 +1,12 @@
 import dayjs from 'dayjs';
 import { MapViewport } from '../container/MapViewport';
-import { Country } from '../data/Country';
-import { Province } from '../data/Provice';
+import type { Country } from '../data/Country';
+import type { Province } from '../data/Provice';
 import { data } from '../GameManager';
-import {
-  CountryPlayerHandler,
-  eventHandler,
-} from '../handler/CountryPlayerHandler';
 import { Observable } from '../util/Observable';
 import { Scene } from './Scene';
+import type { eventHandler } from '../handler/CountryHandler';
+import { CountryPlayerHandler } from '../handler/CountryHandler';
 
 export class MainScene extends Scene {
   private readonly map: MapViewport;

@@ -1,5 +1,5 @@
 import { MapViewport } from '../container/MapViewport';
-import { Province } from '../data/Provice';
+import type { Province } from '../data/Provice';
 import { data, GameManager } from '../GameManager';
 import { Observable } from '../util/Observable';
 import { MainScene } from './MainScene';

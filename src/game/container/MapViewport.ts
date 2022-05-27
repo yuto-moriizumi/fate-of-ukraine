@@ -65,8 +65,12 @@ export class MapViewport extends Viewport {
 
       this.updateMap();
     };
-    if (!resource) loader().add(MapViewport.MAP_SRC).load(onLoaded);
-    else onLoaded();
+    const requireLoad = () => loader().add(MapViewport.MAP_SRC).load(onLoaded);
+    if (!resource) {
+      if (loader().loading) {
+        loader().onComplete.add(requireLoad);
+      } else requireLoad();
+    } else onLoaded();
 
     this.on('click', this.getClickedProvince);
   }
