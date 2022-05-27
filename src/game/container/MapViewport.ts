@@ -27,7 +27,7 @@ export class MapViewport extends Viewport {
       this.sprite = new PIXI.Sprite(
         loader().resources[MapViewport.MAP_SRC].texture
       );
-      const renderer = GameManager._instance.game.renderer;
+      const renderer = GameManager.instance.game.renderer;
       this.spritePixelArray = renderer.plugins.extract.pixels(this.sprite);
       this.addChild(this.sprite);
       const { width, height } = renderer;

@@ -6,23 +6,19 @@ import { TitleScene } from './scene/TitleScene';
 import { Observable } from './util/Observable';
 
 export class GameManager {
-  public static _instance: GameManager;
+  private static _instance: GameManager;
   public static onLoadEnd: () => void;
   public readonly game!: PIXI.Application;
+  public readonly data = new SaveData();
   public readonly countries!: Set<Country>;
   public readonly scene = new Observable<Scene>();
-  private _data!: SaveData;
-
-  public get data() {
-    return this._data;
-  }
 
   public static get instance() {
     return this._instance;
   }
 
   constructor(app: PIXI.Application) {
-    if (GameManager._instance) {
+    if (GameManager.instance) {
       throw new Error('GameManager can be instantiate only once');
     }
     this.game = app;
@@ -37,10 +33,11 @@ export class GameManager {
       .add(SAVEDATA_FILE)
       .add(EVENT_FILE)
       .load(() => {
-        this._data = new SaveData(loader.resources[GAMEDATA_FILE].data)
+        this.data
+          .loadJson(loader.resources[GAMEDATA_FILE].data)
           .loadJson(loader.resources[SAVEDATA_FILE].data)
           .loadJson(loader.resources[EVENT_FILE].data);
-        console.log(this._data);
+        console.log(this.data);
       });
 
     this.game.ticker.add((delta: number) => {
@@ -77,7 +74,7 @@ export class GameManager {
     //Reactに初期イベントを通知
     if (GameManager.onLoadEnd) GameManager.onLoadEnd();
     //タイトル画面をロード
-    GameManager._instance.loadScene(new TitleScene());
+    GameManager.instance.loadScene(new TitleScene());
   }
 
   public loadScene(newScene: Scene): void {
@@ -90,9 +87,9 @@ export class GameManager {
 }
 
 export const data = () => {
-  return GameManager._instance.data;
+  return GameManager.instance.data;
 };
 
 export const loader = () => {
-  return GameManager._instance.game.loader;
+  return GameManager.instance.game.loader;
 };

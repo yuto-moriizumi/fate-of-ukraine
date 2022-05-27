@@ -1,5 +1,4 @@
 import { CountryHandler } from './CountryHandler';
-import { EventBase } from '../event/EventBase';
 import { VisibleEvent } from '../event/VisibleEvent';
 import { InvisibleEvent } from '../event/InvisibleEvent';
 import { Country } from '../data/Country';
