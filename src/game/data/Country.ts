@@ -4,7 +4,7 @@ import type { Serializable } from '../util/Serializable';
 import type { EventBase } from '../event/EventBase';
 import type { Dayjs } from 'dayjs';
 import type { CountryHandler } from '../handler/CountryHandler';
-import { CountryAIHandler } from '../handler/CountryHandler';
+import { CountryAIHandler } from '../handler/handlers';
 
 export class Country implements Serializable {
   /**
