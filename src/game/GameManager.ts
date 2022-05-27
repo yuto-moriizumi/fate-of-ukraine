@@ -9,13 +9,9 @@ export class GameManager {
   private static _instance: GameManager;
   public static onLoadEnd: () => void;
   public readonly game!: PIXI.Application;
+  public readonly data = new SaveData();
   public readonly countries!: Set<Country>;
   public readonly scene = new Observable<Scene>();
-  private _data!: SaveData;
-
-  public get data() {
-    return this._data;
-  }
 
   public static get instance() {
     return this._instance;
@@ -35,10 +31,10 @@ export class GameManager {
       .add(GAMEDATA_FILE)
       .add(SAVEDATA_FILE)
       .load(() => {
-        this._data = new SaveData(
-          loader.resources[GAMEDATA_FILE].data
-        ).loadJson(loader.resources[SAVEDATA_FILE].data);
-        console.log(this._data);
+        this.data
+          .loadJson(loader.resources[GAMEDATA_FILE].data)
+          .loadJson(loader.resources[SAVEDATA_FILE].data);
+        console.log(this.data);
       });
 
     this.game.ticker.add((delta: number) => {
