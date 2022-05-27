@@ -17,6 +17,36 @@ const testProvinceSaveData = {
   '#cce598': { owner: 'ABU' },
 };
 const testProvincesSaveData = { provinces: { ...testProvinceSaveData } };
+const testEvent = {
+  russian_civilwar_begins: {
+    triggeredOnly: false,
+    condition: {
+      type: 'And',
+      conditions: [
+        { type: 'DateCondition', date: '1917-11-07 02:00' },
+        { type: 'CountryIs', country: 'SOV' },
+      ],
+    },
+    title: '白軍への攻撃',
+    desc: 'ロシアの各地には、反革命分子が潜んでいる。ただちに攻撃し、全ロシアを解放するのだ！',
+    options: [
+      {
+        title: 'ブルジョワに死を！',
+        effects: [
+          { type: 'DeclareWar', root: 'SOV', target: 'RPG' },
+          {
+            type: 'DispatchEvent',
+            id: 'russian_civilwar_begins_news',
+            hours2happen: 3,
+          },
+        ],
+      },
+    ],
+  },
+};
+const testEvents = {
+  events: { ...testEvent },
+};
 
 test('国データのロードができる', () => {
   const data = new SaveData(testCountries);
@@ -45,6 +75,10 @@ test('プロヴィンスのロードができる', () => {
   expect(output.provinces).toStrictEqual(testProvince);
 });
 
+test('イベントのロードができる', () => {
+  
+});
+
 describe('データのダウンロード', () => {
   window.URL.createObjectURL = jest.fn();
 
@@ -71,12 +105,11 @@ test('汎用オブザーバブルのテスト', () => {
   observable.val = 1;
   expect(myMockFn).not.lastCalledWith(1);
 });
+
 import * as PIXI from 'pixi.js-legacy';
-import { MapViewport } from './game/container/MapViewport';
 import { TitleScene } from './game/scene/TitleScene';
 import { SelectionScene } from './game/scene/SelectionScene';
 import { MainScene } from './game/scene/MainScene';
-import exp from 'constants';
 PIXI.settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT = false;
 
 describe('pixi.jsのテスト', () => {
