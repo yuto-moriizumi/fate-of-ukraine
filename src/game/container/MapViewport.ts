@@ -6,7 +6,7 @@ import { Observable } from '../util/Observable';
 import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace';
 import { Simple } from 'pixi-cull';
 export class MapViewport extends Viewport {
-  public static _instance: MapViewport;
+  private static _instance: MapViewport;
   private static readonly MAP_SRC = 'provinces.png';
   private spritePixelArray!: Uint8Array;
   private static readonly INITIAL_SCALE = 5;
@@ -14,7 +14,7 @@ export class MapViewport extends Viewport {
   private sprite!: PIXI.Sprite;
 
   public static get instance(): MapViewport {
-    return this.instance;
+    return this._instance;
   }
 
   constructor(provinceRef: Observable<Province>) {
@@ -86,7 +86,8 @@ export class MapViewport extends Viewport {
           ];
       }) as [number, number][];
 
-    this.sprite.filters = this.getColorReplaceFilters(arr, 0.005);
+    if (this.sprite !== undefined)
+      this.sprite.filters = this.getColorReplaceFilters(arr, 0.005);
   }
 
   private getColorReplaceFilters(
@@ -136,11 +137,8 @@ export class MapViewport extends Viewport {
     this.provinceRef.val = province;
   }
 
-  private getProvinceByPoint(position: PIXI.Point): Province | null {
+  private getProvinceByPoint(position: PIXI.Point): Province {
     const provinceId = this.getProvinceIdFromPoint(position);
-
-    if (!provinceId) return null; //provinceIdがnullの時は何もしない
-
     const provinces = data().provinces;
     let province = provinces.get(provinceId);
 
@@ -148,10 +146,6 @@ export class MapViewport extends Viewport {
       //プロビンスデータが無かったら新規作成(データを事前に用意したのでここが実行されることはないはず)
       province = new Province(provinceId);
       provinces.set(provinceId, province);
-      const countries = data().countries;
-      const owner = countries.get('Rebels');
-      if (!owner) return province;
-      province.owner = owner;
     }
     return province;
   }

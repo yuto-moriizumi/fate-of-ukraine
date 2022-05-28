@@ -5,16 +5,13 @@ import { CountryMap } from '../util/CountryMap';
 import { ProvinceMap } from '../util/ProvinceMap';
 import { EventMap } from '../util/EventMap';
 import { DiplomacyFactory } from '../diplomacy/DiplomacyFactory';
+import { DiplomacySet } from '../util/DiplomacySet';
 
 export class SaveData implements Serializable {
   public readonly countries = new CountryMap();
   public readonly provinces = new ProvinceMap();
   public readonly events = new EventMap();
-  private _diplomacy = new Set<Diplomacy>();
-
-  public get diplomacy() {
-    return this._diplomacy;
-  }
+  public readonly diplomacy = new DiplomacySet();
 
   constructor(json?: SaveDataJson) {
     if (json) this.loadJson(json);
@@ -25,7 +22,7 @@ export class SaveData implements Serializable {
       countries: this.countries.toJson(as),
       provinces: this.provinces.toJson(as),
       events: this.events.toJson(as),
-      diplomacy: Array.from(this.diplomacy).map((d) => d.toJson(as)),
+      diplomacy: this.diplomacy.toJson(as),
     };
   }
 
@@ -33,10 +30,7 @@ export class SaveData implements Serializable {
     if (json.countries) this.countries.loadJson(json.countries);
     if (json.provinces) this.provinces.loadJson(json.provinces);
     if (json.events) this.events.loadJson(json.events);
-    if (json.diplomacy)
-      this._diplomacy = new Set<Diplomacy>(
-        json.diplomacy.map((j) => DiplomacyFactory.fromJson(j))
-      );
+    if (json.diplomacy) this.diplomacy.loadJson(json.diplomacy);
     return this;
   }
 

@@ -5,6 +5,8 @@ import type { EventBase } from '../event/EventBase';
 import type { Dayjs } from 'dayjs';
 import type { CountryHandler } from '../handler/CountryHandler';
 import { CountryAIHandler } from '../handler/handlers';
+import { data } from '../GameManager';
+import { War } from '../diplomacy/War';
 
 export class Country implements Serializable {
   /**
@@ -33,6 +35,10 @@ export class Country implements Serializable {
 
   public set handler(handler: CountryHandler) {
     this._handler = handler;
+  }
+
+  private get diplomacy() {
+    return new Set(Array.from(data().diplomacy).filter((d) => d.has(this)));
   }
 
   constructor(id: string) {
@@ -104,14 +110,6 @@ export class Country implements Serializable {
   //     this._divisions.forEach((d) => d.destroy());
   //   }
 
-  public hasWar() {
-    // return this.__diplomaticTies.some((tie: DiplomaticTie) => {
-    //   if (tie instanceof War) return true;
-    //   return false;
-    // });
-    return true;
-  }
-
   /**
    * この国が指定の国に対して軍事通行権を有しているか
    * @param {Country} country
@@ -138,6 +136,15 @@ export class Country implements Serializable {
   //   // );
   //   return true;
   // }
+
+  public hasWar(target?: Country) {
+    return Array.from(this.diplomacy).some((d) => {
+      if (!(d instanceof War)) return false;
+      if (target == undefined) return true;
+      console.log(this.id, target.id, d.getOpponent(this));
+      return d.getOpponent(this) == target;
+    });
+  }
 
   public onEvent(event: EventBase): void {
     this._handler.onEvent(event);

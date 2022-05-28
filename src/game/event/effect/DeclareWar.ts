@@ -2,7 +2,13 @@ import Effect from './Effect';
 
 import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
-import { DeclareWarJson, EFFECT_TYPE, SaveDataType } from '../../type/JsonType';
+import {
+  DeclareWarJson,
+  DIPLOMACY_TYPE,
+  EFFECT_TYPE,
+  SaveDataType,
+} from '../../type/JsonType';
+import { War } from '../../diplomacy/War';
 
 export default class DeclareWar extends Effect {
   private _root!: string;
@@ -15,8 +21,7 @@ export default class DeclareWar extends Effect {
   }
 
   public activate() {
-    // const war = new War(this._root, this._target);
-    // war.activate();
+    data().diplomacy.add(new War(this._root, this._target));
   }
 
   public toJson(as: SaveDataType): DeclareWarJson {

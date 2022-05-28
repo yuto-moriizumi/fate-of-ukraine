@@ -1,19 +1,19 @@
 import { Dayjs } from 'dayjs';
 import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
-import { CONDITION_TYPE, EventFiredJson, SaveDataType } from '../../type/JsonType';
+import {
+  CONDITION_TYPE,
+  EventFiredJson,
+  SaveDataType,
+} from '../../type/JsonType';
 import Condition from './Condition';
 
 export default class EventFired extends Condition {
   private id!: string;
 
   public isValid(country: Country, date: Dayjs): boolean {
-    const ans = false;
-    // data().getEvents().forEach((event) => {
-    //   if (event.getId() != this.id) return;
-    //   ans = event.isFired();
-    // });
-    return ans;
+    const event = data().events.get(this.id);
+    return event !== undefined && event.fired;
   }
 
   public toJson(as: SaveDataType): EventFiredJson {

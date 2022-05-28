@@ -14,6 +14,10 @@ export class War extends Diplomacy {
   }
 
   toJson(as: SaveDataType): DiplomacyJson {
-    return { type: DIPLOMACY_TYPE.WAR, root: this._root, target: this._target };
+    return {
+      type: DIPLOMACY_TYPE.WAR,
+      root: this._root,
+      target: this._target,
+    };
   }
 }

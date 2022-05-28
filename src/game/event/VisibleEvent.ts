@@ -1,19 +1,14 @@
 import Option from './Option';
-import Condition from './condition/Condition';
 import { data } from '../GameManager';
 import { Country } from '../data/Country';
 import Effect from './effect/Effect';
 import { Dayjs } from 'dayjs';
-import { Serializable } from '../util/Serializable';
 import {
-  EventJson,
   SaveDataEventJson,
   SaveDataType,
-  SAVEDATA_TYPE,
   VisibleEventJson,
 } from '../type/JsonType';
 import EffectFactory from './effect/EffectFactory';
-import ConditionFactory from './condition/ConditionFactory';
 import { EventBase } from './EventBase';
 
 export class VisibleEvent extends EventBase {
@@ -33,8 +28,7 @@ export class VisibleEvent extends EventBase {
   }
 
   public dispatch(country: Country, date: Dayjs) {
-    if (!this.isDispatchable(country, date)) return; //発火可能でないなら発火しない
-    console.log('hihi22');
+    if (!super.isDispatchable(country, date)) return; //発火可能でないなら発火しない
     this.fired = true;
     console.log('visible event dispatched', { id: this.id, at: country });
     if (this.immediate) this.immediate.forEach((e) => e.activate());

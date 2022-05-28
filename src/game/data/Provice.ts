@@ -26,7 +26,7 @@ export class Province implements Serializable {
 
   public set owner(owner: Country | undefined) {
     this.ownerId = owner?.id;
-    MapViewport._instance.updateMap();
+    MapViewport.instance.updateMap();
   }
 
   public get name() {
@@ -82,7 +82,6 @@ export class Province implements Serializable {
       this._name = json.name;
       this.x = json.x;
       this.y = json.y;
-      this.ownerId = (json as SaveDataProvinceJson).owner;
     } else if ('owner' in json) this.ownerId = json.owner;
     return this;
   }

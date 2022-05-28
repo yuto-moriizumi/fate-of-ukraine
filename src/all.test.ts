@@ -2,29 +2,38 @@
 import { jest } from '@jest/globals';
 import { SaveData } from './game/data/SaveData';
 import { GameManager } from './game/GameManager';
-import { SAVEDATA_TYPE } from './game/type/JsonType';
+import {
+  Dict,
+  EventJson,
+  InvisibleEventJson,
+  SAVEDATA_TYPE,
+  VisibleEventJson,
+} from './game/type/JsonType';
 import { Observable } from './game/util/Observable';
 
 const testCountry = {
   ABU: { name: 'Abu Dhabi', color: '#717060' },
+  ADE: { name: 'Aden', color: '#ff1111' },
 };
 const testCountries = { countries: { ...testCountry } };
 const testProvince = {
   '#cce598': { name: 'Sitka', x: 711, y: 1992 },
+  '#ccb399': { name: 'Yakutat', x: 669, y: 2017 },
 };
 const testProvinces = { provinces: { ...testProvince } };
 const testProvinceSaveData = {
   '#cce598': { owner: 'ABU' },
+  '#ccb399': { owner: 'ADE' },
 };
 const testProvincesSaveData = { provinces: { ...testProvinceSaveData } };
-const testEvent = {
+const testEvent: Dict<EventJson> = {
   russian_civilwar_begins: {
     triggeredOnly: false,
     condition: {
       type: 'And',
       conditions: [
-        { type: 'DateCondition', date: '1917-11-07 02:00' },
-        { type: 'CountryIs', country: 'SOV' },
+        { type: 'DateCondition', date: '1917-11-07 01:00' },
+        { type: 'CountryIs', country: 'ADE' },
       ],
     },
     title: '白軍への攻撃',
@@ -33,20 +42,48 @@ const testEvent = {
       {
         title: 'ブルジョワに死を！',
         effects: [
-          { type: 'DeclareWar', root: 'SOV', target: 'RPG' },
-          {
-            type: 'DispatchEvent',
-            id: 'russian_civilwar_begins_news',
-            hours2happen: 3,
-          },
+          { type: 'DeclareWar', root: 'ADE', target: 'ABU' },
+          // {
+          //   type: 'DispatchEvent',
+          //   id: 'russian_civilwar_begins_news',
+          //   hours2happen: 3,
+          // },
         ],
       },
     ],
   },
+  silent: {
+    triggeredOnly: false,
+    condition: {
+      type: 'And',
+      conditions: [
+        { type: 'CountryIs', country: 'ADE' },
+        { type: 'AtWarWith', country: 'ABU' },
+        { type: 'Always', always: true },
+      ],
+    },
+    immediate: [
+      { type: 'Peace', root: 'ADE', target: 'ABU' },
+      { type: 'GainAccess', root: 'ADE', target: 'ABU' },
+    ],
+  },
+  silent2: {
+    triggeredOnly: false,
+    condition: {
+      type: 'And',
+      conditions: [{ type: 'EventFired', id: 'silent' }],
+    },
+    immediate: [{ type: 'SetOwner', root: 'ADE', provinces: ['#cce598'] }],
+  },
 };
+
 const testEvents = {
   events: { ...testEvent },
 };
+// const testEventSaveData = {
+//   russian_civilwar_begins: { fired: false },
+// };
+// const testEventsSaveData = { events: { ...testEventSaveData } };
 
 test('国データのロードができる', () => {
   const data = new SaveData(testCountries);
@@ -76,7 +113,9 @@ test('プロヴィンスのロードができる', () => {
 });
 
 test('イベントのロードができる', () => {
-  
+  const data = new SaveData(testEvents);
+  const events = data.events;
+  expect(events.get('russian_civilwar_begins')).not.toBeUndefined();
 });
 
 describe('データのダウンロード', () => {
@@ -110,6 +149,9 @@ import * as PIXI from 'pixi.js-legacy';
 import { TitleScene } from './game/scene/TitleScene';
 import { SelectionScene } from './game/scene/SelectionScene';
 import { MainScene } from './game/scene/MainScene';
+import dayjs from 'dayjs';
+import { InvisibleEvent } from './game/event/InvisibleEvent';
+import { MapViewport } from './game/container/MapViewport';
 PIXI.settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT = false;
 
 describe('pixi.jsのテスト', () => {
@@ -137,6 +179,7 @@ describe('pixi.jsのテスト', () => {
     data.loadJson(testProvinces);
     data.loadJson(testProvincesSaveData);
     data.loadJson(testCountries);
+    data.loadJson(testEvents);
     const selectProvince = game.data.provinces.get('#cce598');
     expect(selectProvince).not.toBeUndefined();
     if (selectProvince == undefined) return;
@@ -147,5 +190,39 @@ describe('pixi.jsのテスト', () => {
     expect(owner.id).toBe('ABU');
     scene.play();
     expect(game.scene.val).toBeInstanceOf(MainScene);
+  });
+
+  test('メイン画面を1フレーム更新する', () => {
+    const game = GameManager.instance;
+    const scene = game.scene.val;
+    expect(scene).toBeInstanceOf(MainScene);
+    if (!(scene instanceof MainScene)) return;
+    scene.pause.val = false;
+    while (scene.datetime.val.isBefore(dayjs('1917-11-07 02:00'))) {
+      scene.update(1);
+    }
+    const data = GameManager.instance.data;
+    const event = data.events.get('russian_civilwar_begins');
+    expect(event).not.toBeUndefined();
+    if (event == undefined) return;
+    expect(event.fired).toBe(true);
+    console.log(data.diplomacy);
+    const ADE = data.countries.get('ADE');
+    expect(ADE?.hasWar(data.countries.get('ABU'))).toBe(true);
+    // expect()
+    while (scene.datetime.val.isBefore(dayjs('1917-11-07 03:00'))) {
+      scene.update(1);
+    }
+    const slientEvent = data.events.get('silent');
+    expect(slientEvent).toBeInstanceOf(InvisibleEvent);
+    if (slientEvent == undefined) return;
+    expect(slientEvent.fired).toBe(true);
+    while (scene.datetime.val.isBefore(dayjs('1917-11-07 04:00'))) {
+      scene.update(1);
+    }
+    const slientEvent2 = data.events.get('silent2');
+    expect(slientEvent2).toBeInstanceOf(InvisibleEvent);
+    if (slientEvent2 == undefined) return;
+    expect(slientEvent2.fired).toBe(true);
   });
 });

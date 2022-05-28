@@ -7,11 +7,11 @@ export class DiplomacyFactory {
   public static fromJson(json: DiplomacyJson) {
     switch (json.type) {
       case DIPLOMACY_TYPE.ACCESS:
-        return new Access().loadJson(json);
+        return new Access(json.root, json.target);
       case DIPLOMACY_TYPE.ALLIANCE:
-        return new Alliance().loadJson(json);
+        return new Alliance(json.root, json.target);
       case DIPLOMACY_TYPE.WAR:
-        return new War().loadJson(json);
+        return new War(json.root, json.target);
     }
   }
 }

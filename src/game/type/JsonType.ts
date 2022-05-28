@@ -16,7 +16,8 @@ export type Json =
   | ConditionJson
   | EffectJson
   | OptionJson
-  | DiplomacyJson;
+  | DiplomacyJson
+  | DiplomacyJson[];
 
 export type SaveDataJson = {
   provinces?: Dict<ProvinceJson>;

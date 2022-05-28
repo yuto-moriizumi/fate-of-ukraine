@@ -1,13 +1,9 @@
-import Option from './Option';
 import {
-  EventJson,
   InvisibleEventJson,
   SaveDataEventJson,
   SaveDataType,
-  SAVEDATA_TYPE,
 } from '../type/JsonType';
 import EffectFactory from './effect/EffectFactory';
-import ConditionFactory from './condition/ConditionFactory';
 import { EventBase } from './EventBase';
 import Effect from './effect/Effect';
 import { Country } from '../data/Country';
@@ -19,7 +15,6 @@ export class InvisibleEvent extends EventBase {
 
   public dispatch(country: Country, date: Dayjs) {
     if (!this.isDispatchable(country, date)) return; //発火可能でないなら発火しない
-    console.log('hihi');
     this.fired = true;
     console.log('invisible event dispatched', { id: this.id, at: country });
     this.immediate.forEach((e) => e.activate());
