@@ -1,23 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { Province } from '../../game/data/Provice';
-import DebugSidebar from './DebugSidebar';
+import DebugSidebar from './sidebar/DebugSidebar';
 import { MainScene } from '../../game/scene/MainScene';
 import Timer from './Timer';
 import { eventHandler } from '../../game/handler/CountryPlayerHandler';
+import { Country } from '../../game/data/Country';
+import DiplomacySidebar from './sidebar/DiplomacySidebar';
 
 export default function MainSceneUI(props: {
   scene: MainScene;
   onEvent: eventHandler;
 }) {
   const [selectedProvince, setSelectedProvince] = useState<Province>();
-  const [isDebugSidebarOpen, setIsDebugSidebarOpen] = useState(false);
+  const [currentSidebar, setCurrentSidebar] = useState<JSX.Element | undefined>(
+    undefined
+  );
+  const [myCountry, setMyCountry] = useState<Country>();
 
   const { scene, onEvent } = props;
 
   useEffect(() => {
     scene.selectedProvince.addObserver(setSelectedProvince);
+    scene.selectedProvince.addObserver(() =>
+      setCurrentSidebar(
+        <DiplomacySidebar root={myCountry} target={selectedProvince?.owner} />
+      )
+    );
     scene.eventHandler = onEvent;
+    setMyCountry(scene.playAs);
   }, []);
 
   return (
@@ -36,7 +47,9 @@ export default function MainSceneUI(props: {
           <Button
             size="lg"
             className="ms-auto"
-            onClick={() => setIsDebugSidebarOpen(!isDebugSidebarOpen)}
+            onClick={() =>
+              setCurrentSidebar(<DebugSidebar province={selectedProvince} />)
+            }
           >
             DEBUG
           </Button>
@@ -45,9 +58,7 @@ export default function MainSceneUI(props: {
           <Timer scene={scene}></Timer>
         </Col>
       </Row>
-      <Row style={{ height: '85%' }}>
-        {isDebugSidebarOpen ? <DebugSidebar province={selectedProvince} /> : ''}
-      </Row>
+      <Row style={{ height: '85%' }}>{currentSidebar}</Row>
       <Row style={{ height: '5%' }}>FOOTER</Row>
     </>
   );

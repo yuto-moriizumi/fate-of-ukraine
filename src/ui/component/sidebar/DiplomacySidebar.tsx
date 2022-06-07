@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Col } from 'react-bootstrap';
-import { Country } from '../../game/data/Country';
-import { Province } from '../../game/data/Provice';
-import { data } from '../../game/GameManager';
-import { Scene } from '../../game/scene/Scene';
-import { SAVEDATA_TYPE } from '../../game/type/JsonType';
+import { Country } from '../../../game/data/Country';
+import { Province } from '../../../game/data/Provice';
+import { data } from '../../../game/GameManager';
+import { SAVEDATA_TYPE } from '../../../game/type/JsonType';
 
-export default function DebugSidebar(props: {
-  province: Province | undefined;
+export default function DiplomacySidebar(props: {
+  root: Country;
+  target: Country;
 }) {
   const [selectedCountry, setSelectedCountry] = useState<Country>();
-
-  // useEffect(() => {
-  //   if (currentScene instanceof SelectionScene) {
-  //     currentScene.selectedProvince.addObserver(setSelectedProvince);
-  //   }
-  // }, [currentScene]);
 
   return (
     <Col className="bg-warning clickable" xs={2}>
