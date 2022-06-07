@@ -1,6 +1,6 @@
 import { MapViewport } from '../container/MapViewport';
-import { Province } from '../data/Provice';
-import { GameManager } from '../GameManager';
+import type { Province } from '../data/Provice';
+import { data, GameManager } from '../GameManager';
 import { Observable } from '../util/Observable';
 import { MainScene } from './MainScene';
 import { Scene } from './Scene';
@@ -13,6 +13,8 @@ export class SelectionScene extends Scene {
     super();
     this.map = new MapViewport(this.selectedProvince);
     this.addChild(this.map);
+
+    console.log(data().events.get('donets_leaves_ukraine'));
   }
 
   update(delta: number) {

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col } from 'react-bootstrap';
-import { Country } from '../game/data/Country';
-import { Province } from '../game/data/Provice';
-import { data } from '../game/GameManager';
-import { Scene } from '../game/scene/Scene';
-import { SAVEDATA_TYPE } from '../game/type/JsonType';
+import { Country } from '../../game/data/Country';
+import { Province } from '../../game/data/Provice';
+import { data } from '../../game/GameManager';
+import { Scene } from '../../game/scene/Scene';
+import { SAVEDATA_TYPE } from '../../game/type/JsonType';
 
 export default function DebugSidebar(props: {
   province: Province | undefined;
@@ -47,6 +47,11 @@ export default function DebugSidebar(props: {
       <Col xs={12} className="d-grid mb-2">
         <Button onClick={() => data().download(SAVEDATA_TYPE.SAVEDATA)}>
           セーブデータのダウンロード
+        </Button>
+      </Col>
+      <Col xs={12} className="d-grid mb-2">
+        <Button onClick={() => data().download(SAVEDATA_TYPE.EVENTDATA)}>
+          イベントデータのダウンロード
         </Button>
       </Col>
     </Col>

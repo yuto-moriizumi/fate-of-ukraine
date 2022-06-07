@@ -24,15 +24,9 @@ export class Province implements Serializable {
     if (this.ownerId) return data().countries.get(this.ownerId);
   }
 
-  public getOwner() {
-    return this.ownerId;
-    // if (this.ownerId != undefined)
-    //   return data().getCountries().get(this.ownerId);
-  }
-
   public set owner(owner: Country | undefined) {
     this.ownerId = owner?.id;
-    MapViewport._instance.updateMap();
+    MapViewport.instance.updateMap();
   }
 
   public get name() {
@@ -69,14 +63,18 @@ export class Province implements Serializable {
     return true;
   }
 
-  public toJson(as: SaveDataType): ProvinceJson {
-    if (as === SAVEDATA_TYPE.GAMEDATA)
-      return {
-        name: this._name,
-        x: this.x,
-        y: this.y,
-      };
-    return { owner: this.ownerId };
+  public toJson(as: SaveDataType): ProvinceJson | undefined {
+    switch (as) {
+      case SAVEDATA_TYPE.GAMEDATA:
+        return {
+          name: this._name,
+          x: this.x,
+          y: this.y,
+        };
+      case SAVEDATA_TYPE.SAVEDATA:
+        return { owner: this.ownerId };
+    }
+    return undefined;
   }
 
   public loadJson(json: ProvinceJson) {
@@ -84,7 +82,6 @@ export class Province implements Serializable {
       this._name = json.name;
       this.x = json.x;
       this.y = json.y;
-      this.ownerId = (json as SaveDataProvinceJson).owner;
     } else if ('owner' in json) this.ownerId = json.owner;
     return this;
   }

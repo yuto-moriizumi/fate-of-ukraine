@@ -1,7 +1,7 @@
 import {
-  CountryDictJson,
   CountryJson,
-  ProvinceDictJson,
+  Dict,
+  Json,
   ProvinceJson,
   SaveDataJson,
   SaveDataProvinceJson,
@@ -9,14 +9,6 @@ import {
 } from '../type/JsonType';
 
 export interface Serializable {
-  toJson(as: SaveDataType): object;
-  loadJson(
-    json:
-      | SaveDataJson
-      | CountryDictJson
-      | ProvinceDictJson
-      | CountryJson
-      | SaveDataProvinceJson
-      | ProvinceJson
-  ): Serializable;
+  toJson(as: SaveDataType): Json | undefined;
+  loadJson(json: Json): Serializable;
 }

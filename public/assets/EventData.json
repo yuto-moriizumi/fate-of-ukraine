@@ -1,0 +1,949 @@
+{
+  "events": {
+    "russian_civilwar_begins": {
+      "triggeredOnly": false,
+      "condition": {
+        "type": "And",
+        "conditions": [
+          { "type": "DateCondition", "date": "1917-11-07 02:00" },
+          { "type": "CountryIs", "country": "SOV" }
+        ]
+      },
+      "title": "白軍への攻撃",
+      "desc": "ロシアの各地には、反革命分子が潜んでいる。ただちに攻撃し、全ロシアを解放するのだ！",
+      "options": [
+        {
+          "title": "ブルジョワに死を！",
+          "effects": [
+            { "type": "DeclareWar", "root": "SOV", "target": "RPG" },
+            {
+              "type": "DispatchEvent",
+              "id": "russian_civilwar_begins_news",
+              "hours2happen": 3
+            }
+          ]
+        }
+      ]
+    },
+    "russian_civilwar_begins_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "isGlobal": true,
+      "title": "ロシア内戦",
+      "desc": "1918年1月のロシアでは、憲法制定議会が招集されたが、ボリシェヴィキはそこでは多数を占めることができなかった。議会制民主主義をブルジョワ権力の擬制であるとしたレーニンは実力で憲法制定議会を解散させ、ソヴィエトを最高機関とする労働者・兵士の政権を樹立し、ボリシェヴィキ以外の党派をほぼ追放し、ボリシェヴィキ独裁体制を作り上げた。それに対し、ロシア各地で反革命軍が蜂起。ロシア内戦が始まった。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "donets_leaves_ukraine": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "DKR",
+          "provinces": ["#71e061", "#71e0e0", "#f061e0", "#7161e0"]
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "donets_leaves_ukraine_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "donets_leaves_ukraine_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "title": "ドネツク＝クリヴォーイ・ローク・ソビエト共和国が独立",
+      "desc": "ウクライナ南東部の支配権をボリシェビキが奪取、ソビエト共和国が成立した。今のところロシア＝ソビエトとは連携していないようだ。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "kuban_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        { "type": "SetOwner", "root": "KPR", "provinces": ["#405000"] },
+        { "type": "DeclareWar", "root": "SOV", "target": "KPR" }
+      ]
+    },
+    "kuban_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "title": "クバーニ人民共和国が独立",
+      "desc": "クバーニはロシア帝国時代から歴史的に高度な自治権を保ってきた。10月革命後、クバーニ・ラーダはロシア民主共和国の自治国家としてクバーニ人民共和国の樹立を宣言したが、今のロシアに国土を統べる力はなかった。ラーダは改めて、完全な独立国を宣言した。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "lithuania_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "LIT",
+          "provinces": [
+            "#8060a0",
+            "#c0a0a0",
+            "#a8ff51",
+            "#00e0a0",
+            "#809f60",
+            "#0161a0",
+            "#c06121",
+            "#406020",
+            "#41e061"
+          ]
+        },
+        { "type": "GainAccess", "root": "GER", "target": "LIT" },
+        {
+          "type": "DispatchEvent",
+          "id": "lithuania_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "lithuania_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "title": "リトアニア王国が独立",
+      "desc": "ドイツ帝国軍占領下のリトアニアにおいて、リトアニア王国が建国された。ドイツはヴィルヘルム2世をリトアニア王に据えることを企んでいるが、リトアニアはそれを受け入れていない。王位はまだ未確定だ。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "kafkas_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "TCF",
+          "provinces": [
+            "#801080",
+            "#001080",
+            "#009000",
+            "#809001",
+            "#011141",
+            "#40d001",
+            "#801000",
+            "#f0e0df",
+            "#c0cf80",
+            "#9bc69b",
+            "#80d041",
+            "#005000",
+            "#805000",
+            "#c09080",
+            "#00d000",
+            "#30df60",
+            "#809040",
+            "#007060",
+            "#008fbf",
+            "#8090bf",
+            "#bfd159",
+            "#c01040"
+          ]
+        },
+        { "type": "DeclareWar", "root": "TUR", "target": "TCF" },
+        {
+          "type": "DispatchEvent",
+          "id": "kafkas_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "kafkas_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "title": "ザカフカース民主連邦共和国が独立",
+      "desc": "ボリシェビキの権力奪取によって、南ロシアは権力の空白地帯となった。さらに、オスマン帝国とソビエトの講和によって南ロシアが放棄されたことにより、オスマン帝国軍が進軍を開始した。これに対応するため、アルメニア、グルジア、アゼルバイジャンを初めとする民族主義系政党は連合して、ロシアからの離脱を宣言した。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "estonia_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "EST",
+          "provinces": ["#01a021", "#80a021", "#6040e0"]
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "estonia_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "estonia_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "title": "エストニア共和国が独立",
+      "desc": "タリン市長とエストニア・ボリシェビキの権力闘争の後、ドイツ軍の支援もあってエストニア共和国が独立した。しかし、国土の南半分はドイツが樹立した別の国家に占領されたままだ。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "udb_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "UBD",
+          "provinces": ["#0121a0", "#bf6060", "#8021a0", "#00a0a0", "#bf2060"]
+        },
+        { "type": "GainAccess", "root": "GER", "target": "UBD" },
+        {
+          "type": "DispatchEvent",
+          "id": "udb_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "udb_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "title": "バルト連合公国が独立",
+      "desc": "ドイツ軍の進撃を受けて、バルト・ドイツ人貴族と亡命ロシア貴族が中心となってバルト連合公国が成立した。ドイツ軍の勢力圏は益々拡大する一方だ。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "dcs_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "DCS",
+          "provinces": ["#4a8e5d", "#806121", "#01e021"]
+        },
+        { "type": "GainAccess", "root": "GER", "target": "DCS" },
+        {
+          "type": "DispatchEvent",
+          "id": "dcs_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "dcs_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "title": "クールラント・ゼムガレン公国が独立",
+      "desc": "ドイツ軍の進撃を受けて、バルト・ドイツ人貴族が中心となってクールラント公国が成立した。公位はヴィルヘルム2世が有している。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "ger_invasion_osr": {
+      "triggeredOnly": false,
+      "condition": {
+        "type": "And",
+        "conditions": [
+          { "type": "DateCondition", "date": "2022-05-17 12:00" },
+          { "type": "CountryIs", "country": "GER" }
+        ]
+      },
+      "title": "オデッサへの拡大？",
+      "desc": "ドイツ軍は東部への拡大を続けている。いまだウクライナ南方にはボリシェビキ政権が存在しているが、そこは休戦条約で我が国の影響が認められている。反抗的な政権を破壊しておこう。",
+      "options": [
+        {
+          "title": "オデッサに侵攻する",
+          "effects": [{ "type": "DeclareWar", "root": "GER", "target": "OSR" }]
+        },
+        { "title": "避けるべきだ", "effects": [] }
+      ]
+    },
+    "ger_invasion_osr_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "title": "ドイツ軍がオデッサへ侵攻",
+      "desc": "ドイツ軍は東部への拡大を続けている。ウクライナ南部に駐留するドイツ軍部隊は、さらに南東のオデッサへ侵攻することを決定した。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "tsr_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "TSR",
+          "provinces": ["#31e0e0", "#b0dfdf", "#ef6020", "#f06161", "#706060"]
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "tsr_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "tsr_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "title": "タヴリダ共和国が成立",
+      "desc": "シンフェロポリにおけるボリシェビキの会談で、旧クリミア人民共和国の領域にタヴリダソビエト社会主義共和国が設置されることが決まった。しかし、北部の領域は他のソビエト共和国と被っている。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "ukr_civil_war": {
+      "triggeredOnly": false,
+      "condition": {
+        "type": "And",
+        "conditions": [
+          { "type": "DateCondition", "date": "2022-05-17 12:00" },
+          { "type": "CountryIs", "country": "UPR" }
+        ]
+      },
+      "title": "1918年のウクライナ",
+      "desc": "ウクライナ人民共和国は国土の大半を失った。大半の領土はソビエト派が掌握しており、いまや風前の灯火である。しかしながら、恐れることは無い。ドイツ軍が東部への進軍を決定したのだ！",
+      "options": [
+        {
+          "title": "国土を取り戻そう！",
+          "effects": [
+            { "type": "DeclareWar", "root": "UPR", "target": "UPRS" },
+            { "type": "DeclareWar", "root": "GER", "target": "UPRS" }
+          ]
+        }
+      ]
+    },
+    "bpr_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "BPR",
+          "provinces": [
+            "#bfdf20",
+            "#416161",
+            "#e06176",
+            "#80e0a0",
+            "#806161",
+            "#0161e0",
+            "#80e061",
+            "#80dfdf",
+            "#41a0e0",
+            "#016161",
+            "#c0a0e0",
+            "#01e061",
+            "#8061e0",
+            "#c0a060",
+            "#c0df60"
+          ]
+        },
+        { "type": "GainAccess", "root": "GER", "target": "BPR" },
+        {
+          "type": "DispatchEvent",
+          "id": "bpr_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "bpr_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "title": "ベラルーシ人民共和国が成立",
+      "desc": "第一次世界大戦中の1918年3月25日、ベラルーシがドイツ軍に占領されている時にブレスト＝リトフスク条約によって独立が宣言された。ブレスト＝リトフスク条約の第3条でその領土が規定されている。ベラルーシ人が人口の大半を占めている地域をその領土としたが、リトアニア人やポーランド人、ユダヤ人なども多く居住していた。一部のユダヤ人はロシア語を母語とし、それ以外のユダヤ人はイディッシュ語を話した。 ",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "rom_annex_mdr": {
+      "triggeredOnly": false,
+      "condition": {
+        "type": "And",
+        "conditions": [
+          { "type": "DateCondition", "date": "2022-05-17 12:00" },
+          { "type": "CountryIs", "country": "ROM" }
+        ]
+      },
+      "title": "モルダヴィアが統合を要請",
+      "desc": "元々ルーマニア系民族で構成されるモルダヴィアであったが、ロシアからの離脱が決定してからというもの、国民はルーマニアとの連合を強く望むようになった。これに促され、1918年4月9日、スファトゥル・ツァーリーはルーマニアとの連合の票決を行い86人の賛成、3人の反対、36人の棄権で連合を行うことが決定された。地方自治、ベッサラビア議会の継続、地方議会と行政体としての権限を条件にルーマニアとの合同を強く望んでいる。どうするべきだろうか？ ",
+      "options": [
+        {
+          "title": "ルーマニア人いるところルーマニアなり！",
+          "effects": [
+            { "type": "Annex", "root": "ROM", "target": "MDR" },
+            {
+              "type": "DispatchEvent",
+              "id": "rom_annex_mdr_news",
+              "hours2happen": 3
+            }
+          ]
+        }
+      ]
+    },
+    "rom_annex_mdr_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "title": "ルーマニア王国がモルダヴィア民主共和国を統合",
+      "desc": "元々ルーマニア系民族で構成されるモルダヴィアであったが、ロシアからの離脱が決定してからというもの、国民はルーマニアとの連合を強く望むようになった。これに促され、1918年4月9日、スファトゥル・ツァーリーはルーマニアとの連合の票決を行い86人の賛成、3人の反対、36人の棄権で連合を行うことが決定された。地方自治、ベッサラビア議会の継続、地方議会と行政体としての権限を条件にルーマニアと交渉を行い、スファトゥル・ツァーリーは法的にモルダヴィア民主共和国を終焉させ、ベッサラビアとルーマニア王国の連合を宣言した。 ",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "bucharest_peace": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "ROM",
+          "provinces": [
+            "#30e0a0",
+            "#31e021",
+            "#2164e0",
+            "#b0e020",
+            "#e0a321",
+            "#e02121",
+            "#51e021",
+            "#d9e021",
+            "#b06121"
+          ]
+        },
+        { "type": "GainAccess", "root": "GER", "target": "ROM" },
+        { "type": "GainAccess", "root": "AHE", "target": "ROM" },
+        {
+          "type": "DispatchEvent",
+          "id": "bucharest_peace_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "bucharest_peace_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "title": "ブカレスト講和条約",
+      "desc": "1918年5月7日、ロシアが革命で戦争を離脱すると、後ろ盾を失ったルーマニア軍と政府は同盟軍に降伏した。直ちにブカレスト講和条約が締結され、ルーマニアは同盟軍の占領地として総督府が設置された。ルーマニア降伏は膨大な穀物と石油を同盟軍に与え、連合軍にとって不利な状態を与えた。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "ksr_form": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "KSR",
+          "provinces": ["#405000", "#80d080", "#c05001"]
+        },
+        { "type": "DispatchEvent", "id": "ksr_form_news", "hours2happen": 3 }
+      ]
+    },
+    "ksr_form_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "title": "クバーニ・ソビエト共和国の成立",
+      "desc": "1918年4月13日にクバーニ人民共和国に反して誕生した。クバン全土が含まれていた。クバーニ人民共和国はタタールの政権であったために、農民はソビエト側に付いた。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "don_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "DON",
+          "provinces": ["#00d080", "#c05180", "#015080", "#e06020", "#805180"]
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "don_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "don_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "title": "ドン共和国が独立",
+      "desc": "1918年5月18日、クルークと呼ばれたドン・コサックの会議に独立が宣言された。この出来事の後、ドン・ソビエト共和国はドン軍管州から一掃された。ドン共和国はドン地域を領土とし、ノヴォチェルカースクを首都とすることを宣言した。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "kafkas_collapce": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        { "type": "Annex", "root": "TUR", "target": "TCF" },
+        {
+          "type": "SetOwner",
+          "root": "GEO",
+          "provinces": [
+            "#40d001",
+            "#801000",
+            "#011141",
+            "#f0e0df",
+            "#c0cf80",
+            "#809001",
+            "#9bc69b"
+          ]
+        },
+        {
+          "type": "SetOwner",
+          "root": "AZR",
+          "provinces": ["#008fbf", "#007060", "#809040", "#8090bf", "#80d041"]
+        },
+        {
+          "type": "SetOwner",
+          "root": "ARM",
+          "provinces": ["#005000", "#805000", "#30df60"]
+        },
+        {
+          "type": "SetOwner",
+          "root": "MRC",
+          "provinces": ["#c01040", "#bfd159"]
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "kafkas_collapce_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "kafkas_collapce_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "title": "カフカース連邦が崩壊",
+      "desc": "ザカフカース議会は軍事力を持たなかったため、バトゥーミにおいてドイツ・トルコ軍司令部と交渉に入った。交渉中、3民族の意見の相違（アルメニアとグルジアは親独、アゼルバイジャンは親土など）が明らかになったため、3民族の国民会議は独立国家の建国に賛成した。また、ドイツ・トルコ側も連邦共和国の廃止に賛成した。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "greece_attack_bulgaria": {
+      "triggeredOnly": false,
+      "condition": {
+        "type": "And",
+        "conditions": [
+          { "type": "DateCondition", "date": "2022-05-17 12:00" },
+          { "type": "CountryIs", "country": "GRE" }
+        ]
+      },
+      "title": "ギリシャ軍の侵攻",
+      "desc": "ギリシャとブルガリアが戦うマケドニア戦線は長い間膠着状態にあったが、それももう終わりだ。突破の準備はできている。",
+      "options": [
+        {
+          "title": "OK",
+          "effects": [{ "type": "DeclareWar", "root": "GRE", "target": "BUL" }]
+        }
+      ]
+    },
+    "britain_landing_bulgaria": {
+      "triggeredOnly": false,
+      "condition": {
+        "type": "And",
+        "conditions": [
+          { "type": "DateCondition", "date": "2022-05-17 12:00" },
+          { "type": "CountryIs", "country": "GBE" }
+        ]
+      },
+      "title": "イギリス軍が南ブルガリアに上陸",
+      "desc": "ギリシャ軍の攻勢を支援するため、イギリス軍が南ブルガリアに上陸した",
+      "options": [
+        {
+          "title": "OK",
+          "effects": [
+            {
+              "type": "SetOwner",
+              "root": "GBR",
+              "provinces": ["#6181d2", "#f021a0", "#f0a0e0"]
+            },
+            { "type": "DeclareWar", "root": "GBR", "target": "BUL" },
+            { "type": "GainAccess", "root": "GBR", "target": "GRE" },
+            { "type": "GainAccess", "root": "GRE", "target": "GBR" }
+          ]
+        }
+      ]
+    },
+    "scs_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "SCS",
+          "provinces": [
+            "#51a0a0",
+            "#1121e0",
+            "#d0a0a0",
+            "#50209f",
+            "#f06101",
+            "#71a0c0",
+            "#d0a021",
+            "#70df00",
+            "#71a041",
+            "#f021c0",
+            "#106020",
+            "#d021a0",
+            "#9021e0",
+            "#124d73",
+            "#51a021",
+            "#906121",
+            "#80cf00",
+            "#efa0c0",
+            "#11a0e0",
+            "#902161"
+          ]
+        },
+        { "type": "GainAccess", "root": "SER", "target": "SCS" },
+        {
+          "type": "DispatchEvent",
+          "id": "scs_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "scs_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "title": "クロアチア・ボスニアがオーストリアを離脱",
+      "desc": "有力政治家で構成される国民評議会が、「スロベニア人・クロアチア人・セルビア人国」の独立を宣言した。もはやクロアチアはオーストリアにとどまっていない。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "ubd_integrate_dcs": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [{ "type": "Annex", "root": "UBD", "target": "DCS" }]
+    },
+    "wupr_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "WUPR",
+          "provinces": [
+            "#90e060",
+            "#11a021",
+            "#8f9f20",
+            "#b021a0",
+            "#7edd9e",
+            "#31a0a0",
+            "#00a7f4",
+            "#11e061",
+            "#1161e0"
+          ]
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "wupr_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "wupr_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "title": "西ウクライナ人民共和国がオーストリアを離脱",
+      "desc": "20世紀初頭、ガリツィア地方の住民はウクライナ人が6割を占めていたが、彼らの大半は農村部に住んでおり、都市部は主にポーランド人やユダヤ人によって支配されていた。とりわけ本国の首都とされるリヴィウには多くのポーランド人が住んでおり、ポーランドにとって最も重要な都市の一つと見なされている。この国の政情は不安定だ。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "cze_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "CZE",
+          "provinces": ["#71e041", "#ef6080", "#9080a0", "#71e080"]
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "cze_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "cze_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "title": "チェコスロバキア共和国がオーストリアを離脱",
+      "desc": "チェコスロバキア国内の国民委員会が独立宣言を行い、プラハの政庁を占拠。新政府は熱心な独立運動家であるトマーシュ・マサリクに率いられている。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "ger_surrender": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "POL",
+          "provinces": ["#11e061", "#1161e0", "#90e060", "#9061e0"]
+        },
+        {
+          "type": "SetOwner",
+          "root": "ROM",
+          "provinces": ["#31a0a0", "#00a7f4"]
+        },
+        {
+          "type": "SetOwner",
+          "root": "AUS",
+          "provinces": [
+            "#8f8020",
+            "#f0e0c0",
+            "#f061c0",
+            "#1101a0",
+            "#9001a0",
+            "#1180a0",
+            "#a9793b",
+            "#f0e041",
+            "#b06141",
+            "#316141",
+            "#f06141",
+            "#716141",
+            "#1d6b94",
+            "#b0e040",
+            "#31e041",
+            "#3060bf",
+            "#b061c0",
+            "#f0a040"
+          ]
+        },
+        {
+          "type": "SetOwner",
+          "root": "HUN",
+          "provinces": [
+            "#d061e0",
+            "#51e0e0",
+            "#846165",
+            "#b02121",
+            "#cf2020",
+            "#cfdfdf",
+            "#716180",
+            "#f0e001",
+            "#30a020",
+            "#715f5d",
+            "#d06161",
+            "#109f9f",
+            "#5060df",
+            "#90a0a0",
+            "#5161a0",
+            "#90e021",
+            "#1161a0",
+            "#d0e021",
+            "#d061a0",
+            "#d0e0a0",
+            "#9021a0",
+            "#b06161",
+            "#3161a0",
+            "#51e0a0",
+            "#306060",
+            "#af609f",
+            "#516161",
+            "#90e0e0",
+            "#51306a",
+            "#51e061",
+            "#20c000",
+            "#d0e061",
+            "#11e021",
+            "#626998",
+            "#906121"
+          ]
+        },
+        {
+          "type": "SetOwner",
+          "root": "CZE",
+          "provinces": ["#f0e080", "#10dfdf"]
+        },
+        {
+          "type": "SetOwner",
+          "root": "ITA",
+          "provinces": ["#71c0e0", "#d0a061", "#c771e0", "#51a061"]
+        },
+        {
+          "type": "SetOwner",
+          "root": "SER",
+          "provinces": [
+            "#707040",
+            "#e0118b",
+            "#11e0a0",
+            "#a5d3a9",
+            "#d02161",
+            "#62a730",
+            "#d021e0",
+            "#9061a0",
+            "#90a061",
+            "#edba20",
+            "#9dffaf",
+            "#a12f82",
+            "#446e84",
+            "#8c6292",
+            "#f5f6c2",
+            "#90a0e0",
+            "#10a060"
+          ]
+        },
+        { "type": "Peace", "root": "GER", "target": "OSR" },
+        { "type": "Peace", "root": "GER", "target": "UPRS" },
+        {
+          "type": "DispatchEvent",
+          "id": "ussr_attack_west",
+          "hours2happen": 7
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "ger_surrender_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "ger_surrender_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "title": "ドイツ帝国が休戦！",
+      "desc": "1914年から始まった「大戦争」は、4年の歳月を経て、ドイツの休戦という形で終結を迎えた。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "ser_annex_scs": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        { "type": "Annex", "root": "SER", "target": "SCS" },
+        {
+          "type": "ChangeName",
+          "country": "SER",
+          "name": "ユーゴスラビア王国"
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "ser_annex_scs_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "ser_annex_scs_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "title": "ユーゴスラビア王国が成立",
+      "desc": "セルビア国王ペータル1世の摂政王子アレクサンダル1世によって、ユーゴスラビア王国の設立が宣言された。汎スラブ主義やセルビア民族主義者の強い後押しを受けている。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "baltic_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "EST",
+          "provinces": ["#0121a0", "#bf6060"]
+        },
+        {
+          "type": "SetOwner",
+          "root": "LAT",
+          "provinces": [
+            "#4a8e5d",
+            "#806121",
+            "#01e021",
+            "#00a0a0",
+            "#8021a0",
+            "#bf2060"
+          ]
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "baltic_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "baltic_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "title": "バルト諸国が独立",
+      "desc": "ラトビアはドイツからの独立を宣言した。またエストニアでは、次の日にドイツ軍政部からエストニア自治政府首脳コンスタンティン・パッツに主権を移動した。ドイツ政府はこれを承認する予定だが、軍部の中では反対する者もいるようだ。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "ussr_attack_west": {
+      "triggeredOnly": true,
+      "condition": { "type": "EventFired", "id": "ger_surrender" },
+      "immediate": [
+        { "type": "DeclareWar", "root": "SOV", "target": "UPR" },
+        { "type": "DeclareWar", "root": "SOV", "target": "BPR" },
+        { "type": "DeclareWar", "root": "SOV", "target": "EST" },
+        { "type": "DeclareWar", "root": "SOV", "target": "LAT" },
+        { "type": "DeclareWar", "root": "SOV", "target": "LIT" },
+        { "type": "DeclareWar", "root": "SOV", "target": "DON" },
+        {
+          "type": "DispatchEvent",
+          "id": "ussr_attack_west_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "ussr_attack_west_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "title": "ソ連軍の東進",
+      "desc": "ドイツの敗戦に伴い、東欧には権力の空白が生まれた。これに目を付けたソビエトは、直ちに攻撃を開始した。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "hungarian_occupation": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "ROM",
+          "provinces": [
+            "#1161a0",
+            "#d061a0",
+            "#d0e0a0",
+            "#b06161",
+            "#00a7f4",
+            "#31a0a0",
+            "#3161a0",
+            "#51e0a0",
+            "#d0e021",
+            "#e02121",
+            "#306060",
+            "#af609f"
+          ]
+        },
+        {
+          "type": "SetOwner",
+          "root": "SER",
+          "provinces": ["#11e021", "#626998", "#902161", "#906121", "#80cf00"]
+        },
+        {
+          "type": "SetOwner",
+          "root": "CZE",
+          "provinces": [
+            "#f0e080",
+            "#71e080",
+            "#10dfdf",
+            "#1d6b94",
+            "#716141",
+            "#f06141",
+            "#90e0e0",
+            "#51306a",
+            "#20c000",
+            "#516161",
+            "#d06161",
+            "#51e061"
+          ]
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "hungarian_occupation_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "hungarian_occupation_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
+      "title": "ルーマニア・ユーゴスラビアがハンガリーを占領",
+      "desc": "ハンガリーの軍隊は弱体であり、また領土的野心を抱く周辺諸国によって、ハンガリーは占領された。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "soviet_puppet_latvia": {
+      "triggeredOnly": false,
+      "condition": {
+        "type": "And",
+        "conditions": [
+          { "type": "CountryIs", "country": "SOV" },
+          { "type": "AtWarWith", "country": "LAT" },
+          { "type": "OwnProvince", "province": "#bf2060" },
+          { "type": "OwnProvince", "province": "#8021a0" }
+        ]
+      },
+      "title": "ラトビアに協力政府を樹立",
+      "desc": "我が軍はラトビアの大部分を占領した。この地域を効率的に統治するために、協力政府を樹立することが出来る。",
+      "options": [
+        {
+          "title": "OK",
+          "effects": [
+            {
+              "type": "SetOwner",
+              "root": "LSSR",
+              "provinces": ["#bf2060", "#8021a0"]
+            },
+            { "type": "DeclareWar", "root": "LSSR", "target": "LAT" },
+            { "type": "GainAccess", "root": "SOV", "target": "LSSR" },
+            { "type": "GainAccess", "root": "LSSR", "target": "SOV" }
+          ]
+        }
+      ]
+    }
+  },
+  "diplomacy": []
+}

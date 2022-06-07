@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import './App.css';
 import { Row, Col, Button } from 'react-bootstrap';
-import { SelectionScene } from '../game/scene/SelectionScene';
-import { Province } from '../game/data/Provice';
+import { Province } from '../../game/data/Provice';
 import DebugSidebar from './DebugSidebar';
+import { MainScene } from '../../game/scene/MainScene';
+import Timer from './Timer';
+import { eventHandler } from '../../game/handler/CountryPlayerHandler';
 
-export default function SelectionSceneUI(props: { scene: SelectionScene }) {
+export default function MainSceneUI(props: {
+  scene: MainScene;
+  onEvent: eventHandler;
+}) {
   const [selectedProvince, setSelectedProvince] = useState<Province>();
   const [isDebugSidebarOpen, setIsDebugSidebarOpen] = useState(false);
 
+  const { scene, onEvent } = props;
+
   useEffect(() => {
-    props.scene.selectedProvince.addObserver(setSelectedProvince);
+    scene.selectedProvince.addObserver(setSelectedProvince);
+    scene.eventHandler = onEvent;
   }, []);
 
   return (
@@ -18,16 +25,12 @@ export default function SelectionSceneUI(props: { scene: SelectionScene }) {
       <Row style={{ height: '10%' }} className="clickable bg-danger">
         <Col xs="auto" className="mh-100">
           <img
-            src={
-              './assets/flags/' +
-              (selectedProvince ? selectedProvince.owner?.id : 'Rebels') +
-              '.png'
-            }
+            src={'./assets/flags/' + scene.playAs.id + '.png'}
             className="mh-100"
           ></img>
         </Col>
         <Col className="d-flex align-items-center">
-          <h1>{selectedProvince?.owner?.name}</h1>
+          <h1>{scene.playAs.name}</h1>
         </Col>
         <Col className="d-flex align-items-center" xs="auto">
           <Button
@@ -39,13 +42,7 @@ export default function SelectionSceneUI(props: { scene: SelectionScene }) {
           </Button>
         </Col>
         <Col className="d-flex align-items-center" xs="auto">
-          <Button
-            size="lg"
-            className="ms-auto"
-            onClick={() => props.scene.play()}
-          >
-            START
-          </Button>
+          <Timer scene={scene}></Timer>
         </Col>
       </Row>
       <Row style={{ height: '85%' }}>

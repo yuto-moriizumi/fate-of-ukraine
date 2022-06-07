@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
-import { Country } from './data/Country';
+import type { Country } from './data/Country';
 import { SaveData } from './data/SaveData';
-import { Scene } from './scene/Scene';
+import type { Scene } from './scene/Scene';
 import { TitleScene } from './scene/TitleScene';
 import { Observable } from './util/Observable';
 
@@ -26,14 +26,17 @@ export class GameManager {
     //ゲームデータのロード
     const GAMEDATA_FILE = 'GameData.json';
     const SAVEDATA_FILE = 'SaveData.json';
+    const EVENT_FILE = 'EventData.json';
     const loader = app.loader;
     loader
       .add(GAMEDATA_FILE)
       .add(SAVEDATA_FILE)
+      .add(EVENT_FILE)
       .load(() => {
         this.data
           .loadJson(loader.resources[GAMEDATA_FILE].data)
-          .loadJson(loader.resources[SAVEDATA_FILE].data);
+          .loadJson(loader.resources[SAVEDATA_FILE].data)
+          .loadJson(loader.resources[EVENT_FILE].data);
         console.log(this.data);
       });
 
@@ -85,4 +88,8 @@ export class GameManager {
 
 export const data = () => {
   return GameManager.instance.data;
+};
+
+export const loader = () => {
+  return GameManager.instance.game.loader;
 };

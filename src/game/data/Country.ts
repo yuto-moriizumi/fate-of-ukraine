@@ -1,5 +1,12 @@
-import { CountryJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
-import { Serializable } from '../util/Serializable';
+import type { CountryJson, SaveDataType } from '../type/JsonType';
+import { SAVEDATA_TYPE } from '../type/JsonType';
+import type { Serializable } from '../util/Serializable';
+import type { EventBase } from '../event/EventBase';
+import type { Dayjs } from 'dayjs';
+import type { CountryHandler } from '../handler/CountryHandler';
+import { CountryAIHandler } from '../handler/handlers';
+import { data } from '../GameManager';
+import { War } from '../diplomacy/War';
 
 export class Country implements Serializable {
   /**
@@ -12,6 +19,7 @@ export class Country implements Serializable {
   private _name!: string;
   private _color!: string;
   private money = 0;
+  private _handler: CountryHandler = new CountryAIHandler(this);
 
   public get flagPath(): string {
     return `assets/flags/${this.id}.png`;
@@ -23,6 +31,14 @@ export class Country implements Serializable {
 
   public get name() {
     return this._name;
+  }
+
+  public set handler(handler: CountryHandler) {
+    this._handler = handler;
+  }
+
+  private get diplomacy() {
+    return new Set(Array.from(data().diplomacy).filter((d) => d.has(this)));
   }
 
   constructor(id: string) {
@@ -60,7 +76,8 @@ export class Country implements Serializable {
     return 0;
   }
 
-  public update() {
+  public update(date: Dayjs) {
+    this._handler.update(date);
     //金を更新
     // this.__money.setMoney(this.__money.getMoney() + this.calcBalance());
     // this._divisions.forEach((division) => division.update());
@@ -93,27 +110,19 @@ export class Country implements Serializable {
   //     this._divisions.forEach((d) => d.destroy());
   //   }
 
-  public hasWar() {
-    // return this.__diplomaticTies.some((tie: DiplomaticTie) => {
-    //   if (tie instanceof War) return true;
-    //   return false;
-    // });
-    return true;
-  }
-
   /**
    * この国が指定の国に対して軍事通行権を有しているか
    * @param {Country} country
    * @memberof Country
    */
-  public hasAccessTo(country: Country) {
-    // return this.__diplomaticTies.some((d) => {
-    //   return (
-    //     d instanceof Access && d.getRoot() == this && d.getTarget() == country
-    //   );
-    // });
-    return true;
-  }
+  // public hasAccessTo(country: Country) {
+  //   // return this.__diplomaticTies.some((d) => {
+  //   //   return (
+  //   //     d instanceof Access && d.getRoot() == this && d.getTarget() == country
+  //   //   );
+  //   // });
+  //   return true;
+  // }
 
   /**
    * この国が引数の国と同盟しているか
@@ -121,17 +130,34 @@ export class Country implements Serializable {
    * @returns
    * @memberof Country
    */
-  public isAlliedWith(target: Country): boolean {
-    // return this.__diplomaticTies.some(
-    //   (d) => d instanceof Alliance && d.getOpponent(this) == target
-    // );
-    return true;
+  // public isAlliedWith(target: Country): boolean {
+  //   // return this.__diplomaticTies.some(
+  //   //   (d) => d instanceof Alliance && d.getOpponent(this) == target
+  //   // );
+  //   return true;
+  // }
+
+  public hasWar(target?: Country) {
+    return Array.from(this.diplomacy).some((d) => {
+      if (!(d instanceof War)) return false;
+      if (target == undefined) return true;
+      console.log(this.id, target.id, d.getOpponent(this));
+      return d.getOpponent(this) == target;
+    });
   }
 
-  public toJson(as: SaveDataType): CountryJson {
-    if (as === SAVEDATA_TYPE.GAMEDATA)
-      return { name: this._name, color: this._color };
-    return { money: this.money };
+  public onEvent(event: EventBase): void {
+    this._handler.onEvent(event);
+  }
+
+  public toJson(as: SaveDataType): CountryJson | undefined {
+    switch (as) {
+      case SAVEDATA_TYPE.GAMEDATA:
+        return { name: this._name, color: this._color };
+      case SAVEDATA_TYPE.SAVEDATA:
+        return { money: this.money };
+    }
+    return undefined;
   }
 
   public loadJson(json: CountryJson) {

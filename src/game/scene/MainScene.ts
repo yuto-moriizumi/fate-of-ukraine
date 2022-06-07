@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
 import { MapViewport } from '../container/MapViewport';
-import { Country } from '../data/Country';
-import { Province } from '../data/Provice';
-import { GameManager } from '../GameManager';
+import type { Country } from '../data/Country';
+import type { Province } from '../data/Provice';
+import { data } from '../GameManager';
+import { CountryPlayerHandler, eventHandler } from '../handler/handlers';
 import { Observable } from '../util/Observable';
 import { Scene } from './Scene';
 
@@ -16,10 +17,15 @@ export class MainScene extends Scene {
   public readonly MAX_SPEED = 5;
   public readonly speed = new Observable<number>(3);
   public readonly pause = new Observable<boolean>(true);
+  public eventHandler!: eventHandler;
 
   constructor(playAs: Country) {
     super();
     this.playAs = playAs;
+    playAs.handler = new CountryPlayerHandler(playAs, (e) => {
+      this.eventHandler(e);
+      console.log('mainscene');
+    });
     this.map = new MapViewport(this.selectedProvince);
     this.addChild(this.map);
   }
@@ -33,5 +39,8 @@ export class MainScene extends Scene {
     )
       return;
     this.datetime.val = this.datetime.val.add(1, 'hour');
+    // console.log(data().events.get('russian_civilwar_begins_news'));
+    data().countries.forEach((c) => c.update(this.datetime.val)); //国ハンドラを稼働させる
+    data().events.forEach((e) => e.countFoward()); //イベントタイマーを進める
   }
 }
