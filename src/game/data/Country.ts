@@ -37,7 +37,7 @@ export class Country implements Serializable {
     this._handler = handler;
   }
 
-  private get diplomacy() {
+  public get diplomacy() {
     return new Set(Array.from(data().diplomacy).filter((d) => d.has(this)));
   }
 

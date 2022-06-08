@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Image } from 'react-bootstrap';
 import { Province } from '../../game/data/Provice';
 import DebugSidebar from './sidebar/DebugSidebar';
 import { MainScene } from '../../game/scene/MainScene';
@@ -22,23 +22,30 @@ export default function MainSceneUI(props: {
 
   useEffect(() => {
     scene.selectedProvince.addObserver(setSelectedProvince);
-    scene.selectedProvince.addObserver(() =>
-      setCurrentSidebar(
-        <DiplomacySidebar root={myCountry} target={selectedProvince?.owner} />
-      )
-    );
     scene.eventHandler = onEvent;
     setMyCountry(scene.playAs);
   }, []);
+
+  useEffect(() => {
+    myCountry !== undefined &&
+      selectedProvince?.owner !== undefined &&
+      setCurrentSidebar(
+        <DiplomacySidebar
+          root={myCountry}
+          target={selectedProvince.owner}
+          close={() => setCurrentSidebar(undefined)}
+        />
+      );
+  }, [myCountry, selectedProvince]);
 
   return (
     <>
       <Row style={{ height: '10%' }} className="clickable bg-danger">
         <Col xs="auto" className="mh-100">
-          <img
+          <Image
             src={'./assets/flags/' + scene.playAs.id + '.png'}
             className="mh-100"
-          ></img>
+          />
         </Col>
         <Col className="d-flex align-items-center">
           <h1>{scene.playAs.name}</h1>
@@ -48,7 +55,12 @@ export default function MainSceneUI(props: {
             size="lg"
             className="ms-auto"
             onClick={() =>
-              setCurrentSidebar(<DebugSidebar province={selectedProvince} />)
+              setCurrentSidebar(
+                <DebugSidebar
+                  province={selectedProvince}
+                  close={() => setCurrentSidebar(undefined)}
+                />
+              )
             }
           >
             DEBUG

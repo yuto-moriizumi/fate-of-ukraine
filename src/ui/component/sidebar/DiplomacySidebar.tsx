@@ -1,52 +1,54 @@
-import React, { useState } from 'react';
-import { Button, Col } from 'react-bootstrap';
+import React from 'react';
+import { Button, Col, Image, Row } from 'react-bootstrap';
 import { Country } from '../../../game/data/Country';
-import { Province } from '../../../game/data/Provice';
+import { War } from '../../../game/diplomacy/War';
 import { data } from '../../../game/GameManager';
-import { SAVEDATA_TYPE } from '../../../game/type/JsonType';
-
+import { BsXLg } from 'react-icons/bs';
+import { GiCrossedSwords } from 'react-icons/gi';
 export default function DiplomacySidebar(props: {
   root: Country;
   target: Country;
+  close: () => void;
 }) {
-  const [selectedCountry, setSelectedCountry] = useState<Country>();
-
+  const { root, target, close } = props;
   return (
     <Col className="bg-warning clickable" xs={2}>
-      <h5>選択中の国</h5>
-      <p>{selectedCountry?.name}</p>
-      <Col xs={12} className="d-grid mb-2">
-        <Button onClick={() => setSelectedCountry(props.province?.owner)}>
-          この国を選択
+      <Row>
+        <h2 className="col-auto">{target.name}</h2>
+        <Button
+          variant="danger"
+          className="col-auto ms-auto m-1 py-2"
+          onClick={close}
+        >
+          <BsXLg />
         </Button>
-      </Col>
-      <h5>プロヴィンス</h5>
-      <p>
-        {props.province?.id}:{props.province?.name}
-      </p>
-      <Col xs={12} className="d-grid mb-2">
+      </Row>
+      <Image
+        src={'./assets/flags/' + target.id + '.png'}
+        fluid
+        className="w-100"
+      />
+      {!root.hasWar(target) && (
         <Button
           onClick={() => {
-            if (props.province) props.province.owner = selectedCountry;
+            data().diplomacy.add(new War(root.id, target.id));
           }}
+          className="col-12 mt-4"
         >
-          このプロヴィンスを領有
+          宣戦布告
         </Button>
-      </Col>
-      <Col xs={12} className="d-grid mb-2">
-        <Button onClick={() => data().download(SAVEDATA_TYPE.GAMEDATA)}>
-          ゲームデータのダウンロード
-        </Button>
-      </Col>
-      <Col xs={12} className="d-grid mb-2">
-        <Button onClick={() => data().download(SAVEDATA_TYPE.SAVEDATA)}>
-          セーブデータのダウンロード
-        </Button>
-      </Col>
-      <Col xs={12} className="d-grid mb-2">
-        <Button onClick={() => data().download(SAVEDATA_TYPE.EVENTDATA)}>
-          イベントデータのダウンロード
-        </Button>
+      )}
+      <Col xs={12} style={{ height: '2rem' }} className="mt-2">
+        <GiCrossedSwords size={28} className="me-1" />
+        {Array.from(target.diplomacy)
+          .filter((d) => d instanceof War)
+          .map((d, i) => (
+            <Image
+              src={'./assets/flags/' + d.getOpponent(target)?.id + '.png'}
+              key={i}
+              className="mh-100"
+            />
+          ))}
       </Col>
     </Col>
   );
