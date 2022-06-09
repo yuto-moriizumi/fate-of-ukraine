@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Col, Image, Row } from 'react-bootstrap';
 import { Country } from '../../../game/data/Country';
 import { War } from '../../../game/diplomacy/War';
 import { data } from '../../../game/GameManager';
 import { BsXLg } from 'react-icons/bs';
-import { GiCrossedSwords } from 'react-icons/gi';
+import WarFlagContainer from './WarFlagContainer';
 export default function DiplomacySidebar(props: {
   root: Country;
   target: Country;
   close: () => void;
 }) {
   const { root, target, close } = props;
+  const [rootHasWar, setRootHasWar] = useState(false);
+  useEffect(() => {
+    data().diplomacy.addObserver(() => setRootHasWar(root.hasWar(target)));
+    setRootHasWar(root.hasWar(target));
+  }, []);
   return (
     <Col className="bg-warning clickable" xs={2}>
       <Row>
@@ -28,7 +33,7 @@ export default function DiplomacySidebar(props: {
         fluid
         className="w-100"
       />
-      {!root.hasWar(target) && (
+      {!rootHasWar && (
         <Button
           onClick={() => {
             data().diplomacy.add(new War(root.id, target.id));
@@ -38,18 +43,7 @@ export default function DiplomacySidebar(props: {
           宣戦布告
         </Button>
       )}
-      <Col xs={12} style={{ height: '2rem' }} className="mt-2">
-        <GiCrossedSwords size={28} className="me-1" />
-        {Array.from(target.diplomacy)
-          .filter((d) => d instanceof War)
-          .map((d, i) => (
-            <Image
-              src={'./assets/flags/' + d.getOpponent(target)?.id + '.png'}
-              key={i}
-              className="mh-100"
-            />
-          ))}
-      </Col>
+      <WarFlagContainer target={target} className="mt-2" />
     </Col>
   );
 }
