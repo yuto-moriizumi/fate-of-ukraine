@@ -6,6 +6,7 @@ import { data } from '../../../game/GameManager';
 import { BsXLg } from 'react-icons/bs';
 import WarFlagContainer from './WarFlagContainer';
 import AllyFlagContainer from './AllyFlagContainer';
+import AccessFlagsContainer from './AccessFlagsContainer';
 export default function DiplomacySidebar(props: {
   root: Country;
   target: Country;
@@ -46,6 +47,8 @@ export default function DiplomacySidebar(props: {
       )}
       <WarFlagContainer target={target} className="mt-2" />
       <AllyFlagContainer target={target} className="mt-2" />
+      <AccessFlagsContainer target={target} className="mt-2" isOut={true} />
+      <AccessFlagsContainer target={target} className="mt-2" isOut={false} />
     </Col>
   );
 }
