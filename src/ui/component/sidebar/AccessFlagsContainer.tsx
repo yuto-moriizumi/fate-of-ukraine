@@ -15,8 +15,10 @@ export default function AccessFlagsContainer(props: {
   const update = useCallback(
     () =>
       setDiplomacy(
-        Array.from(target.diplomacy).filter((d) =>
-          d instanceof Access && isOut ? d.root === target : d.target === target
+        Array.from(target.diplomacy).filter(
+          (d) =>
+            d instanceof Access &&
+            (isOut ? d.root === target : d.target === target)
         ) as Access[]
       ),
     []

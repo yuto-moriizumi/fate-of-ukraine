@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Row, Col, Button, Image } from 'react-bootstrap';
 import { Province } from '../../game/data/Provice';
 import DebugSidebar from './sidebar/DebugSidebar';
@@ -7,18 +7,19 @@ import Timer from './Timer';
 import { eventHandler } from '../../game/handler/CountryPlayerHandler';
 import { Country } from '../../game/data/Country';
 import DiplomacySidebar from './sidebar/DiplomacySidebar';
+import { SIDEBAR, Sidebar } from './sidebar/sidebar';
 
 export default function MainSceneUI(props: {
   scene: MainScene;
   onEvent: eventHandler;
 }) {
   const [selectedProvince, setSelectedProvince] = useState<Province>();
-  const [currentSidebar, setCurrentSidebar] = useState<JSX.Element | undefined>(
-    undefined
-  );
+  const [currentSidebar, setCurrentSidebar] = useState<Sidebar>(SIDEBAR.NONE);
   const [myCountry, setMyCountry] = useState<Country>();
 
   const { scene, onEvent } = props;
+
+  const close = useCallback(() => setCurrentSidebar(SIDEBAR.NONE), []);
 
   useEffect(() => {
     scene.selectedProvince.addObserver(setSelectedProvince);
@@ -29,13 +30,7 @@ export default function MainSceneUI(props: {
   useEffect(() => {
     myCountry !== undefined &&
       selectedProvince?.owner !== undefined &&
-      setCurrentSidebar(
-        <DiplomacySidebar
-          root={myCountry}
-          target={selectedProvince.owner}
-          close={() => setCurrentSidebar(undefined)}
-        />
-      );
+      setCurrentSidebar(SIDEBAR.DIPLOMACY);
   }, [myCountry, selectedProvince]);
 
   return (
@@ -54,14 +49,7 @@ export default function MainSceneUI(props: {
           <Button
             size="lg"
             className="ms-auto"
-            onClick={() =>
-              setCurrentSidebar(
-                <DebugSidebar
-                  province={selectedProvince}
-                  close={() => setCurrentSidebar(undefined)}
-                />
-              )
-            }
+            onClick={() => setCurrentSidebar(SIDEBAR.DEBUG)}
           >
             DEBUG
           </Button>
@@ -70,7 +58,21 @@ export default function MainSceneUI(props: {
           <Timer scene={scene}></Timer>
         </Col>
       </Row>
-      <Row style={{ height: '85%' }}>{currentSidebar}</Row>
+      <Row style={{ height: '85%' }}>
+        {currentSidebar == SIDEBAR.DEBUG ? (
+          <DebugSidebar province={selectedProvince} close={close} />
+        ) : (
+          currentSidebar === SIDEBAR.DIPLOMACY &&
+          myCountry &&
+          selectedProvince?.owner && (
+            <DiplomacySidebar
+              root={myCountry}
+              target={selectedProvince.owner}
+              close={close}
+            />
+          )
+        )}
+      </Row>
       <Row style={{ height: '5%' }}>FOOTER</Row>
     </>
   );

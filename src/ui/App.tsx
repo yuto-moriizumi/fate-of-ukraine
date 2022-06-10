@@ -38,10 +38,10 @@ function App() {
       <Container fluid className="h-100">
         {currentScene instanceof SelectionScene ? (
           <SelectionSceneUI scene={currentScene} />
-        ) : currentScene instanceof MainScene ? (
-          <MainSceneUI scene={currentScene} onEvent={addEvent} />
         ) : (
-          ''
+          currentScene instanceof MainScene && (
+            <MainSceneUI scene={currentScene} onEvent={addEvent} />
+          )
         )}
       </Container>
 

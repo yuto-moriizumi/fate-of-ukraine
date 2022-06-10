@@ -49,13 +49,11 @@ export default function SelectionSceneUI(props: { scene: SelectionScene }) {
         </Col>
       </Row>
       <Row style={{ height: '85%' }}>
-        {isDebugSidebarOpen ? (
+        {isDebugSidebarOpen && (
           <DebugSidebar
             province={selectedProvince}
             close={() => setIsDebugSidebarOpen(false)}
           />
-        ) : (
-          ''
         )}
       </Row>
       <Row style={{ height: '5%' }}>FOOTER</Row>

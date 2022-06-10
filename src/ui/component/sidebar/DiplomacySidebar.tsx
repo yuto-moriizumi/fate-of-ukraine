@@ -15,8 +15,11 @@ export default function DiplomacySidebar(props: {
   const { root, target, close } = props;
   const [rootHasWar, setRootHasWar] = useState(false);
   useEffect(() => {
-    data().diplomacy.addObserver(() => setRootHasWar(root.hasWar(target)));
-    setRootHasWar(root.hasWar(target));
+    const diplomacy = data().diplomacy;
+    const observer = () => setRootHasWar(root.hasWar(target));
+    diplomacy.addObserver(observer);
+    observer();
+    return () => diplomacy.removeObserver(observer);
   }, []);
   return (
     <Col className="bg-warning clickable" xs={2}>
