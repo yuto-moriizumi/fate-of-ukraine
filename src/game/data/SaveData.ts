@@ -1,17 +1,17 @@
 import type { SaveDataJson, SaveDataType } from '../type/JsonType';
 import type { Serializable } from '../util/Serializable';
-import type { Diplomacy } from '../diplomacy/Diplomacy';
 import { CountryMap } from '../util/CountryMap';
 import { ProvinceMap } from '../util/ProvinceMap';
 import { EventMap } from '../util/EventMap';
-import { DiplomacyFactory } from '../diplomacy/DiplomacyFactory';
 import { DiplomacySet } from '../util/DiplomacySet';
+import { Division } from '../container/Division';
 
 export class SaveData implements Serializable {
   public readonly countries = new CountryMap();
   public readonly provinces = new ProvinceMap();
   public readonly events = new EventMap();
   public readonly diplomacy = new DiplomacySet();
+  public readonly divisions = new Set<Division>();
 
   constructor(json?: SaveDataJson) {
     if (json) this.loadJson(json);

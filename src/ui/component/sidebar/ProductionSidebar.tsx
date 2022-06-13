@@ -7,7 +7,7 @@ import { Province } from '../../../game/data/Provice';
 import { data } from '../../../game/GameManager';
 import { SAVEDATA_TYPE } from '../../../game/type/JsonType';
 
-export default function DebugSidebar(props: {
+export default function ProductionSidebar(props: {
   province: Province | undefined;
   close: () => void;
 }) {
