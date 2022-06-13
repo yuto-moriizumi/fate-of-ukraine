@@ -41,6 +41,12 @@ export class Country implements Serializable {
     return new Set(Array.from(data().diplomacy).filter((d) => d.has(this)));
   }
 
+  public get provinces() {
+    return Array.from(data().provinces.values()).filter(
+      (p) => p.owner === this
+    );
+  }
+
   constructor(id: string) {
     this.id = id;
   }
