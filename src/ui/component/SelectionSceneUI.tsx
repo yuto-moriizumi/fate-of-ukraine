@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { SelectionScene } from '../../game/scene/SelectionScene';
 import { Province } from '../../game/data/Provice';
-import DebugSidebar from './DebugSidebar';
+import DebugSidebar from './sidebar/DebugSidebar';
+import DiplomacySidebar from './sidebar/DiplomacySidebar';
 
 export default function SelectionSceneUI(props: { scene: SelectionScene }) {
   const [selectedProvince, setSelectedProvince] = useState<Province>();
@@ -48,7 +49,12 @@ export default function SelectionSceneUI(props: { scene: SelectionScene }) {
         </Col>
       </Row>
       <Row style={{ height: '85%' }}>
-        {isDebugSidebarOpen ? <DebugSidebar province={selectedProvince} /> : ''}
+        {isDebugSidebarOpen && (
+          <DebugSidebar
+            province={selectedProvince}
+            close={() => setIsDebugSidebarOpen(false)}
+          />
+        )}
       </Row>
       <Row style={{ height: '5%' }}>FOOTER</Row>
     </>

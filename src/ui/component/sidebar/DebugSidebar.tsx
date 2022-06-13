@@ -1,25 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Col } from 'react-bootstrap';
-import { Country } from '../../game/data/Country';
-import { Province } from '../../game/data/Provice';
-import { data } from '../../game/GameManager';
-import { Scene } from '../../game/scene/Scene';
-import { SAVEDATA_TYPE } from '../../game/type/JsonType';
+import React, { useState } from 'react';
+import { Button, Col, Row } from 'react-bootstrap';
+import { BsXLg } from 'react-icons/bs';
+import { Country } from '../../../game/data/Country';
+import { Province } from '../../../game/data/Provice';
+import { data } from '../../../game/GameManager';
+import { SAVEDATA_TYPE } from '../../../game/type/JsonType';
 
 export default function DebugSidebar(props: {
   province: Province | undefined;
+  close: () => void;
 }) {
   const [selectedCountry, setSelectedCountry] = useState<Country>();
 
-  // useEffect(() => {
-  //   if (currentScene instanceof SelectionScene) {
-  //     currentScene.selectedProvince.addObserver(setSelectedProvince);
-  //   }
-  // }, [currentScene]);
-
   return (
     <Col className="bg-warning clickable" xs={2}>
-      <h5>選択中の国</h5>
+      <Row>
+        <h5 className="col-auto">選択中の国</h5>
+        <Button
+          variant="danger"
+          className="col-auto ms-auto m-1 py-2"
+          onClick={props.close}
+        >
+          <BsXLg />
+        </Button>
+      </Row>
       <p>{selectedCountry?.name}</p>
       <Col xs={12} className="d-grid mb-2">
         <Button onClick={() => setSelectedCountry(props.province?.owner)}>
