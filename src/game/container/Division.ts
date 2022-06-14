@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { Country } from '../data/Country';
+import { DivisionMovement, MOVE_TYPE } from '../data/DivisionMovement';
 import { Province } from '../data/Provice';
 import { loader } from '../GameManager';
 import { MapViewport } from './MapViewport';
@@ -13,6 +14,8 @@ export class Division extends PIXI.Container {
   private readonly speed = 10;
   private readonly owner: Country;
   private readonly at: Province;
+  private movement?: DivisionMovement;
+
   constructor(owner: Country, at: Province) {
     super();
     this.owner = owner;
@@ -26,5 +29,9 @@ export class Division extends PIXI.Container {
       this.scale.set(Division.WIDTH / this.width);
       MapViewport.instance.addChild(this);
     });
+  }
+
+  set destination(destination: Province) {
+    this.movement = new DivisionMovement(MOVE_TYPE.MOVE, destination);
   }
 }
