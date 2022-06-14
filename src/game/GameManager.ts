@@ -9,9 +9,8 @@ import { ResourceLoader } from './util/ResourceLoader';
 export class GameManager {
   private static _instance: GameManager;
   public static onLoadEnd: () => void;
-  public readonly game!: PIXI.Application;
+  public readonly game: PIXI.Application;
   public readonly data = new SaveData();
-  public readonly countries!: Set<Country>;
   public readonly scene = new Observable<Scene>();
   public readonly loader: ResourceLoader;
 
