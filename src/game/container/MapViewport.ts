@@ -5,6 +5,8 @@ import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
 import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace';
 import { Simple } from 'pixi-cull';
+import { Loader, LoaderResource } from 'pixi.js';
+
 export class MapViewport extends Viewport {
   private static _instance: MapViewport;
   private static readonly MAP_SRC = 'provinces.png';
@@ -22,11 +24,8 @@ export class MapViewport extends Viewport {
     MapViewport._instance = this;
     this.provinceRef = provinceRef;
 
-    const resource = loader().resources[MapViewport.MAP_SRC];
-    const onLoaded = () => {
-      this.sprite = new PIXI.Sprite(
-        loader().resources[MapViewport.MAP_SRC].texture
-      );
+    loader().load(MapViewport.MAP_SRC, (resource) => {
+      this.sprite = new PIXI.Sprite(resource.texture);
       const renderer = GameManager.instance.game.renderer;
       this.spritePixelArray = renderer.plugins.extract.pixels(this.sprite);
       this.addChild(this.sprite);
@@ -64,13 +63,7 @@ export class MapViewport extends Viewport {
       });
 
       this.updateMap();
-    };
-    const requireLoad = () => loader().add(MapViewport.MAP_SRC).load(onLoaded);
-    if (!resource) {
-      if (loader().loading) {
-        loader().onComplete.add(requireLoad);
-      } else requireLoad();
-    } else onLoaded();
+    });
 
     this.on('click', this.getClickedProvince);
   }

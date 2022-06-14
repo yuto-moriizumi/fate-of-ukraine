@@ -1,9 +1,12 @@
 import * as PIXI from 'pixi.js';
 import { Country } from '../data/Country';
 import { Province } from '../data/Provice';
+import { loader } from '../GameManager';
 import { MapViewport } from './MapViewport';
 
 export class Division extends PIXI.Container {
+  private static readonly WIDTH = 10;
+  private static readonly ICON = 'Light Infantry.png';
   private readonly hp = 100;
   private readonly max_hp = 100;
   private readonly attack = 10;
@@ -14,10 +17,14 @@ export class Division extends PIXI.Container {
     super();
     this.owner = owner;
     this.at = at;
-    this.x = at.x;
-    this.y = at.y;
+    this.x = at.x - Division.WIDTH / 2;
+    this.y = at.y - Division.WIDTH / 2;
     console.log('created division at', at);
-    this.addChild(PIXI.Sprite.from('./assets/Light Infantry.png'));
-    MapViewport.instance.addChild(this);
+
+    loader().load(Division.ICON, (resource) => {
+      this.addChild(new PIXI.Sprite(resource.texture));
+      this.scale.set(Division.WIDTH / this.width);
+      MapViewport.instance.addChild(this);
+    });
   }
 }

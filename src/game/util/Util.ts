@@ -11,4 +11,8 @@ export default abstract class Util {
   public static getRandomInt(min = 0, max = 1) {
     return Math.floor(Math.random() * (max + 1 - min)) + min;
   }
+
+  public static getRandom<T>(arr: Array<T>) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
 }

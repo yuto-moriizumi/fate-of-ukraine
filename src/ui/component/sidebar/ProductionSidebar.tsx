@@ -4,6 +4,7 @@ import { BsXLg } from 'react-icons/bs';
 import { Division } from '../../../game/container/Division';
 import { Country } from '../../../game/data/Country';
 import { data } from '../../../game/GameManager';
+import Util from '../../../game/util/Util';
 
 export default function ProductionSidebar(props: {
   country: Country;
@@ -25,8 +26,8 @@ export default function ProductionSidebar(props: {
       <Col xs={12} className="d-grid mb-2">
         <Button
           onClick={() => {
-            const division = new Division(country, country.provinces[0]);
-            console.log(division);
+            const provinces = country.provinces;
+            const division = new Division(country, Util.getRandom(provinces));
             data().divisions.add(division);
           }}
         >

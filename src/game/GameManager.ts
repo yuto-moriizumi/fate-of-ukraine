@@ -4,6 +4,7 @@ import { SaveData } from './data/SaveData';
 import type { Scene } from './scene/Scene';
 import { TitleScene } from './scene/TitleScene';
 import { Observable } from './util/Observable';
+import { ResourceLoader } from './util/ResourceLoader';
 
 export class GameManager {
   private static _instance: GameManager;
@@ -12,6 +13,7 @@ export class GameManager {
   public readonly data = new SaveData();
   public readonly countries!: Set<Country>;
   public readonly scene = new Observable<Scene>();
+  public readonly loader: ResourceLoader;
 
   public static get instance() {
     return this._instance;
@@ -28,6 +30,7 @@ export class GameManager {
     const SAVEDATA_FILE = 'SaveData.json';
     const EVENT_FILE = 'EventData.json';
     const loader = app.loader;
+    this.loader = new ResourceLoader(loader);
     loader
       .add(GAMEDATA_FILE)
       .add(SAVEDATA_FILE)
@@ -91,5 +94,5 @@ export const data = () => {
 };
 
 export const loader = () => {
-  return GameManager.instance.game.loader;
+  return GameManager.instance.loader;
 };
