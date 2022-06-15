@@ -2,7 +2,8 @@ import * as PIXI from 'pixi.js';
 import { Country } from '../data/Country';
 import { DivisionMovement, MOVE_TYPE } from '../data/DivisionMovement';
 import { Province } from '../data/Provice';
-import { loader } from '../GameManager';
+import { GameManager, loader } from '../GameManager';
+import { MainScene } from '../scene/MainScene';
 import { MapViewport } from './MapViewport';
 
 export class Division extends PIXI.Container {
@@ -21,15 +22,25 @@ export class Division extends PIXI.Container {
     this.owner = owner;
     this.at = at;
     console.log('created division at', at);
+    this.interactive = true;
 
     loader().load(Division.ICON, (resource) => {
-      this.addChild(new PIXI.Sprite(resource.texture));
-      this.scale.set(Division.WIDTH / this.width);
+      const sprite = new PIXI.Sprite(resource.texture);
+      // sprite.anchor.set(0.5);
+      this.addChild(sprite);
+      sprite.scale.set(Division.WIDTH / this.width);
       MapViewport.instance.addChild(this);
+    });
+
+    this.on('click', () => {
+      const scene = GameManager.instance.scene;
+      if (!(scene.val instanceof MainScene)) return;
+      scene.val.selectedDivision = this;
     });
   }
 
   set destination(destination: Province | undefined) {
+    this.movement?.destroy();
     this.movement =
       destination === undefined
         ? undefined
@@ -38,8 +49,12 @@ export class Division extends PIXI.Container {
 
   set at(at: Province) {
     this._at = at;
-    this.x = at.x - Division.WIDTH / 2;
-    this.y = at.y - Division.WIDTH / 2;
+    this.x = at.x;
+    this.y = at.y;
+  }
+
+  get at() {
+    return this._at;
   }
 
   public update() {
