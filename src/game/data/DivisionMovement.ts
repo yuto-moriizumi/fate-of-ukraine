@@ -1,13 +1,24 @@
+import { Division } from '../container/Division';
 import { Province } from './Provice';
 
 export class DivisionMovement {
+  private readonly division: Division;
   private readonly type: MoveType;
   private readonly destination: Province;
-  private readonly progress = 0;
+  private progress = 0;
 
-  constructor(type: MoveType, destination: Province) {
+  constructor(division: Division, type: MoveType, destination: Province) {
+    this.division = division;
     this.type = type;
     this.destination = destination;
+  }
+
+  public update() {
+    this.progress += 1;
+    if (this.progress >= 1) {
+      this.division.at = this.destination;
+      this.division.destination = undefined;
+    }
   }
 }
 

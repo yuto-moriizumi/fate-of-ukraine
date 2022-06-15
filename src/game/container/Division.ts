@@ -13,15 +13,13 @@ export class Division extends PIXI.Container {
   private readonly attack = 10;
   private readonly speed = 10;
   private readonly owner: Country;
-  private readonly at: Province;
+  private _at!: Province;
   private movement?: DivisionMovement;
 
   constructor(owner: Country, at: Province) {
     super();
     this.owner = owner;
     this.at = at;
-    this.x = at.x - Division.WIDTH / 2;
-    this.y = at.y - Division.WIDTH / 2;
     console.log('created division at', at);
 
     loader().load(Division.ICON, (resource) => {
@@ -31,7 +29,20 @@ export class Division extends PIXI.Container {
     });
   }
 
-  set destination(destination: Province) {
-    this.movement = new DivisionMovement(MOVE_TYPE.MOVE, destination);
+  set destination(destination: Province | undefined) {
+    this.movement =
+      destination === undefined
+        ? undefined
+        : new DivisionMovement(this, MOVE_TYPE.MOVE, destination);
+  }
+
+  set at(at: Province) {
+    this._at = at;
+    this.x = at.x - Division.WIDTH / 2;
+    this.y = at.y - Division.WIDTH / 2;
+  }
+
+  public update() {
+    this.movement?.update();
   }
 }
