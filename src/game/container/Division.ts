@@ -23,10 +23,11 @@ export class Division extends PIXI.Container {
     this.at = at;
     console.log('created division at', at);
     this.interactive = true;
+    this.sortableChildren = true;
 
     loader().load(Division.ICON, (resource) => {
       const sprite = new PIXI.Sprite(resource.texture);
-      // sprite.anchor.set(0.5);
+      sprite.anchor.set(0.5);
       this.addChild(sprite);
       sprite.scale.set(Division.WIDTH / this.width);
       MapViewport.instance.addChild(this);
