@@ -8,6 +8,7 @@ import { CountryAIHandler } from '../handler/handlers';
 import { data } from '../GameManager';
 import { War } from '../diplomacy/War';
 import { Division } from '../container/Division';
+import Util from '../util/Util';
 
 export class Country implements Serializable {
   /**
@@ -53,6 +54,12 @@ export class Country implements Serializable {
     this.id = id;
   }
 
+  public buildDivision() {
+    const provinces = this.provinces;
+    const division = new Division(this, Util.getRandom(provinces));
+    this.divisions.add(division);
+  }
+
   //   private __diplomaticRelations: Array<DiplomaticTie> = new Array<DiplomaticTie>();
   //   private divisions = new Array<DivisionData>();
 
@@ -72,16 +79,12 @@ export class Country implements Serializable {
    * @memberof Country
    */
   public calcBalance() {
-    // let balance = 0;
-    // GameManager.instance.data.getProvinces().forEach((province) => {
-    //   if (province.getOwner() == this) {
-    //     balance += 1; //領土につき1
-    //     if (province.getCulture() == province.getOwner().getCulture())
-    //       balance += 1; //自国と同じ文化ならさらに+1
-    //   }
-    // });
-    // return balance - this.calcMaintanance();
-    return 0;
+    const balance = this.provinces.length;
+    return balance - this.calcMaintanance();
+  }
+
+  public calcMaintanance() {
+    return this.divisions.size;
   }
 
   public update(date: Dayjs) {
@@ -145,13 +148,16 @@ export class Country implements Serializable {
   //   return true;
   // }
 
+  public getEnemies() {
+    return Array.from(this.diplomacy)
+      .filter((d) => d instanceof War)
+      .map((d) => d.getOpponent(this));
+  }
+
   public hasWar(target?: Country) {
-    return Array.from(this.diplomacy).some((d) => {
-      if (!(d instanceof War)) return false;
-      if (target == undefined) return true;
-      console.log(this.id, target.id, d.getOpponent(this));
-      return d.getOpponent(this) == target;
-    });
+    const enemies = this.getEnemies();
+    if (target == undefined && enemies.length > 0) return true;
+    return enemies.some((d) => d === target);
   }
 
   public onEvent(event: EventBase): void {

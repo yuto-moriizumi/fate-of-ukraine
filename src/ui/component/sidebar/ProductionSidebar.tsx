@@ -24,15 +24,7 @@ export default function ProductionSidebar(props: {
         </Button>
       </Row>
       <Col xs={12} className="d-grid mb-2">
-        <Button
-          onClick={() => {
-            const provinces = country.provinces;
-            const division = new Division(country, Util.getRandom(provinces));
-            country.divisions.add(division);
-          }}
-        >
-          民兵
-        </Button>
+        <Button onClick={() => country.buildDivision()}>民兵</Button>
       </Col>
     </Col>
   );

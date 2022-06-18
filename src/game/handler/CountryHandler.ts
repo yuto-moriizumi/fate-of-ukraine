@@ -4,7 +4,7 @@ import type { EventBase } from '../event/EventBase';
 import { data } from '../GameManager';
 
 export abstract class CountryHandler {
-  private readonly country: Country;
+  readonly country: Country;
   constructor(country: Country) {
     this.country = country;
   }

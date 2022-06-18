@@ -15,10 +15,10 @@ export abstract class Diplomacy implements Serializable {
   }
 
   public get root() {
-    return data().countries.get(this._root);
+    return data().countries.get(this._root) as Country;
   }
   public get target() {
-    return data().countries.get(this._target);
+    return data().countries.get(this._target) as Country;
   }
 
   public has(country: Country) {
