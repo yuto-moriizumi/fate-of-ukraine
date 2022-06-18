@@ -13,8 +13,8 @@ export class Province implements Serializable {
   public readonly id!: string;
   private _name!: string;
   private ownerId!: string | undefined;
-  private _x = 0;
-  private _y = 0;
+  public x = 0;
+  public y = 0;
 
   constructor(id: string) {
     this.id = id;
@@ -31,14 +31,6 @@ export class Province implements Serializable {
 
   public get name() {
     return this._name;
-  }
-
-  public get x() {
-    return this._x;
-  }
-
-  public get y() {
-    return this._y;
   }
 
   public isNextTo(province: Province): boolean {
@@ -76,8 +68,8 @@ export class Province implements Serializable {
       case SAVEDATA_TYPE.GAMEDATA:
         return {
           name: this._name,
-          x: this._x,
-          y: this._y,
+          x: this.x,
+          y: this.y,
         };
       case SAVEDATA_TYPE.SAVEDATA:
         return { owner: this.ownerId };
@@ -88,8 +80,8 @@ export class Province implements Serializable {
   public loadJson(json: ProvinceJson) {
     if ('name' in json) {
       this._name = json.name;
-      this._x = json.x;
-      this._y = json.y;
+      this.x = json.x;
+      this.y = json.y;
     } else if ('owner' in json) this.ownerId = json.owner;
     return this;
   }
