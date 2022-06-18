@@ -41,7 +41,6 @@ export class Division extends PIXI.Container {
   }
 
   set destination(destination: Province | undefined) {
-    this.movement?.destroy();
     this.movement =
       destination === undefined
         ? undefined

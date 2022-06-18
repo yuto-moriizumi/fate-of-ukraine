@@ -4,13 +4,14 @@ import type { EventBase } from '../event/EventBase';
 import { data } from '../GameManager';
 
 export abstract class CountryHandler {
-  readonly country: Country;
+  private readonly country: Country;
   constructor(country: Country) {
     this.country = country;
   }
 
   update(date: Dayjs) {
     this.dispatchEvents(date);
+    this.country.divisions.forEach((d) => d.update());
   }
 
   public getCountry() {

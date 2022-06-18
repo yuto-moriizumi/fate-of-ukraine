@@ -7,6 +7,7 @@ import type { CountryHandler } from '../handler/CountryHandler';
 import { CountryAIHandler } from '../handler/handlers';
 import { data } from '../GameManager';
 import { War } from '../diplomacy/War';
+import { Division } from '../container/Division';
 
 export class Country implements Serializable {
   /**
@@ -19,6 +20,7 @@ export class Country implements Serializable {
   private _name!: string;
   private _color!: string;
   private money = 0;
+  public readonly divisions = new Set<Division>();
   private _handler: CountryHandler = new CountryAIHandler(this);
 
   public get flagPath(): string {

@@ -7,7 +7,7 @@ export class DivisionMovement {
   private readonly type: MoveType;
   private readonly destination: Province;
   private readonly arrow: ProgressArrow;
-  private progress = 0;
+  private progress = 0; //0-1
 
   constructor(division: Division, type: MoveType, destination: Province) {
     this.division = division;
@@ -18,15 +18,13 @@ export class DivisionMovement {
   }
 
   public update() {
-    this.progress += 1;
+    this.progress += 0.1;
+    this.arrow.progress = this.progress;
     if (this.progress >= 1) {
       this.division.at = this.destination;
       this.division.destination = undefined;
+      this.arrow.destroy();
     }
-  }
-
-  public destroy() {
-    this.arrow.destroy();
   }
 }
 

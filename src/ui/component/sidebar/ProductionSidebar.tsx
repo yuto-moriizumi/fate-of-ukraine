@@ -28,7 +28,7 @@ export default function ProductionSidebar(props: {
           onClick={() => {
             const provinces = country.provinces;
             const division = new Division(country, Util.getRandom(provinces));
-            data().divisions.add(division);
+            country.divisions.add(division);
           }}
         >
           民兵
