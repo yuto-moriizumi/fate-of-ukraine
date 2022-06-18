@@ -5,7 +5,7 @@ import { Province } from './Provice';
 export class DivisionMovement {
   private readonly division: Division;
   private readonly type: MoveType;
-  private readonly destination: Province;
+  public readonly destination: Province;
   private readonly arrow: ProgressArrow;
   private progress = 0; //0-1
 
@@ -23,8 +23,11 @@ export class DivisionMovement {
     if (this.progress >= 1) {
       this.division.at = this.destination;
       this.division.destination = undefined;
-      this.arrow.destroy();
     }
+  }
+
+  public destroy() {
+    this.arrow.destroy();
   }
 }
 
