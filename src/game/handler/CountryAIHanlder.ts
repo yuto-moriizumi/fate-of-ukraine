@@ -33,6 +33,32 @@ export class CountryAIHandler extends CountryHandler {
     this.country.divisions.forEach((division) => {
       if (division.movement != undefined) return;
       //プロヴィンスに属していて、移動も戦闘もしていないならば、師団を動かす
+
+      //一番近いプロヴィンスに突撃
+      let minDistance = 10 ** 8;
+      let closetProvince = null;
+
+      //最も近いプロヴィンスを求める
+      Atlas.instance.getNeighborProvinces(position).forEach((province) => {
+        //進入可能か確認
+        if (!province.hasAccess(this.country)) return;
+        if (province.getOwner().getWarInfoWith(this.country) != null) {
+          //隣接したプロヴィンスに敵領土があれば、そこに突撃
+          minDistance = -1;
+          closetProvince = province;
+        }
+
+        //距離の最小値で更新
+        const provinceCoord = province.getCoord();
+        const distance =
+          (provinceCoord.x - targetCoord.x) ** 2 +
+          (provinceCoord.y - targetCoord.y) ** 2;
+        if (distance < minDistance) {
+          minDistance = distance;
+          closetProvince = province;
+        }
+      });
+
       const destinationCandidates = targetCountry.provinces.filter((p) =>
         p.isNextTo(division.at)
       );
