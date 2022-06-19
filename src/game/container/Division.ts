@@ -64,4 +64,8 @@ export class Division extends PIXI.Container {
   public update() {
     this.movement?.update();
   }
+
+  public retreat() {
+    
+  }
 }
