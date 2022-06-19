@@ -2,20 +2,21 @@ import * as PIXI from 'pixi.js';
 import { Country } from '../data/Country';
 import { DivisionMovement, MOVE_TYPE } from '../data/DivisionMovement';
 import { Province } from '../data/Provice';
-import { GameManager, loader } from '../GameManager';
+import { data, GameManager, loader } from '../GameManager';
 import { MainScene } from '../scene/MainScene';
+import Util from '../util/Util';
 import { MapViewport } from './MapViewport';
 
 export class Division extends PIXI.Container {
   private static readonly WIDTH = 10;
   private static readonly ICON = 'Light Infantry.png';
-  private readonly hp = 100;
+  private _hp = 100;
   private readonly max_hp = 100;
-  private readonly attack = 10;
+  private readonly offense = 10;
   private readonly speed = 10;
   private readonly owner: Country;
   private _at!: Province;
-  private movement?: DivisionMovement;
+  private _movement?: DivisionMovement;
 
   constructor(owner: Country, at: Province) {
     super();
@@ -40,17 +41,6 @@ export class Division extends PIXI.Container {
     });
   }
 
-  set destination(destination: Province | undefined) {
-    if (this.movement) {
-      if (this.movement.destination === destination) return;
-      this.movement.destroy();
-    }
-    this.movement =
-      destination === undefined
-        ? undefined
-        : new DivisionMovement(this, MOVE_TYPE.MOVE, destination);
-  }
-
   set at(at: Province) {
     this._at = at;
     this.x = at.x;
@@ -61,11 +51,53 @@ export class Division extends PIXI.Container {
     return this._at;
   }
 
+  get hp() {
+    return this._hp;
+  }
+
+  get combats() {
+    return [...data().combats].filter(
+      (c) => c.attackers.has(this) || c.defenders.has(this)
+    );
+  }
+
+  get movement() {
+    return this._movement;
+  }
+
   public update() {
-    this.movement?.update();
+    this._movement?.update();
+  }
+
+  public setDestination(destination: Province | undefined) {
+    if (this._movement) {
+      if (this._movement.destination === destination) return;
+      this._movement.destroy();
+    }
+    this._movement =
+      destination === undefined
+        ? undefined
+        : new DivisionMovement(this, MOVE_TYPE.MOVE, destination);
   }
 
   public retreat() {
-    
+    const destinationCandidates = [...this._at.neighbors].filter(
+      (p) => p.owner !== undefined && this.owner.hasAccessTo(p.owner)
+    );
+    if (destinationCandidates.length === 0) {
+      this.destroy();
+      this.owner.divisions.delete(this);
+      return;
+    }
+    const destination = Util.getRandom(destinationCandidates);
+    if (destination === undefined) {
+      console.error('retreat destination not found', this);
+      return;
+    }
+    this._movement = new DivisionMovement(this, MOVE_TYPE.RETREAT, destination);
+  }
+
+  public attack(division: Division, weight: number) {
+    division._hp -= this.offense / weight;
   }
 }

@@ -6,6 +6,7 @@ import {
   Dict,
   EventJson,
   InvisibleEventJson,
+  ProvinceJson,
   SAVEDATA_TYPE,
   VisibleEventJson,
 } from './game/type/JsonType';
@@ -17,15 +18,17 @@ const testCountry = {
 };
 const testCountries = { countries: { ...testCountry } };
 const testProvince = {
-  '#cce598': { name: 'Sitka', x: 711, y: 1992 },
-  '#ccb399': { name: 'Yakutat', x: 669, y: 2017 },
+  '#cce598': { name: 'Sitka', x: 711, y: 1992, neighbors: [] },
+  '#ccb399': { name: 'Yakutat', x: 669, y: 2017, neighbors: [] },
 };
 const testProvinces = { provinces: { ...testProvince } };
 const testProvinceSaveData = {
   '#cce598': { owner: 'ABU' },
   '#ccb399': { owner: 'ADE' },
 };
-const testProvincesSaveData = { provinces: { ...testProvinceSaveData } };
+const testProvincesSaveData = {
+  provinces: { ...testProvinceSaveData },
+};
 const testEvent: Dict<EventJson> = {
   russian_civilwar_begins: {
     triggeredOnly: false,

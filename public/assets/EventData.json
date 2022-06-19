@@ -15,7 +15,7 @@
         {
           "title": "ブルジョワに死を！",
           "effects": [
-            { "type": "DeclareWar", "root": "SOV", "target": "RPG" },
+            { "type": "DeclareWar", "root": "SOV", "target": "RUS" },
             {
               "type": "DispatchEvent",
               "id": "russian_civilwar_begins_news",

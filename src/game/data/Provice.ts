@@ -1,11 +1,6 @@
 import { MapViewport } from '../container/MapViewport';
 import { data } from '../GameManager';
-import {
-  ProvinceJson,
-  SaveDataProvinceJson,
-  SaveDataType,
-  SAVEDATA_TYPE,
-} from '../type/JsonType';
+import { ProvinceJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
 import { Serializable } from '../util/Serializable';
 import { Country } from './Country';
 
@@ -15,6 +10,7 @@ export class Province implements Serializable {
   private ownerId!: string | undefined;
   public x = 0;
   public y = 0;
+  private _neighbors!: Set<string>;
 
   constructor(id: string) {
     this.id = id;
@@ -33,9 +29,14 @@ export class Province implements Serializable {
     return this._name;
   }
 
+  public get neighbors() {
+    return [...this._neighbors]
+      .map((id) => data().provinces.get(id))
+      .filter((p) => p !== undefined) as Province[];
+  }
+
   public isNextTo(province: Province): boolean {
-    // return this._neighbours.some((p) => p === province.getId());
-    return true;
+    return [...this._neighbors].some((p) => p === province.id);
   }
 
   /**
@@ -70,6 +71,7 @@ export class Province implements Serializable {
           name: this._name,
           x: this.x,
           y: this.y,
+          neighbors: [...this._neighbors],
         };
       case SAVEDATA_TYPE.SAVEDATA:
         return { owner: this.ownerId };
@@ -78,10 +80,11 @@ export class Province implements Serializable {
   }
 
   public loadJson(json: ProvinceJson) {
-    if ('name' in json) {
+    if ('x' in json) {
       this._name = json.name;
       this.x = json.x;
       this.y = json.y;
+      this._neighbors = new Set(json.neighbors);
     } else if ('owner' in json) this.ownerId = json.owner;
     return this;
   }

@@ -22,7 +22,7 @@ export class DivisionMovement {
     this.arrow.progress = this.progress;
     if (this.progress >= 1) {
       this.division.at = this.destination;
-      this.division.destination = undefined;
+      this.division.setDestination(undefined);
     }
   }
 

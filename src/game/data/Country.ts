@@ -9,6 +9,8 @@ import { data } from '../GameManager';
 import { War } from '../diplomacy/War';
 import { Division } from '../container/Division';
 import Util from '../util/Util';
+import { Access } from '../diplomacy/Access';
+import { Alliance } from '../diplomacy/Alliance';
 
 export class Country implements Serializable {
   /**
@@ -41,13 +43,19 @@ export class Country implements Serializable {
   }
 
   public get diplomacy() {
-    return new Set(Array.from(data().diplomacy).filter((d) => d.has(this)));
+    return new Set([...data().diplomacy].filter((d) => d.has(this)));
   }
 
   public get provinces() {
     return Array.from(data().provinces.values()).filter(
       (p) => p.owner === this
     );
+  }
+
+  get enemies() {
+    return [...this.diplomacy]
+      .filter((d) => d instanceof War)
+      .map((d: War) => d.getOpponent(this));
   }
 
   constructor(id: string) {
@@ -126,38 +134,21 @@ export class Country implements Serializable {
    * @param {Country} country
    * @memberof Country
    */
-  // public hasAccessTo(country: Country) {
-  //   // return this.__diplomaticTies.some((d) => {
-  //   //   return (
-  //   //     d instanceof Access && d.getRoot() == this && d.getTarget() == country
-  //   //   );
-  //   // });
-  //   return true;
-  // }
-
-  /**
-   * この国が引数の国と同盟しているか
-   * @param {Country} target
-   * @returns
-   * @memberof Country
-   */
-  // public isAlliedWith(target: Country): boolean {
-  //   // return this.__diplomaticTies.some(
-  //   //   (d) => d instanceof Alliance && d.getOpponent(this) == target
-  //   // );
-  //   return true;
-  // }
-
-  public getEnemies() {
-    return Array.from(this.diplomacy)
-      .filter((d) => d instanceof War)
-      .map((d) => d.getOpponent(this));
+  public hasAccessTo(country: Country) {
+    if (country === this) return true;
+    return [...this.diplomacy].some(
+      (d) =>
+        (d instanceof Alliance && d.getOpponent(this) === country) ||
+        (d instanceof Access && d.root == this && d.target == country)
+    );
   }
 
   public hasWar(target?: Country) {
-    const enemies = this.getEnemies();
-    if (target == undefined && enemies.length > 0) return true;
-    return enemies.some((d) => d === target);
+    if (target === undefined) {
+      if (this.enemies.length > 0) return true;
+      return false;
+    }
+    return this.enemies.some((c) => c === target);
   }
 
   public onEvent(event: EventBase): void {

@@ -32,6 +32,7 @@ export type GameDataProvinceJson = {
   name: string;
   x: number;
   y: number;
+  neighbors: string[];
 };
 
 export type SaveDataProvinceJson = {
