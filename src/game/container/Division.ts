@@ -82,8 +82,6 @@ export class Division extends PIXI.Container {
       this.movement === undefined
     )
       this._hp = Math.min(this.max_hp, this._hp + this.max_hp * 0.1);
-    if (this.movement?.type === MOVE_TYPE.MOVE)
-      this._hp = Math.min(this.max_hp, this._hp + this.max_hp * 0.05);
   }
 
   public stop() {

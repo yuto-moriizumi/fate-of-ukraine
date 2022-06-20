@@ -100,6 +100,7 @@
     "JOH": { "name": "Johore", "color": "#a59750" },
     "KAL": { "name": "Kalat", "color": "#6162c3" },
     "KAS": { "name": "Kashmir", "color": "#3f961e" },
+    "KAZ": { "name": "Alash Orda", "color": "#00aac4" },
     "KHI": { "name": "Khiva", "color": "#bc7b67" },
     "KOK": { "name": "Kokand", "color": "#778291" },
     "KOR": { "name": "Korea", "color": "#9d9061" },
@@ -7885,7 +7886,7 @@
       "name": "Kerch",
       "x": 3367,
       "y": 624,
-      "neighbors": ["#b0dfdf", "#4ac8fa", "#31e0e0"]
+      "neighbors": ["#b0dfdf", "#4ac8fa", "#31e0e0", "#405000"]
     },
     "#b0dfdf": {
       "name": "Sevastopol",
@@ -8613,7 +8614,14 @@
       "name": "Novorossiysk",
       "x": 3407,
       "y": 634,
-      "neighbors": ["#80d080", "#4ac8fa", "#4bdcfa", "#40d001", "#c05001"]
+      "neighbors": [
+        "#80d080",
+        "#4ac8fa",
+        "#4bdcfa",
+        "#40d001",
+        "#c05001",
+        "#706060"
+      ]
     },
     "#c0d001": {
       "name": "Stavropol",

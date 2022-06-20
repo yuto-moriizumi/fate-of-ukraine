@@ -111,7 +111,8 @@
             "#e08061",
             "#7141e0",
             "#71e0e0",
-            "#7020df"
+            "#7020df",
+            "#71e061"
           ]
         }
       ],
@@ -141,6 +142,58 @@
       "isGlobal": true,
       "title": "イデル＝ウラル国が独立",
       "desc": "タタール人、バシキール人、チュヴァシ人のよる国家連合がカザンに成立した。この国は明らかにボリシェビキの標的となっている。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "kaz_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "1917-12-26 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "KAZ",
+          "provinces": [
+            "#c090c0",
+            "#5aae42",
+            "#c05141",
+            "#84b1c2",
+            "#45dfdc",
+            "#ad9b01",
+            "#a09695",
+            "#4656dc",
+            "#2e5108",
+            "#aeb443",
+            "#044e87",
+            "#bf10bf"
+          ]
+        },
+        {
+          "type": "DeclareWar",
+          "root": "KAZ",
+          "target": "SOV"
+        },
+        {
+          "type": "GainAccess",
+          "root": "KAZ",
+          "target": "RUS"
+        },
+        {
+          "type": "GainAccess",
+          "root": "RUS",
+          "target": "KAZ"
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "ius_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "kaz_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "isGlobal": true,
+      "title": "アラシュ自治国が独立",
+      "desc": "カザフ人から成るアラシュ党は、全カザフ人第2回大会において、アラシュ自治国の独立を宣言した。",
       "options": [{ "title": "OK", "effects": [] }]
     },
     "don_declare_war_against_soviets": {
