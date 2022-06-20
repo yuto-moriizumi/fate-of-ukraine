@@ -1,6 +1,10 @@
 import * as PIXI from 'pixi.js';
 import { Country } from '../data/Country';
-import { DivisionMovement, MOVE_TYPE } from '../data/DivisionMovement';
+import {
+  DivisionMovement,
+  MoveType,
+  MOVE_TYPE,
+} from '../data/DivisionMovement';
 import { Province } from '../data/Provice';
 import { data, GameManager, loader } from '../GameManager';
 import { MainScene } from '../scene/MainScene';
@@ -14,7 +18,7 @@ export class Division extends PIXI.Container {
   private readonly max_hp = 100;
   private readonly offense = 10;
   private readonly speed = 10;
-  private readonly owner: Country;
+  public readonly owner: Country;
   private _at!: Province;
   private _movement?: DivisionMovement;
 
@@ -45,6 +49,9 @@ export class Division extends PIXI.Container {
     this._at = at;
     this.x = at.x;
     this.y = at.y;
+    if (at.owner?.hasWar(this.owner)) at.owner = this.owner;
+    // 新規位置で防衛戦が発生している場合は参加
+    at.incomingCombats.forEach((c) => c.addDefender(this));
   }
 
   get at() {
@@ -56,33 +63,40 @@ export class Division extends PIXI.Container {
   }
 
   get combats() {
-    return [...data().combats].filter(
-      (c) => c.attackers.has(this) || c.defenders.has(this)
-    );
+    return [...data().combats].filter((c) => c.contains(this));
   }
 
   get movement() {
     return this._movement;
   }
 
-  public update() {
-    this._movement?.update();
+  get isRetreating() {
+    return (
+      this._movement !== undefined && this._movement.type === MOVE_TYPE.RETREAT
+    );
   }
 
-  public setDestination(destination: Province | undefined) {
+  public update() {
+    if (this.movement) this.movement.update();
+    else this._hp = Math.min(this.max_hp, this._hp + this.max_hp * 0.1);
+  }
+
+  public stop() {
+    this._movement?.destroy();
+    this._movement = undefined;
+  }
+
+  public setDestination(province: Province, type: MoveType) {
     if (this._movement) {
-      if (this._movement.destination === destination) return;
+      if (this._movement.destination === province) return;
       this._movement.destroy();
     }
-    this._movement =
-      destination === undefined
-        ? undefined
-        : new DivisionMovement(this, MOVE_TYPE.MOVE, destination);
+    this._movement = new DivisionMovement(this, type, province);
   }
 
   public retreat() {
     const destinationCandidates = [...this._at.neighbors].filter(
-      (p) => p.owner !== undefined && this.owner.hasAccessTo(p.owner)
+      (p) => p.owner !== undefined && this.owner.hasAccessTo(p.owner, true)
     );
     if (destinationCandidates.length === 0) {
       this.destroy();
@@ -94,7 +108,7 @@ export class Division extends PIXI.Container {
       console.error('retreat destination not found', this);
       return;
     }
-    this._movement = new DivisionMovement(this, MOVE_TYPE.RETREAT, destination);
+    this.setDestination(destination, MOVE_TYPE.RETREAT);
   }
 
   public attack(division: Division, weight: number) {

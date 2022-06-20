@@ -11,7 +11,7 @@ export default function AccessFlagsContainer(props: {
   className: string;
 }) {
   const { target, isOut, className } = props;
-  const [diplomacy, setDiplomacy] = useState(new Array<Access>());
+  const [diplomacy, setDiplomacy] = useState<Access[]>([]);
   const update = useCallback(
     () =>
       setDiplomacy(

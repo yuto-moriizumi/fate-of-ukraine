@@ -10,7 +10,7 @@ export default function AllyFlagContainer(props: {
   className: string;
 }) {
   const { target, className } = props;
-  const [diplomacy, setDiplomacy] = useState(new Array<Alliance>());
+  const [diplomacy, setDiplomacy] = useState<Alliance[]>([]);
   const update = useCallback(
     () =>
       setDiplomacy(

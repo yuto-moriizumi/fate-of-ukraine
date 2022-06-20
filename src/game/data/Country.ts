@@ -11,6 +11,7 @@ import { Division } from '../container/Division';
 import Util from '../util/Util';
 import { Access } from '../diplomacy/Access';
 import { Alliance } from '../diplomacy/Alliance';
+import { Province } from './Provice';
 
 export class Country implements Serializable {
   /**
@@ -134,12 +135,20 @@ export class Country implements Serializable {
    * @param {Country} country
    * @memberof Country
    */
-  public hasAccessTo(country: Country) {
-    if (country === this) return true;
+  public hasAccessTo(target: Country | Province, peacefully = false) {
+    let targetCountry: Country;
+    if (target instanceof Province) {
+      if (target.owner === undefined) return false;
+      targetCountry = target.owner;
+    } else targetCountry = target;
+    if (targetCountry === this) return true;
     return [...this.diplomacy].some(
       (d) =>
-        (d instanceof Alliance && d.getOpponent(this) === country) ||
-        (d instanceof Access && d.root == this && d.target == country)
+        (d instanceof Alliance && d.getOpponent(this) === targetCountry) ||
+        (d instanceof Access && d.root == this && d.target == targetCountry) ||
+        (!peacefully &&
+          d instanceof War &&
+          d.getOpponent(this) === targetCountry)
     );
   }
 

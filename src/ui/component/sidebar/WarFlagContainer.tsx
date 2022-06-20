@@ -10,7 +10,7 @@ export default function WarFlagContainer(props: {
   className: string;
 }) {
   const { target, className } = props;
-  const [diplomacy, setDiplomacy] = useState(new Array<War>());
+  const [diplomacy, setDiplomacy] = useState<War[]>([]);
   const update = useCallback(
     () =>
       setDiplomacy(

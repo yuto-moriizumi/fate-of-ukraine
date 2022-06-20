@@ -4,7 +4,7 @@ import { EFFECT_TYPE, SetOwnerJson } from '../../type/JsonType';
 
 export default class SetOwner extends Effect {
   private _root!: string;
-  private _provinces = new Array<string>();
+  private _provinces: string[] = [];
 
   public get root() {
     return data().countries.get(this._root);

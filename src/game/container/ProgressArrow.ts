@@ -1,18 +1,25 @@
 import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace';
 import { Container, Graphics, ProjectionSystem } from 'pixi.js';
+import { MoveType, MOVE_TYPE } from '../data/DivisionMovement';
 import { Province } from '../data/Provice';
 
 export class ProgressArrow extends Container {
   private static readonly WIDTH = 5;
   private static readonly TRIANGLE_DEFAULT_HEIGHT = ProgressArrow.WIDTH;
+  private static readonly COLOR: Record<MoveType, number> = {
+    MOVE: 0xff0000,
+    RETREAT: 0xcfcfcf,
+  };
   private _progress = 0; // 0-1
   private arrow: Graphics;
   private arrowForMask: Graphics;
   private progressRect?: Graphics;
   private readonly length: number;
+  private readonly type: MoveType;
 
-  constructor(from: Province, to: Province) {
+  constructor(from: Province, to: Province, type: MoveType) {
     super();
+    this.type = type;
     this.length = Math.sqrt((to.y - from.y) ** 2 + (to.x - from.x) ** 2);
     const triangleHeight = Math.min(
       this.length,
@@ -70,7 +77,7 @@ export class ProgressArrow extends Container {
     if (this.progressRect) this.progressRect.destroy();
 
     this.progressRect = new Graphics();
-    this.progressRect.beginFill(0xff0000);
+    this.progressRect.beginFill(ProgressArrow.COLOR[this.type]);
     this.progressRect.drawRect(
       0,
       -ProgressArrow.WIDTH * 0.5,

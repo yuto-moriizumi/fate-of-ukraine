@@ -167,7 +167,7 @@ export class MapViewport extends Viewport {
     let x = 0;
     let y = 0;
     let count = 0;
-    const candidates = new Array<Point>(); //{x: number, y: number,over:number} 形式
+    const candidates: Point[] = []; //{x: number, y: number,over:number} 形式
     const already = new Set<number>();
     candidates.push(point);
     while (candidates.length > 0) {

@@ -35,33 +35,22 @@ export class Province implements Serializable {
       .filter((p) => p !== undefined) as Province[];
   }
 
+  public get outgoingCombats() {
+    return [...data().combats].filter((c) => c.attackFrom === this);
+  }
+
+  public get incomingCombats() {
+    return [...data().combats].filter((c) => c.defenceAt === this);
+  }
+
+  public get divisions() {
+    return [...data().countries.values()]
+      .map((c) => [...c.divisions].filter((d) => d.at === this))
+      .reduce((a, b) => a.concat(b));
+  }
+
   public isNextTo(province: Province): boolean {
     return [...this._neighbors].some((p) => p === province.id);
-  }
-
-  /**
-   * このプロヴィンスに対して指定の国が平和的に進入可能か
-   * @param {Country} country
-   * @returns
-   * @memberof Province
-   */
-  public hasPeaceAccess(country: Country) {
-    // return (
-    //   this._owner == country ||
-    //   country.hasAccessTo(this._owner) || //軍事通行権があるか
-    //   country.alliesWith(this._owner) //同盟しているか
-    // );
-    return true;
-  }
-
-  /**
-   * このプロヴィンスに対して指定の国が何らかの手段で進入可能か
-   * @param {Country} country
-   * @memberof Province
-   */
-  public hasAccess(country: Country) {
-    // return this.hasPeaceAccess(country) || this._owner.getWarInfoWith(country);
-    return true;
   }
 
   public toJson(as: SaveDataType): ProvinceJson | undefined {
