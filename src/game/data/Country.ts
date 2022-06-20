@@ -12,6 +12,7 @@ import Util from '../util/Util';
 import { Access } from '../diplomacy/Access';
 import { Alliance } from '../diplomacy/Alliance';
 import { Province } from './Provice';
+import { Observable } from '../util/Observable';
 
 export class Country implements Serializable {
   /**
@@ -21,7 +22,7 @@ export class Country implements Serializable {
    * @memberof Country
    */
   public readonly id!: string;
-  private _name!: string;
+  public readonly name = new Observable<string>('');
   private _color!: string;
   private money = 0;
   public readonly divisions = new Set<Division>();
@@ -33,10 +34,6 @@ export class Country implements Serializable {
 
   public get color() {
     return this._color;
-  }
-
-  public get name() {
-    return this._name;
   }
 
   public set handler(handler: CountryHandler) {
@@ -167,7 +164,7 @@ export class Country implements Serializable {
   public toJson(as: SaveDataType): CountryJson | undefined {
     switch (as) {
       case SAVEDATA_TYPE.GAMEDATA:
-        return { name: this._name, color: this._color };
+        return { name: this.name.val, color: this._color };
       case SAVEDATA_TYPE.SAVEDATA:
         return { money: this.money };
     }
@@ -176,7 +173,7 @@ export class Country implements Serializable {
 
   public loadJson(json: CountryJson) {
     if ('name' in json) {
-      this._name = json.name;
+      this.name.val = json.name;
       this._color = json.color;
     } else if ('money' in json) this.money = json.money;
     return this;

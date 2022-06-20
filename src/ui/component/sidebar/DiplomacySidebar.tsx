@@ -14,17 +14,23 @@ export default function DiplomacySidebar(props: {
 }) {
   const { root, target, close } = props;
   const [rootHasWar, setRootHasWar] = useState(false);
+  const [targetName, setTargetName] = useState(target.name.val);
   useEffect(() => {
     const diplomacy = data().diplomacy;
     const observer = () => setRootHasWar(root.hasWar(target));
     diplomacy.addObserver(observer);
     observer();
-    return () => diplomacy.removeObserver(observer);
+    const nameObserver = () => setTargetName(target.name.val);
+    target.name.addObserver(nameObserver);
+    return () => {
+      diplomacy.removeObserver(observer);
+      target.name.removeObserver(nameObserver);
+    };
   }, []);
   return (
     <Col className="bg-warning clickable" xs={2}>
       <Row>
-        <h2 className="col-auto">{target.name}</h2>
+        <h2 className="col-auto">{targetName}</h2>
         <Button
           variant="danger"
           className="col-auto ms-auto m-1 py-2"

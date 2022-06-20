@@ -26,7 +26,7 @@ export default function DebugSidebar(props: {
           <BsXLg />
         </Button>
       </Row>
-      <p>{selectedCountry?.name}</p>
+      <p>{selectedCountry?.name.val}</p>
       <Col xs={12} className="d-grid mb-2">
         <Button onClick={() => setSelectedCountry(province?.owner)}>
           この国を選択

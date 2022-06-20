@@ -27,7 +27,7 @@ export default function SelectionSceneUI(props: { scene: SelectionScene }) {
           ></img>
         </Col>
         <Col className="d-flex align-items-center">
-          <h1>{selectedProvince?.owner?.name}</h1>
+          <h1>{selectedProvince?.owner?.name.val}</h1>
         </Col>
         <Col className="d-flex align-items-center" xs="auto">
           <Button

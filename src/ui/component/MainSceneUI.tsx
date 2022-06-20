@@ -19,12 +19,16 @@ export default function MainSceneUI(props: {
   const [selectedProvince, setSelectedProvince] = useState<Province>();
   const [currentSidebar, setCurrentSidebar] = useState<Sidebar>(SIDEBAR.NONE);
   const [myCountry, setMyCountry] = useState(scene.playAs);
+  const [name, setName] = useState(myCountry.name.val);
 
   const close = useCallback(() => setCurrentSidebar(SIDEBAR.NONE), []);
 
   useEffect(() => {
     scene.selectedProvince.addObserver(setSelectedProvince);
     scene.eventHandler = onEvent;
+    const nameObserver = () => setName(myCountry.name.val);
+    myCountry.name.addObserver(nameObserver);
+    return () => myCountry.name.removeObserver(nameObserver);
   }, []);
 
   useEffect(() => {
@@ -61,7 +65,7 @@ export default function MainSceneUI(props: {
           />
         </Col>
         <Col className="d-flex align-items-center">
-          <h1>{scene.playAs.name}</h1>
+          <h1>{name}</h1>
         </Col>
         <Col className="d-flex align-items-center" xs="auto">
           <Button
