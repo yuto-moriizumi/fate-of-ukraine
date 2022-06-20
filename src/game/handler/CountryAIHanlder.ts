@@ -23,8 +23,9 @@ export class CountryAIHandler extends CountryHandler {
     const maintanance = this.country.calcMaintanance();
     const expeditionRate = balance == 0 ? 1 : maintanance / balance;
     if (
-      (this.country.hasWar() && expeditionRate < 0.8) ||
-      expeditionRate < 0.2
+      ((this.country.hasWar() && expeditionRate < 0.8) ||
+        expeditionRate < 0.2) &&
+      this.country.money > 2
     ) {
       //戦時中に支出割合が8割を超えていないか、2割を超えていない場合1師団生産
       this.country.buildDivision();

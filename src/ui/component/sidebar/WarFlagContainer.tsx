@@ -11,18 +11,17 @@ export default function WarFlagContainer(props: {
 }) {
   const { target, className } = props;
   const [diplomacy, setDiplomacy] = useState<War[]>([]);
-  const update = useCallback(
-    () =>
-      setDiplomacy(
-        Array.from(target.diplomacy).filter((d) => d instanceof War)
-      ),
-    []
-  );
+  const update = useCallback(() => {
+    setDiplomacy(Array.from(target.diplomacy).filter((d) => d instanceof War));
+    console.log('warflag updated');
+  }, [target]);
   useEffect(() => {
     data().diplomacy.addObserver(update);
     update();
-  }, []);
+    return () => data().diplomacy.removeObserver(update);
+  }, [target]);
   if (!target.hasWar()) return <></>;
+
   return (
     <Col xs={12} style={{ height: '2rem' }} className={className}>
       <GiCrossedSwords size={28} className="me-1" />

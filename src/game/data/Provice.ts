@@ -21,8 +21,10 @@ export class Province implements Serializable {
   }
 
   public set owner(owner: Country | undefined) {
+    const prev = this.owner;
     this.ownerId = owner?.id;
     MapViewport.instance.updateMap();
+    if (prev && prev.provinces.length === 0) prev.destroy();
   }
 
   public get name() {

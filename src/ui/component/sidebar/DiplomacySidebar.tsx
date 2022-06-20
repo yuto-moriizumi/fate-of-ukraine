@@ -27,6 +27,7 @@ export default function DiplomacySidebar(props: {
       target.name.removeObserver(nameObserver);
     };
   }, []);
+  useEffect(() => setTargetName(target.name.val), [target]);
   return (
     <Col className="bg-warning clickable" xs={2}>
       <Row>
@@ -45,12 +46,7 @@ export default function DiplomacySidebar(props: {
         className="w-100"
       />
       {!rootHasWar && (
-        <Button
-          onClick={() => {
-            data().diplomacy.add(new War(root.id, target.id));
-          }}
-          className="col-12 mt-4"
-        >
+        <Button onClick={() => root.declareWar(target)} className="col-12 mt-4">
           宣戦布告
         </Button>
       )}

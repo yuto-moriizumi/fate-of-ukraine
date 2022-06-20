@@ -1,4 +1,5 @@
 import { Country } from '../data/Country';
+import { data } from '../GameManager';
 import { DiplomacyJson, DIPLOMACY_TYPE, SaveDataType } from '../type/JsonType';
 import { Diplomacy } from './Diplomacy';
 

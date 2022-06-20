@@ -90,6 +90,7 @@
     "IRE": { "name": "Ireland", "color": "#709669" },
     "ISR": { "name": "Israel", "color": "#96d4d6" },
     "ITA": { "name": "Italy", "color": "#7dab54" },
+    "IUS": { "name": "Idel-Ural", "color": "#3399ff" },
     "JAI": { "name": "Jaipur", "color": "#4f59b6" },
     "JAS": { "name": "Jaisalmer", "color": "#638999" },
     "JAP": { "name": "Japan", "color": "#d19c63" },
@@ -186,6 +187,7 @@
     "SPA": { "name": "Spain", "color": "#e7b50c" },
     "SWE": { "name": "Sweden", "color": "#5782c7" },
     "SWI": { "name": "Switzerland", "color": "#997a6c" },
+    "TCF": { "name": "Transcaucas", "color": "#fbdb77" },
     "TEX": { "name": "Texas", "color": "#0490b2" },
     "TIB": { "name": "Tibet", "color": "#417fba" },
     "TRN": { "name": "Transvaal", "color": "#8cb79a" },
@@ -34631,5 +34633,11 @@
     "#5e3529": { "x": 1963, "y": 2089, "neighbors": ["#59caca"] }
   },
   "events": {},
-  "diplomacy": []
+  "diplomacy": [
+    {
+      "type": "Alliance",
+      "root": "RUS",
+      "target": "DON"
+    }
+  ]
 }

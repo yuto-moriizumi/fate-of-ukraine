@@ -16,8 +16,8 @@ export class Division extends PIXI.Container {
   private static readonly ICON = 'Light Infantry.png';
   private _hp = 100;
   private readonly max_hp = 100;
-  private readonly offense = 10;
-  private readonly speed = 10;
+  private readonly offense = 4;
+  public readonly speed = 10;
   public readonly owner: Country;
   private _at!: Province;
   private _movement?: DivisionMovement;
@@ -26,7 +26,6 @@ export class Division extends PIXI.Container {
     super();
     this.owner = owner;
     this.at = at;
-    console.log('created division at', at);
     this.interactive = true;
     this.sortableChildren = true;
 
@@ -78,7 +77,13 @@ export class Division extends PIXI.Container {
 
   public update() {
     if (this.movement) this.movement.update();
-    else this._hp = Math.min(this.max_hp, this._hp + this.max_hp * 0.1);
+    if (
+      this.movement?.type === MOVE_TYPE.RETREAT ||
+      this.movement === undefined
+    )
+      this._hp = Math.min(this.max_hp, this._hp + this.max_hp * 0.1);
+    if (this.movement?.type === MOVE_TYPE.MOVE)
+      this._hp = Math.min(this.max_hp, this._hp + this.max_hp * 0.05);
   }
 
   public stop() {
@@ -100,7 +105,6 @@ export class Division extends PIXI.Container {
     );
     if (destinationCandidates.length === 0) {
       this.destroy();
-      this.owner.divisions.delete(this);
       return;
     }
     const destination = Util.getRandom(destinationCandidates);
@@ -112,6 +116,11 @@ export class Division extends PIXI.Container {
   }
 
   public attack(division: Division, weight: number) {
-    division._hp -= this.offense / weight;
+    division._hp -= this.offense * weight;
+  }
+
+  public destroy() {
+    super.destroy();
+    this.owner.divisions.delete(this);
   }
 }

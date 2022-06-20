@@ -17,11 +17,11 @@ export default class DeclareWar extends Effect {
     return data().countries.get(this._root);
   }
   public get target() {
-    return data().countries.get(this._root);
+    return data().countries.get(this._target);
   }
 
   public activate() {
-    data().diplomacy.add(new War(this._root, this._target));
+    if (this.target) this.root?.declareWar(this.target);
   }
 
   public toJson(as: SaveDataType): DeclareWarJson {

@@ -24,7 +24,7 @@ export class Country implements Serializable {
   public readonly id!: string;
   public readonly name = new Observable<string>('');
   private _color!: string;
-  private money = 0;
+  private _money = 0;
   public readonly divisions = new Set<Division>();
   private _handler: CountryHandler = new CountryAIHandler(this);
 
@@ -56,13 +56,27 @@ export class Country implements Serializable {
       .map((d: War) => d.getOpponent(this));
   }
 
+  get allies() {
+    const res = (
+      [...this.diplomacy].filter((d) => d instanceof Alliance) as Alliance[]
+    ).map((d) => d.getOpponent(this));
+    console.log(this, this.diplomacy);
+    return res;
+  }
+
+  get money() {
+    return this._money;
+  }
+
   constructor(id: string) {
     this.id = id;
   }
 
   public buildDivision() {
     const provinces = this.provinces;
-    const division = new Division(this, Util.getRandom(provinces));
+    const province = Util.getRandom(provinces);
+    if (province === undefined) return;
+    const division = new Division(this, province);
     this.divisions.add(division);
   }
 
@@ -94,6 +108,7 @@ export class Country implements Serializable {
   }
 
   public update(date: Dayjs) {
+    this._money += this.calcBalance();
     this._handler.update(date);
     //金を更新
     // this.__money.setMoney(this.__money.getMoney() + this.calcBalance());
@@ -157,8 +172,25 @@ export class Country implements Serializable {
     return this.enemies.some((c) => c === target);
   }
 
+  public declareWar(target: Country, callAllies = true) {
+    if (this.hasWar(target)) return;
+    data().diplomacy.add(new War(this.id, target.id));
+    console.log(
+      `${this.name.val} declared war against ${target.name.val}, call allies? ${callAllies}`
+    );
+    if (callAllies)
+      this.allies.forEach((ally) => ally.declareWar(target, false)); //味方同盟国が参戦
+    console.log(target.allies);
+    target.allies.forEach((ally) => ally.declareWar(this, false)); //敵側同盟国が参戦
+  }
+
   public onEvent(event: EventBase): void {
     this._handler.onEvent(event);
+  }
+
+  public destroy(): void {
+    this.diplomacy.forEach((d) => data().diplomacy.delete(d));
+    this.divisions.forEach((d) => d.destroy());
   }
 
   public toJson(as: SaveDataType): CountryJson | undefined {
@@ -166,7 +198,7 @@ export class Country implements Serializable {
       case SAVEDATA_TYPE.GAMEDATA:
         return { name: this.name.val, color: this._color };
       case SAVEDATA_TYPE.SAVEDATA:
-        return { money: this.money };
+        return { money: this._money };
     }
     return undefined;
   }
@@ -175,7 +207,7 @@ export class Country implements Serializable {
     if ('name' in json) {
       this.name.val = json.name;
       this._color = json.color;
-    } else if ('money' in json) this.money = json.money;
+    } else if ('money' in json) this._money = json.money;
     return this;
   }
 }
