@@ -1,11 +1,6 @@
 import { MapViewport } from '../container/MapViewport';
 import { data } from '../GameManager';
-import {
-  ProvinceJson,
-  SaveDataProvinceJson,
-  SaveDataType,
-  SAVEDATA_TYPE,
-} from '../type/JsonType';
+import { ProvinceJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
 import { Serializable } from '../util/Serializable';
 import { Country } from './Country';
 
@@ -26,6 +21,8 @@ export class Province implements Serializable {
 
   public set owner(owner: Country | undefined) {
     this.ownerId = owner?.id;
+    this.owner?._provinces.delete(this);
+    owner?._provinces.add(this);
     MapViewport.instance.updateMap();
   }
 
@@ -92,5 +89,9 @@ export class Province implements Serializable {
       this._y = json.y;
     } else if ('owner' in json) this.ownerId = json.owner;
     return this;
+  }
+
+  public onLoadEnd() {
+    this.owner?._provinces.add(this);
   }
 }

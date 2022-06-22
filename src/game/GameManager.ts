@@ -39,7 +39,8 @@ export class GameManager {
           .loadJson(loader.resources[SAVEDATA_FILE].data)
           .loadJson(loader.resources[EVENT_FILE].data);
         console.log(this.data);
-      });
+      })
+      .onComplete.add(() => this.data.onLoadEnd());
 
     this.game.ticker.add((delta: number) => {
       if (this.scene) this.scene.val.update(delta);
