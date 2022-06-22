@@ -32,7 +32,7 @@ export default function MainSceneUI(props: {
       setCurrentSidebar(SIDEBAR.DIPLOMACY);
   }, [myCountry, selectedProvince]);
 
-  const sidebar = useMemo(() => {
+  const sidebar = () => {
     switch (currentSidebar) {
       case SIDEBAR.DEBUG:
         return <DebugSidebar province={selectedProvince} close={close} />;
@@ -47,9 +47,15 @@ export default function MainSceneUI(props: {
               close={close}
             />
           );
+        break;
+      case SIDEBAR.NONE:
+        return <></>;
+      default: {
+        const _exhaustiveCheck: never = currentSidebar;
+        return _exhaustiveCheck;
+      }
     }
-    return <></>;
-  }, [currentSidebar, selectedProvince]);
+  };
 
   return (
     <>
@@ -85,7 +91,7 @@ export default function MainSceneUI(props: {
           <Timer scene={scene}></Timer>
         </Col>
       </Row>
-      <Row style={{ height: '85%' }}>{sidebar}</Row>
+      <Row style={{ height: '85%' }}>{sidebar()}</Row>
       <Row style={{ height: '5%' }}>FOOTER</Row>
     </>
   );
