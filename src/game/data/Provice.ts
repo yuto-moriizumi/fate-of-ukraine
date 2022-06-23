@@ -23,6 +23,8 @@ export class Province implements Serializable {
   public set owner(owner: Country | undefined) {
     const prev = this.owner;
     this.ownerId = owner?.id;
+    this.owner?._provinces.delete(this);
+    owner?._provinces.add(this);
     MapViewport.instance.updateMap();
     if (prev && prev.provinces.length === 0) prev.destroy();
   }
@@ -78,5 +80,9 @@ export class Province implements Serializable {
       this._neighbors = new Set(json.neighbors);
     } else if ('owner' in json) this.ownerId = json.owner;
     return this;
+  }
+
+  public onLoadEnd() {
+    this.owner?._provinces.add(this);
   }
 }

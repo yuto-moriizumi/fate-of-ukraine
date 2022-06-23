@@ -27,6 +27,7 @@ export class Country implements Serializable {
   private _money = 0;
   public readonly divisions = new Set<Division>();
   private _handler: CountryHandler = new CountryAIHandler(this);
+  readonly _provinces = new Set<Province>();
 
   public get flagPath(): string {
     return `assets/flags/${this.id}.png`;
@@ -45,9 +46,7 @@ export class Country implements Serializable {
   }
 
   public get provinces() {
-    return Array.from(data().provinces.values()).filter(
-      (p) => p.owner === this
-    );
+    return [...this._provinces];
   }
 
   get enemies() {

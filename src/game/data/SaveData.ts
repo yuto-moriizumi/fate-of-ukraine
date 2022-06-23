@@ -46,4 +46,8 @@ export class SaveData implements Serializable {
     a.download = as + '.json';
     a.click();
   }
+
+  public onLoadEnd() {
+    this.provinces.onLoadEnd();
+  }
 }
