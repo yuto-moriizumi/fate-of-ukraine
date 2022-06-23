@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { Division } from '../container/Division';
 import { MapViewport } from '../container/MapViewport';
 import type { Country } from '../data/Country';
 import type { Province } from '../data/Provice';
@@ -17,6 +18,7 @@ export class MainScene extends Scene {
   public readonly MAX_SPEED = 5;
   public readonly speed = new Observable<number>(3);
   public readonly pause = new Observable<boolean>(true);
+  public selectedDivision?: Division;
   public eventHandler!: eventHandler;
 
   constructor(playAs: Country) {
@@ -28,6 +30,9 @@ export class MainScene extends Scene {
     });
     this.map = new MapViewport(this.selectedProvince);
     this.addChild(this.map);
+    this.map.provinceAtRightClick.addObserver((p) => {
+      if (this.selectedDivision) this.selectedDivision.destination = p;
+    });
   }
 
   update(delta: number) {

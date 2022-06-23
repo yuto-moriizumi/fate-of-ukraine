@@ -5,12 +5,14 @@ import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
 import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace';
 import { Simple } from 'pixi-cull';
+
 export class MapViewport extends Viewport {
   private static _instance: MapViewport;
   private static readonly MAP_SRC = 'provinces.png';
   private spritePixelArray!: Uint8Array;
   private static readonly INITIAL_SCALE = 5;
-  private provinceRef!: Observable<Province>;
+  private provinceAtLeftClick: Observable<Province>;
+  public readonly provinceAtRightClick = new Observable<Province>();
   private sprite!: PIXI.Sprite;
 
   public static get instance(): MapViewport {
@@ -20,13 +22,10 @@ export class MapViewport extends Viewport {
   constructor(provinceRef: Observable<Province>) {
     super();
     MapViewport._instance = this;
-    this.provinceRef = provinceRef;
+    this.provinceAtLeftClick = provinceRef;
 
-    const resource = loader().resources[MapViewport.MAP_SRC];
-    const onLoaded = () => {
-      this.sprite = new PIXI.Sprite(
-        loader().resources[MapViewport.MAP_SRC].texture
-      );
+    loader().load(MapViewport.MAP_SRC, (resource) => {
+      this.sprite = new PIXI.Sprite(resource.texture);
       const renderer = GameManager.instance.game.renderer;
       this.spritePixelArray = renderer.plugins.extract.pixels(this.sprite);
       this.addChild(this.sprite);
@@ -64,15 +63,16 @@ export class MapViewport extends Viewport {
       });
 
       this.updateMap();
-    };
-    const requireLoad = () => loader().add(MapViewport.MAP_SRC).load(onLoaded);
-    if (!resource) {
-      if (loader().loading) {
-        loader().onComplete.add(requireLoad);
-      } else requireLoad();
-    } else onLoaded();
+    });
 
-    this.on('click', this.getClickedProvince);
+    this.on('click', (e) => {
+      const p = this.getClickedProvince(e);
+      if (p) this.provinceAtLeftClick.val = p;
+    });
+    this.on('rightclick', (e) => {
+      const p = this.getClickedProvince(e);
+      if (p) this.provinceAtRightClick.val = p;
+    });
   }
 
   public updateMap() {
@@ -126,15 +126,14 @@ export class MapViewport extends Viewport {
     return provinceId;
   }
 
-  private getClickedProvince(e: PIXI.InteractionEvent): void {
+  private getClickedProvince(e: PIXI.InteractionEvent) {
     //Uinit8Array上でのインデックスを算出
     const position = e.data.getLocalPosition(this);
     const province = this.getProvinceByPoint(position);
     console.log('clicked point', position.x, position.y);
     if (!province) return; //プロヴィンスが存在しなければ何もしない
     console.log('selected province', province);
-
-    this.provinceRef.val = province;
+    return province;
   }
 
   private getProvinceByPoint(position: PIXI.Point): Province {

@@ -1,11 +1,6 @@
 import { MapViewport } from '../container/MapViewport';
 import { data } from '../GameManager';
-import {
-  ProvinceJson,
-  SaveDataProvinceJson,
-  SaveDataType,
-  SAVEDATA_TYPE,
-} from '../type/JsonType';
+import { ProvinceJson, SaveDataType, SAVEDATA_TYPE } from '../type/JsonType';
 import { Serializable } from '../util/Serializable';
 import { Country } from './Country';
 
@@ -13,8 +8,8 @@ export class Province implements Serializable {
   public readonly id!: string;
   private _name!: string;
   private ownerId!: string | undefined;
-  private x = 0;
-  private y = 0;
+  private _x = 0;
+  private _y = 0;
 
   constructor(id: string) {
     this.id = id;
@@ -26,11 +21,21 @@ export class Province implements Serializable {
 
   public set owner(owner: Country | undefined) {
     this.ownerId = owner?.id;
+    this.owner?._provinces.delete(this);
+    owner?._provinces.add(this);
     MapViewport.instance.updateMap();
   }
 
   public get name() {
     return this._name;
+  }
+
+  public get x() {
+    return this._x;
+  }
+
+  public get y() {
+    return this._y;
   }
 
   public isNextTo(province: Province): boolean {
@@ -68,8 +73,8 @@ export class Province implements Serializable {
       case SAVEDATA_TYPE.GAMEDATA:
         return {
           name: this._name,
-          x: this.x,
-          y: this.y,
+          x: this._x,
+          y: this._y,
         };
       case SAVEDATA_TYPE.SAVEDATA:
         return { owner: this.ownerId };
@@ -80,9 +85,13 @@ export class Province implements Serializable {
   public loadJson(json: ProvinceJson) {
     if ('name' in json) {
       this._name = json.name;
-      this.x = json.x;
-      this.y = json.y;
+      this._x = json.x;
+      this._y = json.y;
     } else if ('owner' in json) this.ownerId = json.owner;
     return this;
+  }
+
+  public onLoadEnd() {
+    this.owner?._provinces.add(this);
   }
 }

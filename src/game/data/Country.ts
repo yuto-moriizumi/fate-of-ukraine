@@ -7,6 +7,7 @@ import type { CountryHandler } from '../handler/CountryHandler';
 import { CountryAIHandler } from '../handler/handlers';
 import { data } from '../GameManager';
 import { War } from '../diplomacy/War';
+import { Province } from './Provice';
 
 export class Country implements Serializable {
   /**
@@ -20,6 +21,7 @@ export class Country implements Serializable {
   private _color!: string;
   private money = 0;
   private _handler: CountryHandler = new CountryAIHandler(this);
+  readonly _provinces = new Set<Province>();
 
   public get flagPath(): string {
     return `assets/flags/${this.id}.png`;
@@ -39,6 +41,10 @@ export class Country implements Serializable {
 
   public get diplomacy() {
     return new Set(Array.from(data().diplomacy).filter((d) => d.has(this)));
+  }
+
+  public get provinces() {
+    return [...this._provinces];
   }
 
   constructor(id: string) {

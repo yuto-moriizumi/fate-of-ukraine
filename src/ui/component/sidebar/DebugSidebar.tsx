@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { BsXLg } from 'react-icons/bs';
+import { Division } from '../../../game/container/Division';
 import { Country } from '../../../game/data/Country';
 import { Province } from '../../../game/data/Provice';
 import { data } from '../../../game/GameManager';
@@ -11,6 +12,7 @@ export default function DebugSidebar(props: {
   close: () => void;
 }) {
   const [selectedCountry, setSelectedCountry] = useState<Country>();
+  const { province } = props;
 
   return (
     <Col className="bg-warning clickable" xs={2}>
@@ -26,18 +28,18 @@ export default function DebugSidebar(props: {
       </Row>
       <p>{selectedCountry?.name}</p>
       <Col xs={12} className="d-grid mb-2">
-        <Button onClick={() => setSelectedCountry(props.province?.owner)}>
+        <Button onClick={() => setSelectedCountry(province?.owner)}>
           この国を選択
         </Button>
       </Col>
       <h5>プロヴィンス</h5>
       <p>
-        {props.province?.id}:{props.province?.name}
+        {province?.id}:{province?.name}
       </p>
       <Col xs={12} className="d-grid mb-2">
         <Button
           onClick={() => {
-            if (props.province) props.province.owner = selectedCountry;
+            if (province) province.owner = selectedCountry;
           }}
         >
           このプロヴィンスを領有

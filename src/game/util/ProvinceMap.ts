@@ -19,4 +19,8 @@ export class ProvinceMap extends SerializableMap<Province> {
     console.log('provinces loaded:', this);
     return this;
   }
+
+  public onLoadEnd() {
+    [...this.values()].forEach((p) => p.onLoadEnd());
+  }
 }

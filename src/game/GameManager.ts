@@ -1,17 +1,17 @@
 import * as PIXI from 'pixi.js';
-import type { Country } from './data/Country';
 import { SaveData } from './data/SaveData';
 import type { Scene } from './scene/Scene';
 import { TitleScene } from './scene/TitleScene';
 import { Observable } from './util/Observable';
+import { ResourceLoader } from './util/ResourceLoader';
 
 export class GameManager {
   private static _instance: GameManager;
   public static onLoadEnd: () => void;
-  public readonly game!: PIXI.Application;
+  public readonly game: PIXI.Application;
   public readonly data = new SaveData();
-  public readonly countries!: Set<Country>;
   public readonly scene = new Observable<Scene>();
+  public readonly loader: ResourceLoader;
 
   public static get instance() {
     return this._instance;
@@ -28,6 +28,7 @@ export class GameManager {
     const SAVEDATA_FILE = 'SaveData.json';
     const EVENT_FILE = 'EventData.json';
     const loader = app.loader;
+    this.loader = new ResourceLoader(loader);
     loader
       .add(GAMEDATA_FILE)
       .add(SAVEDATA_FILE)
@@ -38,7 +39,8 @@ export class GameManager {
           .loadJson(loader.resources[SAVEDATA_FILE].data)
           .loadJson(loader.resources[EVENT_FILE].data);
         console.log(this.data);
-      });
+      })
+      .onComplete.add(() => this.data.onLoadEnd());
 
     this.game.ticker.add((delta: number) => {
       if (this.scene) this.scene.val.update(delta);
@@ -91,5 +93,5 @@ export const data = () => {
 };
 
 export const loader = () => {
-  return GameManager.instance.game.loader;
+  return GameManager.instance.loader;
 };
