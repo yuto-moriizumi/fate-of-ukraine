@@ -51,8 +51,14 @@ export class Combat {
     //戦闘は継続する
     this.attackers.forEach((attacker) =>
       this.defenders.forEach((defender) => {
-        attacker.attack(defender, 1 / this.defenders.size);
-        defender.attack(attacker, 1 / this.attackers.size);
+        attacker.attack(
+          defender,
+          1 / this.defenders.size / attacker.combats.length
+        );
+        defender.attack(
+          attacker,
+          1 / this.attackers.size / defender.combats.length
+        );
       })
     );
   }
