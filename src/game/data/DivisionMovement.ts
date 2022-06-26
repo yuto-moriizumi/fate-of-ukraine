@@ -38,8 +38,10 @@ export class DivisionMovement {
       this.division.retreat();
       return;
     }
-    this.progress +=
-      (this.type === MOVE_TYPE.MOVE ? 0.1 : 0.2) * (this.division.speed / 10);
+    this.progress = Math.min(
+      (this.type === MOVE_TYPE.MOVE ? 0.1 : 0.2) * (this.division.speed / 10),
+      1
+    );
     this.arrow.progress = this.progress;
     if (this.progress >= 1) {
       this.division.at = this.destination;
