@@ -194,11 +194,12 @@ describe('pixi.jsのテスト', () => {
     const scene = game.scene.val;
     expect(scene).toBeInstanceOf(MainScene);
     if (!(scene instanceof MainScene)) return;
+    const data = GameManager.instance.data;
+    data.onLoadEnd();
     scene.pause.val = false;
     while (scene.datetime.val.isBefore(dayjs('1917-11-07 03:00'))) {
       scene.update(1);
     }
-    const data = GameManager.instance.data;
     const event = data.events.get('russian_civilwar_begins');
     expect(event).not.toBeUndefined();
     if (event == undefined) return;
