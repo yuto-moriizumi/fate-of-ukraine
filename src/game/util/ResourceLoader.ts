@@ -7,9 +7,15 @@ export class ResourceLoader {
 
   public load(url: string, onLoadEnd: (resource: LoaderResource) => void) {
     const resource = this.getResource(url);
-    resource === undefined
-      ? this.loader.add(url, () => onLoadEnd(this.getResource(url)))
-      : onLoadEnd(resource);
+    if (resource !== undefined) {
+      onLoadEnd(resource);
+      return;
+    }
+    const addResource = () =>
+      this.loader.add(url, () => onLoadEnd(this.getResource(url)));
+    if (this.loader.loading) {
+      this.loader.onProgress.once(addResource);
+    } else addResource();
   }
 
   private getResource(url: string) {

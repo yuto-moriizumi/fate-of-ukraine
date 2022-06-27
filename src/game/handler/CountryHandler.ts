@@ -11,6 +11,7 @@ export abstract class CountryHandler {
 
   update(date: Dayjs) {
     this.dispatchEvents(date);
+    this.country.divisions.forEach((d) => d.update());
   }
 
   public getCountry() {

@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { Division } from '../container/Division';
 import { MapViewport } from '../container/MapViewport';
 import type { Country } from '../data/Country';
+import { MOVE_TYPE } from '../data/DivisionMovement';
 import type { Province } from '../data/Provice';
 import { data } from '../GameManager';
 import { CountryPlayerHandler, eventHandler } from '../handler/handlers';
@@ -31,7 +32,8 @@ export class MainScene extends Scene {
     this.map = new MapViewport(this.selectedProvince);
     this.addChild(this.map);
     this.map.provinceAtRightClick.addObserver((p) => {
-      if (this.selectedDivision) this.selectedDivision.destination = p;
+      if (this.selectedDivision)
+        this.selectedDivision.setDestination(p, MOVE_TYPE.MOVE);
     });
   }
 
@@ -47,5 +49,6 @@ export class MainScene extends Scene {
     // console.log(data().events.get('russian_civilwar_begins_news'));
     data().countries.forEach((c) => c.update(this.datetime.val)); //国ハンドラを稼働させる
     data().events.forEach((e) => e.countFoward()); //イベントタイマーを進める
+    data().combats.forEach((c) => c.update()); // 戦闘を進める
   }
 }

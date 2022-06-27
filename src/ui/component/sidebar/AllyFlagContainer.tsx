@@ -10,7 +10,7 @@ export default function AllyFlagContainer(props: {
   className: string;
 }) {
   const { target, className } = props;
-  const [diplomacy, setDiplomacy] = useState(new Array<Alliance>());
+  const [diplomacy, setDiplomacy] = useState<Alliance[]>([]);
   const update = useCallback(
     () =>
       setDiplomacy(
@@ -18,12 +18,12 @@ export default function AllyFlagContainer(props: {
           (d) => d instanceof Alliance
         ) as Alliance[]
       ),
-    []
+    [target]
   );
   useEffect(() => {
     data().diplomacy.addObserver(update);
     update();
-  }, []);
+  }, [target]);
   if (diplomacy.length === 0) return <></>;
   return (
     <Col xs={12} style={{ height: '2rem' }} className={className}>

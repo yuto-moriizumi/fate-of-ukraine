@@ -7,7 +7,12 @@ import type { CountryHandler } from '../handler/CountryHandler';
 import { CountryAIHandler } from '../handler/handlers';
 import { data } from '../GameManager';
 import { War } from '../diplomacy/War';
+import { Division } from '../container/Division';
+import Util from '../util/Util';
+import { Access } from '../diplomacy/Access';
+import { Alliance } from '../diplomacy/Alliance';
 import { Province } from './Provice';
+import { Observable } from '../util/Observable';
 
 export class Country implements Serializable {
   /**
@@ -17,9 +22,10 @@ export class Country implements Serializable {
    * @memberof Country
    */
   public readonly id!: string;
-  private _name!: string;
+  public readonly name = new Observable<string>('');
   private _color!: string;
-  private money = 0;
+  private _money = 0;
+  public readonly divisions = new Set<Division>();
   private _handler: CountryHandler = new CountryAIHandler(this);
   readonly _provinces = new Set<Province>();
 
@@ -31,24 +37,46 @@ export class Country implements Serializable {
     return this._color;
   }
 
-  public get name() {
-    return this._name;
-  }
-
   public set handler(handler: CountryHandler) {
     this._handler = handler;
   }
 
   public get diplomacy() {
-    return new Set(Array.from(data().diplomacy).filter((d) => d.has(this)));
+    return new Set([...data().diplomacy].filter((d) => d.has(this)));
   }
 
   public get provinces() {
     return [...this._provinces];
   }
 
+  get enemies() {
+    return [...this.diplomacy]
+      .filter((d) => d instanceof War)
+      .map((d: War) => d.getOpponent(this));
+  }
+
+  get allies() {
+    const res = (
+      [...this.diplomacy].filter((d) => d instanceof Alliance) as Alliance[]
+    ).map((d) => d.getOpponent(this));
+    console.log(this, this.diplomacy);
+    return res;
+  }
+
+  get money() {
+    return this._money;
+  }
+
   constructor(id: string) {
     this.id = id;
+  }
+
+  public buildDivision() {
+    const provinces = this.provinces;
+    const province = Util.getRandom(provinces);
+    if (province === undefined) return;
+    const division = new Division(this, province);
+    this.divisions.add(division);
   }
 
   //   private __diplomaticRelations: Array<DiplomaticTie> = new Array<DiplomaticTie>();
@@ -70,19 +98,16 @@ export class Country implements Serializable {
    * @memberof Country
    */
   public calcBalance() {
-    // let balance = 0;
-    // GameManager.instance.data.getProvinces().forEach((province) => {
-    //   if (province.getOwner() == this) {
-    //     balance += 1; //領土につき1
-    //     if (province.getCulture() == province.getOwner().getCulture())
-    //       balance += 1; //自国と同じ文化ならさらに+1
-    //   }
-    // });
-    // return balance - this.calcMaintanance();
-    return 0;
+    const balance = this.provinces.length;
+    return balance - this.calcMaintanance();
+  }
+
+  public calcMaintanance() {
+    return this.divisions.size;
   }
 
   public update(date: Dayjs) {
+    this._money += this.calcBalance();
     this._handler.update(date);
     //金を更新
     // this.__money.setMoney(this.__money.getMoney() + this.calcBalance());
@@ -121,56 +146,67 @@ export class Country implements Serializable {
    * @param {Country} country
    * @memberof Country
    */
-  // public hasAccessTo(country: Country) {
-  //   // return this.__diplomaticTies.some((d) => {
-  //   //   return (
-  //   //     d instanceof Access && d.getRoot() == this && d.getTarget() == country
-  //   //   );
-  //   // });
-  //   return true;
-  // }
-
-  /**
-   * この国が引数の国と同盟しているか
-   * @param {Country} target
-   * @returns
-   * @memberof Country
-   */
-  // public isAlliedWith(target: Country): boolean {
-  //   // return this.__diplomaticTies.some(
-  //   //   (d) => d instanceof Alliance && d.getOpponent(this) == target
-  //   // );
-  //   return true;
-  // }
+  public hasAccessTo(target: Country | Province, peacefully = false) {
+    let targetCountry: Country;
+    if (target instanceof Province) {
+      if (target.owner === undefined) return false;
+      targetCountry = target.owner;
+    } else targetCountry = target;
+    if (targetCountry === this) return true;
+    return [...this.diplomacy].some(
+      (d) =>
+        (d instanceof Alliance && d.getOpponent(this) === targetCountry) ||
+        (d instanceof Access && d.root == this && d.target == targetCountry) ||
+        (!peacefully &&
+          d instanceof War &&
+          d.getOpponent(this) === targetCountry)
+    );
+  }
 
   public hasWar(target?: Country) {
-    return Array.from(this.diplomacy).some((d) => {
-      if (!(d instanceof War)) return false;
-      if (target == undefined) return true;
-      console.log(this.id, target.id, d.getOpponent(this));
-      return d.getOpponent(this) == target;
-    });
+    if (target === undefined) {
+      if (this.enemies.length > 0) return true;
+      return false;
+    }
+    return this.enemies.some((c) => c === target);
+  }
+
+  public declareWar(target: Country, callAllies = true) {
+    if (this.hasWar(target)) return;
+    data().diplomacy.add(new War(this.id, target.id));
+    console.log(
+      `${this.name.val} declared war against ${target.name.val}, call allies? ${callAllies}`
+    );
+    if (callAllies)
+      this.allies.forEach((ally) => ally.declareWar(target, false)); //味方同盟国が参戦
+    console.log(target.allies);
+    target.allies.forEach((ally) => ally.declareWar(this, false)); //敵側同盟国が参戦
   }
 
   public onEvent(event: EventBase): void {
     this._handler.onEvent(event);
   }
 
+  public destroy(): void {
+    this.diplomacy.forEach((d) => data().diplomacy.delete(d));
+    this.divisions.forEach((d) => d.destroy());
+  }
+
   public toJson(as: SaveDataType): CountryJson | undefined {
     switch (as) {
       case SAVEDATA_TYPE.GAMEDATA:
-        return { name: this._name, color: this._color };
+        return { name: this.name.val, color: this._color };
       case SAVEDATA_TYPE.SAVEDATA:
-        return { money: this.money };
+        return { money: this._money };
     }
     return undefined;
   }
 
   public loadJson(json: CountryJson) {
     if ('name' in json) {
-      this._name = json.name;
+      this.name.val = json.name;
       this._color = json.color;
-    } else if ('money' in json) this.money = json.money;
+    } else if ('money' in json) this._money = json.money;
     return this;
   }
 }

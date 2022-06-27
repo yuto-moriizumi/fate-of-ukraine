@@ -8,8 +8,9 @@ export class Province implements Serializable {
   public readonly id!: string;
   private _name!: string;
   private ownerId!: string | undefined;
-  private _x = 0;
-  private _y = 0;
+  public x = 0;
+  public y = 0;
+  private _neighbors!: Set<string>;
 
   constructor(id: string) {
     this.id = id;
@@ -20,52 +21,40 @@ export class Province implements Serializable {
   }
 
   public set owner(owner: Country | undefined) {
+    const prev = this.owner;
     this.ownerId = owner?.id;
     this.owner?._provinces.delete(this);
     owner?._provinces.add(this);
     MapViewport.instance.updateMap();
+    if (prev && prev.provinces.length === 0) prev.destroy();
   }
 
   public get name() {
     return this._name;
   }
 
-  public get x() {
-    return this._x;
+  public get neighbors() {
+    return [...this._neighbors]
+      .map((id) => data().provinces.get(id))
+      .filter((p) => p !== undefined) as Province[];
   }
 
-  public get y() {
-    return this._y;
+  public get outgoingCombats() {
+    return [...data().combats].filter((c) => c.attackFrom === this);
+  }
+
+  public get incomingCombats() {
+    return [...data().combats].filter((c) => c.defenceAt === this);
+  }
+
+  public get divisions() {
+    return [...data().countries.values()]
+      .map((c) => [...c.divisions].filter((d) => d.at === this))
+      .reduce((a, b) => a.concat(b));
   }
 
   public isNextTo(province: Province): boolean {
-    // return this._neighbours.some((p) => p === province.getId());
-    return true;
-  }
-
-  /**
-   * このプロヴィンスに対して指定の国が平和的に進入可能か
-   * @param {Country} country
-   * @returns
-   * @memberof Province
-   */
-  public hasPeaceAccess(country: Country) {
-    // return (
-    //   this._owner == country ||
-    //   country.hasAccessTo(this._owner) || //軍事通行権があるか
-    //   country.alliesWith(this._owner) //同盟しているか
-    // );
-    return true;
-  }
-
-  /**
-   * このプロヴィンスに対して指定の国が何らかの手段で進入可能か
-   * @param {Country} country
-   * @memberof Province
-   */
-  public hasAccess(country: Country) {
-    // return this.hasPeaceAccess(country) || this._owner.getWarInfoWith(country);
-    return true;
+    return [...this._neighbors].some((p) => p === province.id);
   }
 
   public toJson(as: SaveDataType): ProvinceJson | undefined {
@@ -73,8 +62,9 @@ export class Province implements Serializable {
       case SAVEDATA_TYPE.GAMEDATA:
         return {
           name: this._name,
-          x: this._x,
-          y: this._y,
+          x: this.x,
+          y: this.y,
+          neighbors: [...this._neighbors],
         };
       case SAVEDATA_TYPE.SAVEDATA:
         return { owner: this.ownerId };
@@ -83,10 +73,11 @@ export class Province implements Serializable {
   }
 
   public loadJson(json: ProvinceJson) {
-    if ('name' in json) {
+    if ('x' in json) {
       this._name = json.name;
-      this._x = json.x;
-      this._y = json.y;
+      this.x = json.x;
+      this.y = json.y;
+      this._neighbors = new Set(json.neighbors);
     } else if ('owner' in json) this.ownerId = json.owner;
     return this;
   }

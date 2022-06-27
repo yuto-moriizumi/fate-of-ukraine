@@ -13,6 +13,7 @@ export default abstract class Util {
   }
 
   public static getRandom<T>(arr: Array<T>) {
+    if (arr.length === 0) return undefined;
     return arr[Math.floor(Math.random() * arr.length)];
   }
 }

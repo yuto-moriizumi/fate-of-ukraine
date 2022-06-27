@@ -4,14 +4,14 @@ import { CountryMap } from '../util/CountryMap';
 import { ProvinceMap } from '../util/ProvinceMap';
 import { EventMap } from '../util/EventMap';
 import { DiplomacySet } from '../util/DiplomacySet';
-import { Division } from '../container/Division';
+import { Combat } from './Combat';
 
 export class SaveData implements Serializable {
   public readonly countries = new CountryMap();
   public readonly provinces = new ProvinceMap();
   public readonly events = new EventMap();
   public readonly diplomacy = new DiplomacySet();
-  public readonly divisions = new Set<Division>();
+  public readonly combats = new Set<Combat>();
 
   constructor(json?: SaveDataJson) {
     if (json) this.loadJson(json);

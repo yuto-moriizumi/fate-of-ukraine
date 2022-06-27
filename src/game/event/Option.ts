@@ -5,7 +5,7 @@ import EffectFactory from './effect/EffectFactory';
 
 export default class Option implements Serializable {
   private _title!: string;
-  private effects: Array<Effect> = new Array<Effect>();
+  private effects: Effect[] = [];
 
   public get title() {
     return this._title;

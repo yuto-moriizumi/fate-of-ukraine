@@ -39,6 +39,7 @@ export class DiplomacySet extends Set<Diplomacy> implements Serializable {
 
   public loadJson(json: DiplomacyJson[]) {
     json.forEach((v) => this.add(DiplomacyFactory.fromJson(v)));
+    console.log('diplomacy loaded', this);
     return this;
   }
 }

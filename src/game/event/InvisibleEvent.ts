@@ -11,7 +11,7 @@ import { Dayjs } from 'dayjs';
 import { data } from '../GameManager';
 
 export class InvisibleEvent extends EventBase {
-  immediate = new Array<Effect>();
+  immediate: Effect[] = [];
 
   public dispatch(country: Country, date: Dayjs) {
     if (!this.isDispatchable(country, date)) return; //発火可能でないなら発火しない

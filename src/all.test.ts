@@ -2,13 +2,7 @@
 import { jest } from '@jest/globals';
 import { SaveData } from './game/data/SaveData';
 import { GameManager } from './game/GameManager';
-import {
-  Dict,
-  EventJson,
-  InvisibleEventJson,
-  SAVEDATA_TYPE,
-  VisibleEventJson,
-} from './game/type/JsonType';
+import { Dict, EventJson, SAVEDATA_TYPE } from './game/type/JsonType';
 import { Observable } from './game/util/Observable';
 
 const testCountry = {
@@ -17,15 +11,19 @@ const testCountry = {
 };
 const testCountries = { countries: { ...testCountry } };
 const testProvince = {
-  '#cce598': { name: 'Sitka', x: 711, y: 1992 },
-  '#ccb399': { name: 'Yakutat', x: 669, y: 2017 },
+  '#cce598': { name: 'Sitka', x: 711, y: 1992, neighbors: [] },
+  '#ccb399': { name: 'Yakutat', x: 669, y: 2017, neighbors: [] },
+  '#ccb400': { name: 'Yakuta2', x: 670, y: 2017, neighbors: [] },
 };
 const testProvinces = { provinces: { ...testProvince } };
 const testProvinceSaveData = {
   '#cce598': { owner: 'ABU' },
   '#ccb399': { owner: 'ADE' },
+  '#ccb400': { owner: 'ABU' },
 };
-const testProvincesSaveData = { provinces: { ...testProvinceSaveData } };
+const testProvincesSaveData = {
+  provinces: { ...testProvinceSaveData },
+};
 const testEvent: Dict<EventJson> = {
   russian_civilwar_begins: {
     triggeredOnly: false,
@@ -89,7 +87,7 @@ test('国データのロードができる', () => {
   const data = new SaveData(testCountries);
   const countries = data.countries;
   expect(countries.get('ABU')).not.toBeNull();
-  expect(countries.get('ABU')?.name).toBe(testCountry.ABU.name);
+  expect(countries.get('ABU')?.name.val).toBe(testCountry.ABU.name);
   expect(data.toJson(SAVEDATA_TYPE.GAMEDATA).countries).toStrictEqual(
     testCountry
   );
@@ -151,7 +149,6 @@ import { SelectionScene } from './game/scene/SelectionScene';
 import { MainScene } from './game/scene/MainScene';
 import dayjs from 'dayjs';
 import { InvisibleEvent } from './game/event/InvisibleEvent';
-import { MapViewport } from './game/container/MapViewport';
 PIXI.settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT = false;
 
 describe('pixi.jsのテスト', () => {
@@ -197,20 +194,24 @@ describe('pixi.jsのテスト', () => {
     const scene = game.scene.val;
     expect(scene).toBeInstanceOf(MainScene);
     if (!(scene instanceof MainScene)) return;
+    const data = GameManager.instance.data;
+    data.onLoadEnd();
     scene.pause.val = false;
-    while (scene.datetime.val.isBefore(dayjs('1917-11-07 02:00'))) {
+    while (scene.datetime.val.isBefore(dayjs('1917-11-07 03:00'))) {
       scene.update(1);
     }
-    const data = GameManager.instance.data;
     const event = data.events.get('russian_civilwar_begins');
     expect(event).not.toBeUndefined();
     if (event == undefined) return;
     expect(event.fired).toBe(true);
     console.log(data.diplomacy);
     const ADE = data.countries.get('ADE');
-    expect(ADE?.hasWar(data.countries.get('ABU'))).toBe(true);
+    expect(ADE).not.toBeUndefined();
+    if (ADE == undefined) return;
+    event.dispatch(ADE, dayjs('1917-11-07 03:00'));
+    expect(ADE.hasWar(data.countries.get('ABU'))).toBe(true);
     // expect()
-    while (scene.datetime.val.isBefore(dayjs('1917-11-07 03:00'))) {
+    while (scene.datetime.val.isBefore(dayjs('1917-11-07 05:00'))) {
       scene.update(1);
     }
     const slientEvent = data.events.get('silent');

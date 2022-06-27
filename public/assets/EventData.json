@@ -15,7 +15,7 @@
         {
           "title": "ブルジョワに死を！",
           "effects": [
-            { "type": "DeclareWar", "root": "SOV", "target": "RPG" },
+            { "type": "DeclareWar", "root": "SOV", "target": "RUS" },
             {
               "type": "DispatchEvent",
               "id": "russian_civilwar_begins_news",
@@ -32,6 +32,174 @@
       "title": "ロシア内戦",
       "desc": "1918年1月のロシアでは、憲法制定議会が招集されたが、ボリシェヴィキはそこでは多数を占めることができなかった。議会制民主主義をブルジョワ権力の擬制であるとしたレーニンは実力で憲法制定議会を解散させ、ソヴィエトを最高機関とする労働者・兵士の政権を樹立し、ボリシェヴィキ以外の党派をほぼ追放し、ボリシェヴィキ独裁体制を作り上げた。それに対し、ロシア各地で反革命軍が蜂起。ロシア内戦が始まった。",
       "options": [{ "title": "OK", "effects": [] }]
+    },
+    "kafkas_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "1917-11-14 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "TCF",
+          "provinces": [
+            "#801080",
+            "#001080",
+            "#009000",
+            "#809001",
+            "#011141",
+            "#40d001",
+            "#801000",
+            "#f0e0df",
+            "#c0cf80",
+            "#9bc69b",
+            "#80d041",
+            "#005000",
+            "#805000",
+            "#c09080",
+            "#00d000",
+            "#30df60",
+            "#809040",
+            "#007060",
+            "#008fbf",
+            "#8090bf",
+            "#bfd159",
+            "#c01040"
+          ]
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "kafkas_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "kafkas_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "isGlobal": true,
+      "title": "ザカフカース委員部が成立",
+      "desc": "ボリシェビキの権力奪取によって、南ロシアは権力の空白地帯となった。ザカフカース特別委員会は、ザカフカース委員部として発展解消した。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "3rd_universal": {
+      "triggeredOnly": false,
+      "condition": {
+        "type": "And",
+        "conditions": [
+          { "type": "DateCondition", "date": "1917-11-21 3:00" },
+          {
+            "type": "CountryIs",
+            "country": "UKR"
+          }
+        ]
+      },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "UKR",
+          "provinces": [
+            "#e001e0",
+            "#71e0a0",
+            "#7161a0",
+            "#f0e021",
+            "#71e021",
+            "#716121",
+            "#b02161",
+            "#ef6020",
+            "#f06161",
+            "#f0e0a0",
+            "#726291",
+            "#e08061",
+            "#7141e0",
+            "#71e0e0",
+            "#7020df",
+            "#71e061"
+          ]
+        }
+      ],
+      "title": "第三次ウニヴェルサール",
+      "desc": "ウクライナ中央ラーダは、「ウクライナはロシア共和国とともにロシア連邦を構成する自治共和国である」とする宣言を発表した。ロシア側の政府が機能不全に陥っている今、これは事実上の独立宣言となった。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "ius_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "1917-11-21 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "IUS",
+          "provinces": ["#a06020", "#bf7060", "#dfa0a0", "#a060a0"]
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "ius_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "ius_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "isGlobal": true,
+      "title": "イデル＝ウラル国が独立",
+      "desc": "タタール人、バシキール人、チュヴァシ人のよる国家連合がカザンに成立した。この国は明らかにボリシェビキの標的となっている。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "kaz_independence": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "1917-12-26 12:00" },
+      "immediate": [
+        {
+          "type": "SetOwner",
+          "root": "KAZ",
+          "provinces": [
+            "#c090c0",
+            "#5aae42",
+            "#c05141",
+            "#84b1c2",
+            "#45dfdc",
+            "#ad9b01",
+            "#a09695",
+            "#4656dc",
+            "#2e5108",
+            "#aeb443",
+            "#044e87",
+            "#bf10bf"
+          ]
+        },
+        {
+          "type": "DeclareWar",
+          "root": "KAZ",
+          "target": "SOV"
+        },
+        {
+          "type": "GainAccess",
+          "root": "KAZ",
+          "target": "RUS"
+        },
+        {
+          "type": "GainAccess",
+          "root": "RUS",
+          "target": "KAZ"
+        },
+        {
+          "type": "DispatchEvent",
+          "id": "ius_independence_news",
+          "hours2happen": 3
+        }
+      ]
+    },
+    "kaz_independence_news": {
+      "triggeredOnly": true,
+      "condition": { "type": "Always", "always": true },
+      "isGlobal": true,
+      "title": "アラシュ自治国が独立",
+      "desc": "カザフ人から成るアラシュ党は、全カザフ人第2回大会において、アラシュ自治国の独立を宣言した。",
+      "options": [{ "title": "OK", "effects": [] }]
+    },
+    "don_declare_war_against_soviets": {
+      "triggeredOnly": false,
+      "condition": { "type": "DateCondition", "date": "1917-12-16 12:00" },
+      "immediate": [{ "type": "DeclareWar", "root": "DON", "target": "SOV" }]
     },
     "donets_leaves_ukraine": {
       "triggeredOnly": false,
@@ -103,53 +271,6 @@
       "condition": { "type": "Always", "always": true },
       "title": "リトアニア王国が独立",
       "desc": "ドイツ帝国軍占領下のリトアニアにおいて、リトアニア王国が建国された。ドイツはヴィルヘルム2世をリトアニア王に据えることを企んでいるが、リトアニアはそれを受け入れていない。王位はまだ未確定だ。",
-      "options": [{ "title": "OK", "effects": [] }]
-    },
-    "kafkas_independence": {
-      "triggeredOnly": false,
-      "condition": { "type": "DateCondition", "date": "2022-05-17 12:00" },
-      "immediate": [
-        {
-          "type": "SetOwner",
-          "root": "TCF",
-          "provinces": [
-            "#801080",
-            "#001080",
-            "#009000",
-            "#809001",
-            "#011141",
-            "#40d001",
-            "#801000",
-            "#f0e0df",
-            "#c0cf80",
-            "#9bc69b",
-            "#80d041",
-            "#005000",
-            "#805000",
-            "#c09080",
-            "#00d000",
-            "#30df60",
-            "#809040",
-            "#007060",
-            "#008fbf",
-            "#8090bf",
-            "#bfd159",
-            "#c01040"
-          ]
-        },
-        { "type": "DeclareWar", "root": "TUR", "target": "TCF" },
-        {
-          "type": "DispatchEvent",
-          "id": "kafkas_independence_news",
-          "hours2happen": 3
-        }
-      ]
-    },
-    "kafkas_independence_news": {
-      "triggeredOnly": true,
-      "condition": { "type": "Always", "always": true },
-      "title": "ザカフカース民主連邦共和国が独立",
-      "desc": "ボリシェビキの権力奪取によって、南ロシアは権力の空白地帯となった。さらに、オスマン帝国とソビエトの講和によって南ロシアが放棄されたことにより、オスマン帝国軍が進軍を開始した。これに対応するため、アルメニア、グルジア、アゼルバイジャンを初めとする民族主義系政党は連合して、ロシアからの離脱を宣言した。",
       "options": [{ "title": "OK", "effects": [] }]
     },
     "estonia_independence": {
