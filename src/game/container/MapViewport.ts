@@ -3,9 +3,10 @@ import { data, GameManager, loader } from '../GameManager';
 import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
-import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace';
+// import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace';
 import { Simple } from 'pixi-cull';
 import { Point } from 'pixi.js';
+import { MultiColorReplaceFilter } from '../multi-color-replace-filter/MultiColorReplaceFilter';
 
 export class MapViewport extends Viewport {
   private static _instance: MapViewport;
@@ -95,6 +96,7 @@ export class MapViewport extends Viewport {
     replacements: [Color, Color][],
     epsilon?: number
   ) {
+    // return [new MultiColorReplaceFilter(replacements, epsilon ?? 0.005)];
     const CHUNK_SIZE = 500;
     const sliceCount = Math.ceil(replacements.length / CHUNK_SIZE);
     const filters = [];
