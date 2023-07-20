@@ -7,15 +7,20 @@ import { Observable } from '../util/Observable';
 import { Simple } from 'pixi-cull';
 import { Point } from 'pixi.js';
 import { MultiColorReplaceFilter } from '../multi-color-replace-filter/MultiColorReplaceFilter';
+import { ReducedColorMapFilter } from '../multi-color-replace-filter/ReducedColorMapFilter';
 
 export class MapViewport extends Viewport {
   private static _instance: MapViewport;
-  private static readonly MAP_SRC = 'provinces.png';
+  // private static readonly MAP_SRC = 'provinces.png';
+  private static readonly MAP_SRC = 'remapped-provinces.png';
+  private static readonly COLOR_MAP_SRC = 'color-map.png';
   private spritePixelArray!: Uint8Array;
   private static readonly INITIAL_SCALE = 5;
   private provinceAtLeftClick: Observable<Province>;
   public readonly provinceAtRightClick = new Observable<Province>();
   private sprite!: PIXI.Sprite;
+  private colorMap!: PIXI.Texture;
+  private colorMapPixels!: Uint8Array;
 
   public static get instance(): MapViewport {
     return this._instance;
@@ -26,55 +31,69 @@ export class MapViewport extends Viewport {
     MapViewport._instance = this;
     this.provinceAtLeftClick = provinceRef;
 
-    loader().load(MapViewport.MAP_SRC, (resource) => {
-      // this.sprite = new PIXI.Sprite(resource.texture);
-      const sprite = new PIXI.Sprite(resource.texture);
-      const renderer = GameManager.instance.game.renderer;
-      this.spritePixelArray = renderer.plugins.extract.pixels(sprite);
-      this.sprite = new PIXI.Sprite(
-        PIXI.Texture.fromBuffer(
-          this.spritePixelArray,
-          sprite.width,
-          sprite.height
-        )
-      );
-      // this.sprite = new PIXI.Sprite(this.spritePixelArray);
-      this.addChild(this.sprite);
-      const { width, height } = renderer;
+    loader()
+      .loader.add(MapViewport.MAP_SRC)
+      .add(MapViewport.COLOR_MAP_SRC)
+      .load((rawLoader) => {
+        console.log('heloooooooooo');
+        // })
+        // loader().load(MapViewport.MAP_SRC, (resource) => {
+        // this.sprite = new PIXI.Sprite(resource.texture);
+        const colorMap = rawLoader.resources[MapViewport.COLOR_MAP_SRC].texture;
+        if (!colorMap) throw new Error('Failed to load ColorMap image');
+        this.colorMap = colorMap;
+        const resource = rawLoader.resources[MapViewport.MAP_SRC];
+        const sprite = new PIXI.Sprite(resource.texture);
+        const renderer = GameManager.instance.game.renderer;
+        this.spritePixelArray = renderer.plugins.extract.pixels(sprite);
+        this.colorMapPixels = renderer.plugins.extract.pixels(
+          new PIXI.Sprite(colorMap)
+        );
+        // console.log({ cmp: this.colorMapPixels });
+        this.sprite = new PIXI.Sprite(
+          PIXI.Texture.fromBuffer(
+            this.spritePixelArray,
+            sprite.width,
+            sprite.height
+          )
+        );
+        // this.sprite = new PIXI.Sprite(this.spritePixelArray);
+        this.addChild(this.sprite);
+        const { width, height } = renderer;
 
-      this.drag()
-        .pinch()
-        .wheel()
-        .clampZoom({
-          maxScale: 10,
-          minScale: Math.min(
-            width / this.sprite.width,
-            height / this.sprite.height
-          ),
-        })
-        .clamp({ direction: 'all' })
-        .setZoom(MapViewport.INITIAL_SCALE)
-        .moveCenter(3200, 500);
-
-      const cull = new Simple();
-      cull.addList(
-        (this.children as PIXI.Container[])
-          .map((layer) => {
-            return layer.children;
+        this.drag()
+          .pinch()
+          .wheel()
+          .clampZoom({
+            maxScale: 10,
+            minScale: Math.min(
+              width / this.sprite.width,
+              height / this.sprite.height
+            ),
           })
-          .flat()
-      );
-      cull.cull(this.getVisibleBounds());
+          .clamp({ direction: 'all' })
+          .setZoom(MapViewport.INITIAL_SCALE)
+          .moveCenter(3200, 500);
 
-      this.on('moved', () => {
-        if (this.dirty) {
-          cull.cull(this.getVisibleBounds());
-          this.dirty = false;
-        }
+        const cull = new Simple();
+        cull.addList(
+          (this.children as PIXI.Container[])
+            .map((layer) => {
+              return layer.children;
+            })
+            .flat()
+        );
+        cull.cull(this.getVisibleBounds());
+
+        this.on('moved', () => {
+          if (this.dirty) {
+            cull.cull(this.getVisibleBounds());
+            this.dirty = false;
+          }
+        });
+
+        this.updateMap();
       });
-
-      this.updateMap();
-    });
 
     this.on('click', (e) => {
       const p = this.getClickedProvince(e);
@@ -87,25 +106,63 @@ export class MapViewport extends Viewport {
   }
 
   public updateMap() {
-    const arr = Array.from(data().provinces.values())
-      .filter((p) => p.owner)
-      .map((p) => {
-        if (p.owner)
-          return [
-            PIXI.utils.string2hex(p.id),
-            PIXI.utils.string2hex(p.owner.color),
-          ];
-      }) as [number, number][];
+    // const arr = Array.from(data().provinces.values())
+    //   .filter((p) => p.owner)
+    //   .map((p) => {
+    //     if (p.owner)
+    //       return [
+    //         PIXI.utils.string2hex(p.id),
+    //         PIXI.utils.string2hex(p.owner.color),
+    //       ];
+    //   }) as [number, number][];
 
-    if (this.sprite !== undefined)
-      this.sprite.filters = this.getColorReplaceFilters(arr, 0.005);
+    Array.from(data().provinces.values())
+      .filter((p) => p.owner)
+      .forEach((p) => {
+        if (!p.owner) return;
+        // const indexColorStr = this.getProvinceIdFromPoint(
+        //   new PIXI.Point(p.x, p.y)
+        // );
+
+        const index =
+          (Math.floor(p.y) * this.sprite.width + Math.floor(p.x)) * 4;
+
+        const r = this.spritePixelArray[index + 0];
+        const g = this.spritePixelArray[index + 1];
+
+        // const indexColorHex = PIXI.utils.string2hex(indexColorStr);
+        // const [r, g] = PIXI.utils.hex2rgb(indexColorHex);
+        const colorMapIndex = (r + g * 256) * 4;
+        const [or, og, ob] = PIXI.utils.hex2rgb(
+          PIXI.utils.string2hex(p.owner.color)
+        );
+        this.colorMapPixels[colorMapIndex] = or * 256;
+        this.colorMapPixels[colorMapIndex + 1] = og * 256;
+        this.colorMapPixels[colorMapIndex + 2] = ob * 256;
+        console.log({
+          p: { x: p.x, y: p.y, o: p.owner.id, r, g },
+          to: { r: or * 256, g: or * 256, b: or * 256 },
+        });
+      });
+
+    const colorMap = PIXI.Texture.fromBuffer(this.colorMapPixels, 256, 256);
+    // this.addChild(new PIXI.Sprite(colorMap));
+    this.sprite.filters = [new ReducedColorMapFilter(colorMap)];
+    // if (this.sprite !== undefined)
+    //   this.sprite.filters = this.getColorReplaceFilters(arr, 0.005);
   }
 
   private getColorReplaceFilters(
     replacements: [Color, Color][],
     epsilon?: number
   ) {
-    return [];
+    // return [];
+    return [
+      new ReducedColorMapFilter(
+        loader().loader.resources[MapViewport.COLOR_MAP_SRC]
+          .texture as PIXI.Texture
+      ),
+    ];
     // return [new MultiColorReplaceFilter(replacements, epsilon ?? 0.005)];
     const CHUNK_SIZE = 500;
     const sliceCount = Math.ceil(replacements.length / CHUNK_SIZE);
@@ -143,21 +200,21 @@ export class MapViewport extends Viewport {
     if (!province) return; //プロヴィンスが存在しなければ何もしない
 
     //試験的にクリックした箇所を塗る
-    this.fillColor(position);
+    // this.fillColor(position);
     // const idx = (position.x + position.y * this.sprite.width) * 4;
     // console.log(idx);
     // this.spritePixelArray[idx] = 255;
     // this.spritePixelArray[idx + 1] = 0;
     // this.spritePixelArray[idx + 2] = 0;
-    this.removeChild();
-    this.sprite = new PIXI.Sprite(
-      PIXI.Texture.fromBuffer(
-        this.spritePixelArray,
-        this.sprite.width,
-        this.sprite.height
-      )
-    );
-    this.addChild(this.sprite);
+    // this.removeChild();
+    // this.sprite = new PIXI.Sprite(
+    //   PIXI.Texture.fromBuffer(
+    //     this.spritePixelArray,
+    //     this.sprite.width,
+    //     this.sprite.height
+    //   )
+    // );
+    // this.addChild(this.sprite);
 
     // プロヴィンスの中心座標がおかしい場合は再計算
     if (
