@@ -62,7 +62,7 @@ export default function DebugSidebar(props: {
         </Button>
       </Col>
       <Col xs={12} className="d-grid mb-2">
-        <Button onClick={() => MapViewport.instance.generateRemapTexture()}>
+        <Button onClick={() => MapViewport.instance.downloadRemapTexture()}>
           Remapテクスチャを生成（重い）
         </Button>
       </Col>

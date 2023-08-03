@@ -1,3 +1,5 @@
+import { Rgb } from './Texture';
+
 export default abstract class Util {
   /**
    * [最小値,最大値]の乱数を生成します
@@ -31,5 +33,5 @@ export function hex2rgb(hex: string) {
 
   return [hex.slice(0, 2), hex.slice(2, 4), hex.slice(4, 6)].map((str) =>
     parseInt(str, 16)
-  );
+  ) as Rgb;
 }

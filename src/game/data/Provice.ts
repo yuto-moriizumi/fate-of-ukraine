@@ -11,10 +11,6 @@ export class Province implements Serializable {
   public x = 0;
   public y = 0;
   private _neighbors!: Set<string>;
-  /** This is for debug purpose, should be removed later */
-  public remapColor!: string;
-  /** This is for debug purpose, should be removed later */
-  public targetColor!: string;
 
   constructor(id: string) {
     this.id = id;
