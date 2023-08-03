@@ -5,7 +5,6 @@ import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
 import { Simple } from 'pixi-cull';
 import { Point } from 'pixi.js';
-import { MultiColorReplaceFilter } from '../multi-color-replace-filter/MultiColorReplaceFilter';
 import { ReducedColorMapFilter } from '../multi-color-replace-filter/ReducedColorMapFilter';
 import { hex2rgb } from '../util/Util';
 
@@ -20,7 +19,6 @@ export class MapViewport extends Viewport {
   private provinceAtLeftClick: Observable<Province>;
   public readonly provinceAtRightClick = new Observable<Province>();
   private sprite!: PIXI.Sprite;
-  private colorMap!: PIXI.Texture;
   private colorMapPixels!: Uint8Array;
 
   public static get instance(): MapViewport {
@@ -39,7 +37,6 @@ export class MapViewport extends Viewport {
       .load((rawLoader) => {
         const colorMap = rawLoader.resources[MapViewport.COLOR_MAP_SRC].texture;
         if (!colorMap) throw new Error('Failed to load ColorMap image');
-        this.colorMap = colorMap;
         const resource = rawLoader.resources[MapViewport.MAP_SRC];
         const sprite = new PIXI.Sprite(resource.texture);
         const renderer = GameManager.instance.game.renderer;
@@ -134,14 +131,11 @@ export class MapViewport extends Viewport {
     this.sprite.filters = [new ReducedColorMapFilter(colorMap)];
   }
 
-  private getProvinceIdFromPoint(
-    position: PIXI.Point,
-    dataArray?: Uint8Array
-  ): string {
+  private getProvinceIdFromPoint(position: PIXI.Point): string {
     const index =
       (Math.floor(position.y) * this.sprite.width + Math.floor(position.x)) * 4;
 
-    const dataSource = dataArray ?? this.provincePixelArray;
+    const dataSource = this.provincePixelArray;
     //プロヴィンスIDに変換
     const provinceId = PIXI.utils.hex2string(
       PIXI.utils.rgb2hex([
