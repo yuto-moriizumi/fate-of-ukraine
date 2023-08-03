@@ -3,7 +3,6 @@ import { data, GameManager, loader } from '../GameManager';
 import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
-// import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace';
 import { Simple } from 'pixi-cull';
 import { Point } from 'pixi.js';
 import { MultiColorReplaceFilter } from '../multi-color-replace-filter/MultiColorReplaceFilter';
@@ -38,10 +37,6 @@ export class MapViewport extends Viewport {
       .add(MapViewport.MAP_SRC)
       .add(MapViewport.COLOR_MAP_SRC)
       .load((rawLoader) => {
-        console.log('heloooooooooo');
-        // })
-        // loader().load(MapViewport.MAP_SRC, (resource) => {
-        // this.sprite = new PIXI.Sprite(resource.texture);
         const colorMap = rawLoader.resources[MapViewport.COLOR_MAP_SRC].texture;
         if (!colorMap) throw new Error('Failed to load ColorMap image');
         this.colorMap = colorMap;
@@ -55,7 +50,6 @@ export class MapViewport extends Viewport {
         this.colorMapPixels = renderer.plugins.extract.pixels(
           new PIXI.Sprite(colorMap)
         );
-        // console.log({ cmp: this.colorMapPixels });
         this.sprite = new PIXI.Sprite(
           PIXI.Texture.fromBuffer(
             this.spritePixelArray,
@@ -63,7 +57,6 @@ export class MapViewport extends Viewport {
             sprite.height
           )
         );
-        // this.sprite = new PIXI.Sprite(this.spritePixelArray);
         this.addChild(this.sprite);
         const { width, height } = renderer;
 
@@ -112,32 +105,15 @@ export class MapViewport extends Viewport {
   }
 
   public updateMap() {
-    // const arr = Array.from(data().provinces.values())
-    //   .filter((p) => p.owner)
-    //   .map((p) => {
-    //     if (p.owner)
-    //       return [
-    //         PIXI.utils.string2hex(p.id),
-    //         PIXI.utils.string2hex(p.owner.color),
-    //       ];
-    //   }) as [number, number][];
-
     Array.from(data().provinces.values())
       .filter((p) => p.owner)
       .forEach((p) => {
-        // const indexColorStr = this.getProvinceIdFromPoint(
-        //   new PIXI.Point(p.x, p.y)
-        // );
-
         const index =
           (Math.floor(p.y) * this.sprite.width + Math.floor(p.x)) * 4;
 
         const r = this.spritePixelArray[index + 0];
         const g = this.spritePixelArray[index + 1];
 
-        // p.remapColor = PIXI.utils.hex2string(
-        //   PIXI.utils.rgb2hex([r / 255, g / 255, 0])
-        // );
         p.remapColor =
           '#' + Number(r).toString(16) + Number(g).toString(16) + '00';
 
@@ -145,68 +121,17 @@ export class MapViewport extends Viewport {
         p.targetColor = p.owner.color;
         console.log({ p });
 
-        // const indexColorHex = PIXI.utils.string2hex(indexColorStr);
-        // const [r, g] = PIXI.utils.hex2rgb(indexColorHex);
         const colorMapIndex = (r + g * 256) * 4;
-
         const [or, og, ob] = hex2rgb(
           PIXI.utils.string2hex(p.owner.color).toString(16)
         );
         this.colorMapPixels[colorMapIndex] = or;
         this.colorMapPixels[colorMapIndex + 1] = og;
         this.colorMapPixels[colorMapIndex + 2] = ob;
-
-        // const [or, og, ob] = PIXI.utils.hex2rgb(
-        //   PIXI.utils.string2hex(p.owner.color)
-        // );
-        // this.colorMapPixels[colorMapIndex] = or * 256;
-        // this.colorMapPixels[colorMapIndex + 1] = og * 256;
-        // this.colorMapPixels[colorMapIndex + 2] = ob * 256;
-        // console.log({
-        //   p: { x: p.x, y: p.y, o: p.owner.id, r, g },
-        //   to: { r: or * 256, g: or * 256, b: or * 256 },
-        // });
-        console.log({
-          p: p.id,
-          tChex: p.owner.color,
-          tCrgb: [or, og, ob],
-          cMPcoord: colorMapIndex,
-        });
       });
-    console.log({
-      finished: Array.from(data().provinces.values()).slice(0, 10),
-    });
 
     const colorMap = PIXI.Texture.fromBuffer(this.colorMapPixels, 256, 256);
-    // this.addChild(new PIXI.Sprite(colorMap));
     this.sprite.filters = [new ReducedColorMapFilter(colorMap)];
-    // if (this.sprite !== undefined)
-    //   this.sprite.filters = this.getColorReplaceFilters(arr, 0.005);
-  }
-
-  private getColorReplaceFilters(
-    replacements: [Color, Color][],
-    epsilon?: number
-  ) {
-    // return [];
-    return [
-      new ReducedColorMapFilter(
-        loader().loader.resources[MapViewport.COLOR_MAP_SRC]
-          .texture as PIXI.Texture
-      ),
-    ];
-    // return [new MultiColorReplaceFilter(replacements, epsilon ?? 0.005)];
-    const CHUNK_SIZE = 500;
-    const sliceCount = Math.ceil(replacements.length / CHUNK_SIZE);
-    const filters = [];
-    for (let i = 0; i < sliceCount; i++) {
-      const replacement = replacements.slice(
-        CHUNK_SIZE * i,
-        Math.min(CHUNK_SIZE * (i + 1), replacements.length)
-      );
-      filters.push(new MultiColorReplaceFilter(replacement, epsilon ?? 0.005));
-    }
-    return filters;
   }
 
   private getProvinceIdFromPoint(
@@ -235,34 +160,6 @@ export class MapViewport extends Viewport {
     console.log('clicked point', position.x, position.y);
     if (!province) return; //プロヴィンスが存在しなければ何もしない
 
-    //試験的にクリックした箇所を塗る
-    // this.fillColor(position);
-    // const idx = (position.x + position.y * this.sprite.width) * 4;
-    // console.log(idx);
-    // this.spritePixelArray[idx] = 255;
-    // this.spritePixelArray[idx + 1] = 0;
-    // this.spritePixelArray[idx + 2] = 0;
-    // this.removeChild();
-    // this.sprite = new PIXI.Sprite(
-    //   PIXI.Texture.fromBuffer(
-    //     this.spritePixelArray,
-    //     this.sprite.width,
-    //     this.sprite.height
-    //   )
-    // );
-    // this.addChild(this.sprite);
-
-    // プロヴィンスの中心座標がおかしい場合は再計算
-    // if (
-    //   province.x === 100 ||
-    //   province.y === 100 ||
-    //   Math.abs(province.x - position.x) > 300 ||
-    //   Math.abs(province.x - position.x) > 300
-    // ) {
-    //   const { x, y } = this.calcCenter(position) as Point;
-    //   province.x = x;
-    //   province.y = y;
-    // }
     console.log('selected province', province);
     console.log('targetColor', province.owner && hex2rgb(province.owner.color));
     return province;
@@ -409,12 +306,6 @@ export class MapViewport extends Viewport {
 
     //ダウンロード
 
-    // const blob = new Blob([remapArr], { type: 'image/png' });
-    // const a = document.createElement('a');
-    // a.href = URL.createObjectURL(blob);
-    // a.download = 'remapTexture.png';
-    // a.click();
-
     const canvas =
       GameManager.instance.game.renderer.plugins.extract.canvas(sprite);
 
@@ -425,25 +316,5 @@ export class MapViewport extends Viewport {
       a.download = 'remapTexture.png';
       a.click();
     });
-
-    // const canvas = document.createElement('canvas');
-    // const ctx = canvas.getContext('2d');
-    // ctx?.putImageData(
-    //   new ImageData(remapArr, this.sprite.width, this.sprite.height),
-    //   0,
-    //   0
-    // );
-    // const imageData = ctx?.createImageData(
-    //   this.sprite.width,
-    //   this.sprite.height
-    // );
-    // imageData?.data.set(remapArr);
-
-    // const a = document.createElement('a');
-    // a.href = canvas.toDataURL('image/png', 1);
-    // a.download = 'image.jpg';
-    // a.click();
   }
 }
-
-type Color = number | number[] | Float32Array;
