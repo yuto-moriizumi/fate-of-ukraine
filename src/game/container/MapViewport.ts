@@ -11,9 +11,10 @@ import { ReducedColorMapFilter } from '../multi-color-replace-filter/ReducedColo
 
 export class MapViewport extends Viewport {
   private static _instance: MapViewport;
-  // private static readonly MAP_SRC = 'provinces.png';
+  private static readonly PROVINCE_SRC = 'provinces.png';
   private static readonly MAP_SRC = 'remapped-provinces.png';
   private static readonly COLOR_MAP_SRC = 'color-map.png';
+  private provincePixelArray!: Uint8Array;
   private spritePixelArray!: Uint8Array;
   private static readonly INITIAL_SCALE = 5;
   private provinceAtLeftClick: Observable<Province>;
@@ -32,7 +33,8 @@ export class MapViewport extends Viewport {
     this.provinceAtLeftClick = provinceRef;
 
     loader()
-      .loader.add(MapViewport.MAP_SRC)
+      .loader.add(MapViewport.PROVINCE_SRC)
+      .add(MapViewport.MAP_SRC)
       .add(MapViewport.COLOR_MAP_SRC)
       .load((rawLoader) => {
         console.log('heloooooooooo');
@@ -45,6 +47,9 @@ export class MapViewport extends Viewport {
         const resource = rawLoader.resources[MapViewport.MAP_SRC];
         const sprite = new PIXI.Sprite(resource.texture);
         const renderer = GameManager.instance.game.renderer;
+        this.provincePixelArray = renderer.plugins.extract.pixels(
+          new PIXI.Sprite(rawLoader.resources[MapViewport.PROVINCE_SRC].texture)
+        );
         this.spritePixelArray = renderer.plugins.extract.pixels(sprite);
         this.colorMapPixels = renderer.plugins.extract.pixels(
           new PIXI.Sprite(colorMap)
@@ -119,7 +124,6 @@ export class MapViewport extends Viewport {
     Array.from(data().provinces.values())
       .filter((p) => p.owner)
       .forEach((p) => {
-        if (!p.owner) return;
         // const indexColorStr = this.getProvinceIdFromPoint(
         //   new PIXI.Point(p.x, p.y)
         // );
@@ -130,6 +134,14 @@ export class MapViewport extends Viewport {
         const r = this.spritePixelArray[index + 0];
         const g = this.spritePixelArray[index + 1];
 
+        p.remapColor = PIXI.utils.hex2string(
+          PIXI.utils.rgb2hex([r / 255, g / 255, 0])
+        );
+
+        if (!p.owner) return;
+        p.targetColor = p.owner.color;
+        console.log({ p });
+
         // const indexColorHex = PIXI.utils.string2hex(indexColorStr);
         // const [r, g] = PIXI.utils.hex2rgb(indexColorHex);
         const colorMapIndex = (r + g * 256) * 4;
@@ -139,11 +151,14 @@ export class MapViewport extends Viewport {
         this.colorMapPixels[colorMapIndex] = or * 256;
         this.colorMapPixels[colorMapIndex + 1] = og * 256;
         this.colorMapPixels[colorMapIndex + 2] = ob * 256;
-        console.log({
-          p: { x: p.x, y: p.y, o: p.owner.id, r, g },
-          to: { r: or * 256, g: or * 256, b: or * 256 },
-        });
+        // console.log({
+        //   p: { x: p.x, y: p.y, o: p.owner.id, r, g },
+        //   to: { r: or * 256, g: or * 256, b: or * 256 },
+        // });
       });
+    console.log({
+      finished: Array.from(data().provinces.values()).slice(0, 10),
+    });
 
     const colorMap = PIXI.Texture.fromBuffer(this.colorMapPixels, 256, 256);
     // this.addChild(new PIXI.Sprite(colorMap));
@@ -177,16 +192,20 @@ export class MapViewport extends Viewport {
     return filters;
   }
 
-  private getProvinceIdFromPoint(position: PIXI.Point): string {
+  private getProvinceIdFromPoint(
+    position: PIXI.Point,
+    dataArray?: Uint8Array
+  ): string {
     const index =
       (Math.floor(position.y) * this.sprite.width + Math.floor(position.x)) * 4;
 
+    const dataSource = dataArray ?? this.provincePixelArray;
     //プロヴィンスIDに変換
     const provinceId = PIXI.utils.hex2string(
       PIXI.utils.rgb2hex([
-        this.spritePixelArray[index + 0] / 255,
-        this.spritePixelArray[index + 1] / 255,
-        this.spritePixelArray[index + 2] / 255,
+        dataSource[index + 0] / 255,
+        dataSource[index + 1] / 255,
+        dataSource[index + 2] / 255,
       ])
     );
     return provinceId;
@@ -217,16 +236,16 @@ export class MapViewport extends Viewport {
     // this.addChild(this.sprite);
 
     // プロヴィンスの中心座標がおかしい場合は再計算
-    if (
-      province.x === 100 ||
-      province.y === 100 ||
-      Math.abs(province.x - position.x) > 300 ||
-      Math.abs(province.x - position.x) > 300
-    ) {
-      const { x, y } = this.calcCenter(position) as Point;
-      province.x = x;
-      province.y = y;
-    }
+    // if (
+    //   province.x === 100 ||
+    //   province.y === 100 ||
+    //   Math.abs(province.x - position.x) > 300 ||
+    //   Math.abs(province.x - position.x) > 300
+    // ) {
+    //   const { x, y } = this.calcCenter(position) as Point;
+    //   province.x = x;
+    //   province.y = y;
+    // }
     console.log('selected province', province);
     return province;
   }
@@ -234,9 +253,11 @@ export class MapViewport extends Viewport {
   private getProvinceByPoint(position: PIXI.Point): Province {
     const provinceId = this.getProvinceIdFromPoint(position);
     const provinces = data().provinces;
+
     let province = provinces.get(provinceId);
 
     if (!province) {
+      console.error('Province was not found on the given point');
       //プロビンスデータが無かったら新規作成(データを事前に用意したのでここが実行されることはないはず)
       province = new Province(provinceId);
       provinces.set(provinceId, province);
