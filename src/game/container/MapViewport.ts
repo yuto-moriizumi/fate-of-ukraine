@@ -8,6 +8,7 @@ import { Simple } from 'pixi-cull';
 import { Point } from 'pixi.js';
 import { MultiColorReplaceFilter } from '../multi-color-replace-filter/MultiColorReplaceFilter';
 import { ReducedColorMapFilter } from '../multi-color-replace-filter/ReducedColorMapFilter';
+import { hex2rgb } from '../util/Util';
 
 export class MapViewport extends Viewport {
   private static _instance: MapViewport;
@@ -134,9 +135,11 @@ export class MapViewport extends Viewport {
         const r = this.spritePixelArray[index + 0];
         const g = this.spritePixelArray[index + 1];
 
-        p.remapColor = PIXI.utils.hex2string(
-          PIXI.utils.rgb2hex([r / 255, g / 255, 0])
-        );
+        // p.remapColor = PIXI.utils.hex2string(
+        //   PIXI.utils.rgb2hex([r / 255, g / 255, 0])
+        // );
+        p.remapColor =
+          '#' + Number(r).toString(16) + Number(g).toString(16) + '00';
 
         if (!p.owner) return;
         p.targetColor = p.owner.color;
@@ -145,16 +148,30 @@ export class MapViewport extends Viewport {
         // const indexColorHex = PIXI.utils.string2hex(indexColorStr);
         // const [r, g] = PIXI.utils.hex2rgb(indexColorHex);
         const colorMapIndex = (r + g * 256) * 4;
-        const [or, og, ob] = PIXI.utils.hex2rgb(
-          PIXI.utils.string2hex(p.owner.color)
+
+        const [or, og, ob] = hex2rgb(
+          PIXI.utils.string2hex(p.owner.color).toString(16)
         );
-        this.colorMapPixels[colorMapIndex] = or * 256;
-        this.colorMapPixels[colorMapIndex + 1] = og * 256;
-        this.colorMapPixels[colorMapIndex + 2] = ob * 256;
+        this.colorMapPixels[colorMapIndex] = or;
+        this.colorMapPixels[colorMapIndex + 1] = og;
+        this.colorMapPixels[colorMapIndex + 2] = ob;
+
+        // const [or, og, ob] = PIXI.utils.hex2rgb(
+        //   PIXI.utils.string2hex(p.owner.color)
+        // );
+        // this.colorMapPixels[colorMapIndex] = or * 256;
+        // this.colorMapPixels[colorMapIndex + 1] = og * 256;
+        // this.colorMapPixels[colorMapIndex + 2] = ob * 256;
         // console.log({
         //   p: { x: p.x, y: p.y, o: p.owner.id, r, g },
         //   to: { r: or * 256, g: or * 256, b: or * 256 },
         // });
+        console.log({
+          p: p.id,
+          tChex: p.owner.color,
+          tCrgb: [or, og, ob],
+          cMPcoord: colorMapIndex,
+        });
       });
     console.log({
       finished: Array.from(data().provinces.values()).slice(0, 10),
@@ -247,6 +264,7 @@ export class MapViewport extends Viewport {
     //   province.y = y;
     // }
     console.log('selected province', province);
+    console.log('targetColor', province.owner && hex2rgb(province.owner.color));
     return province;
   }
 
