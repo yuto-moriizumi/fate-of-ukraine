@@ -6,6 +6,7 @@ import { Country } from '../../../game/data/Country';
 import { Province } from '../../../game/data/Provice';
 import { data } from '../../../game/GameManager';
 import { SAVEDATA_TYPE } from '../../../game/type/JsonType';
+import { MapViewport } from '../../../game/container/MapViewport';
 
 export default function DebugSidebar(props: {
   province: Province | undefined;
@@ -58,6 +59,11 @@ export default function DebugSidebar(props: {
       <Col xs={12} className="d-grid mb-2">
         <Button onClick={() => data().download(SAVEDATA_TYPE.EVENTDATA)}>
           イベントデータのダウンロード
+        </Button>
+      </Col>
+      <Col xs={12} className="d-grid mb-2">
+        <Button onClick={() => MapViewport.instance.generateRemapTexture()}>
+          Remapテクスチャを生成（重い）
         </Button>
       </Col>
     </Col>

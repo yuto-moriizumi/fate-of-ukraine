@@ -1,7 +1,7 @@
 import { Loader, LoaderResource } from 'pixi.js';
 
 export class ResourceLoader {
-  constructor(private readonly loader: Loader) {
+  constructor(public readonly loader: Loader) {
     this.loader = loader;
   }
 
