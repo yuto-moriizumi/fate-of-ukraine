@@ -25,10 +25,6 @@ export class SelectionScene extends Scene {
     console.log(data().events.get('donets_leaves_ukraine'));
   }
 
-  update(delta: number) {
-    super.update(delta);
-  }
-
   public play() {
     const playAs = this.selectedProvince.val.owner;
     if (playAs) GameManager.instance.loadScene(new MainScene(playAs));

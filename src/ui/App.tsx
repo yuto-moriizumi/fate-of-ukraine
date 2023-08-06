@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import { Container } from 'react-bootstrap';
 import { GameManager } from '../game/GameManager';
@@ -9,7 +9,6 @@ import MainSceneUI from './component/MainSceneUI';
 import { MainScene } from '../game/scene/MainScene';
 import EventDialog from './component/EventDialog';
 import { VisibleEvent } from '../game/event/VisibleEvent';
-import Test from './component/Test';
 
 function App() {
   const [currentScene, setCurrentScene] = useState<Scene>();

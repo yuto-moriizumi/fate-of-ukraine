@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Col, Image, Row } from 'react-bootstrap';
 import { Country } from '../../../game/data/Country';
-import { War } from '../../../game/diplomacy/War';
 import { data } from '../../../game/GameManager';
 import { BsXLg } from 'react-icons/bs';
 import WarFlagContainer from './WarFlagContainer';

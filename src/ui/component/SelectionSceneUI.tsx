@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { SelectionScene } from '../../game/scene/SelectionScene';
 import { Province } from '../../game/data/Provice';
 import DebugSidebar from './sidebar/DebugSidebar';
-import DiplomacySidebar from './sidebar/DiplomacySidebar';
 
 export default function SelectionSceneUI(props: { scene: SelectionScene }) {
   const [selectedProvince, setSelectedProvince] = useState<Province>();

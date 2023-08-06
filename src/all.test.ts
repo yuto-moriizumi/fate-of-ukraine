@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { jest } from '@jest/globals';
 import { SaveData } from './game/data/SaveData';
 import { GameManager } from './game/GameManager';
 import { Dict, EventJson, SAVEDATA_TYPE } from './game/type/JsonType';
@@ -117,7 +115,7 @@ test('イベントのロードができる', () => {
 });
 
 describe('データのダウンロード', () => {
-  window.URL.createObjectURL = jest.fn<typeof window.URL.createObjectURL>();
+  window.URL.createObjectURL = jest.fn();
 
   afterEach(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -162,6 +160,7 @@ describe('pixi.jsのテスト', () => {
   });
 
   test('国選択画面をロードできる', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (GameManager.instance.scene.val as any).onPointerDown();
     expect(GameManager.instance.scene.val).toBeInstanceOf(SelectionScene);
   });
@@ -197,7 +196,7 @@ describe('pixi.jsのテスト', () => {
     data.onLoadEnd();
     scene.pause.val = false;
     while (scene.datetime.val.isBefore(dayjs('1917-11-07 03:00'))) {
-      scene.update(1);
+      scene.update();
     }
     const event = data.events.get('russian_civilwar_begins');
     expect(event).not.toBeUndefined();
@@ -211,14 +210,14 @@ describe('pixi.jsのテスト', () => {
     expect(ADE.hasWar(data.countries.get('ABU'))).toBe(true);
     // expect()
     while (scene.datetime.val.isBefore(dayjs('1917-11-07 05:00'))) {
-      scene.update(1);
+      scene.update();
     }
     const slientEvent = data.events.get('silent');
     expect(slientEvent).toBeInstanceOf(InvisibleEvent);
     if (slientEvent == undefined) return;
     expect(slientEvent.fired).toBe(true);
     while (scene.datetime.val.isBefore(dayjs('1917-11-07 04:00'))) {
-      scene.update(1);
+      scene.update();
     }
     const slientEvent2 = data.events.get('silent2');
     expect(slientEvent2).toBeInstanceOf(InvisibleEvent);

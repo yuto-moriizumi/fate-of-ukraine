@@ -50,9 +50,9 @@ export class Country implements Serializable {
   }
 
   get enemies() {
-    return [...this.diplomacy]
-      .filter((d) => d instanceof War)
-      .map((d: War) => d.getOpponent(this));
+    return ([...this.diplomacy].filter((d) => d instanceof War) as War[]).map(
+      (d: War) => d.getOpponent(this)
+    );
   }
 
   get allies() {

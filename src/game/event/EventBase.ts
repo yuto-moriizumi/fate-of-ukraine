@@ -1,8 +1,5 @@
-import Option from './Option';
 import Condition from './condition/Condition';
-import { data } from '../GameManager';
 import { Country } from '../data/Country';
-import Effect from './effect/Effect';
 import { Dayjs } from 'dayjs';
 import { Serializable } from '../util/Serializable';
 import {
@@ -12,7 +9,6 @@ import {
   SaveDataType,
   SAVEDATA_TYPE,
 } from '../type/JsonType';
-import EffectFactory from './effect/EffectFactory';
 import ConditionFactory from './condition/ConditionFactory';
 
 export abstract class EventBase implements Serializable {

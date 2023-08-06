@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { BsXLg } from 'react-icons/bs';
-import { Division } from '../../../game/container/Division';
 import { Country } from '../../../game/data/Country';
 import { Province } from '../../../game/data/Provice';
 import { data } from '../../../game/GameManager';

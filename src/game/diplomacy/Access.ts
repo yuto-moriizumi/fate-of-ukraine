@@ -1,4 +1,4 @@
-import { DiplomacyJson, DIPLOMACY_TYPE, SaveDataType } from '../type/JsonType';
+import { DiplomacyJson, DIPLOMACY_TYPE } from '../type/JsonType';
 import { Diplomacy } from './Diplomacy';
 
 /**
@@ -18,7 +18,7 @@ export class Access extends Diplomacy {
     return Access.target_icon;
   }
 
-  toJson(as: SaveDataType): DiplomacyJson {
+  toJson(): DiplomacyJson {
     return {
       type: DIPLOMACY_TYPE.ACCESS,
       root: this._root,

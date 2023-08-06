@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Row, Col, Button, Image } from 'react-bootstrap';
 import { Province } from '../../game/data/Provice';
 import DebugSidebar from './sidebar/DebugSidebar';
 import { MainScene } from '../../game/scene/MainScene';
 import Timer from './Timer';
 import { eventHandler } from '../../game/handler/CountryPlayerHandler';
-import { Country } from '../../game/data/Country';
 import DiplomacySidebar from './sidebar/DiplomacySidebar';
 import { SIDEBAR, Sidebar } from './sidebar/sidebar';
 import ProductionSidebar from './sidebar/ProductionSidebar';
@@ -18,7 +17,7 @@ export default function MainSceneUI(props: {
 
   const [selectedProvince, setSelectedProvince] = useState<Province>();
   const [currentSidebar, setCurrentSidebar] = useState<Sidebar>(SIDEBAR.NONE);
-  const [myCountry, setMyCountry] = useState(scene.playAs);
+  const [myCountry] = useState(scene.playAs);
   const [name, setName] = useState(myCountry.name.val);
 
   const close = useCallback(() => setCurrentSidebar(SIDEBAR.NONE), []);

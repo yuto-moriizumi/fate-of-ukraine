@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Col, Image } from 'react-bootstrap';
 import { GiCrossedSwords } from 'react-icons/gi';
 import { Country } from '../../../game/data/Country';
@@ -12,7 +12,9 @@ export default function WarFlagContainer(props: {
   const { target, className } = props;
   const [diplomacy, setDiplomacy] = useState<War[]>([]);
   const update = useCallback(() => {
-    setDiplomacy(Array.from(target.diplomacy).filter((d) => d instanceof War));
+    setDiplomacy(
+      Array.from(target.diplomacy).filter((d) => d instanceof War) as War[]
+    );
     console.log('warflag updated');
   }, [target]);
   useEffect(() => {

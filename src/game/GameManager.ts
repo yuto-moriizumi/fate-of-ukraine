@@ -34,9 +34,7 @@ export class GameManager {
       }
     );
 
-    this.game.ticker.add((delta: number) => {
-      this.scene.val.update(delta);
-    });
+    this.game.ticker.add(() => this.scene.val.update());
 
     //右クリックのデフォ動作を力技で止める
     document.body.addEventListener(

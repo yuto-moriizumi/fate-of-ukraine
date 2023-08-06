@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Col, Image } from 'react-bootstrap';
 import { GiFlyingFlag } from 'react-icons/gi';
 import { Country } from '../../../game/data/Country';

@@ -40,8 +40,8 @@ export class MainScene extends Scene {
     });
   }
 
-  update(delta: number) {
-    super.update(delta);
+  update() {
+    super.update();
     if (this.pause.val) return;
     if (
       this.elapsedFrameCount % (2 ** (this.MAX_SPEED - this.speed.val) * 3) !==

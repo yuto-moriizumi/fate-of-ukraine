@@ -43,7 +43,7 @@ export class TitleScene extends Scene {
     GameManager.instance.loadScene(await SelectionScene.create());
   }
 
-  public update(delta: number) {
-    super.update(delta);
+  public update() {
+    super.update();
   }
 }

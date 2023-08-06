@@ -1,7 +1,6 @@
 import Effect from './Effect';
-import { Country } from '../../data/Country';
 import { data } from '../../GameManager';
-import { ChangeNameJson, EFFECT_TYPE, SaveDataType } from '../../type/JsonType';
+import { ChangeNameJson, EFFECT_TYPE } from '../../type/JsonType';
 
 export default class ChangeName extends Effect {
   private _country!: string;
@@ -15,7 +14,7 @@ export default class ChangeName extends Effect {
     if (this.country) this.country.name.val = this.name;
   }
 
-  public toJson(as: SaveDataType): ChangeNameJson {
+  public toJson(): ChangeNameJson {
     return {
       type: EFFECT_TYPE.CHANGE_NAME,
       country: this._country,

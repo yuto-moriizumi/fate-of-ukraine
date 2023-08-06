@@ -22,7 +22,8 @@
     "tplant": "tplant --input ./src/game/**/*.ts --output ./class.puml -A",
     "test": "jest --coverage",
     "test:coverage": "npm run test -- --coverage --silent --testLocationInResults --ci --json --outputFile=\"report.json\"",
-    "typecheck": "tsc --noEmit && echo 'Typecheck succeed!'"
+    "typecheck": "tsc --noEmit && echo 'Typecheck succeed!'",
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "eslintConfig": {
     "extends": [

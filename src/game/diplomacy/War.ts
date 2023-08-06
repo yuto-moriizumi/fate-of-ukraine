@@ -1,6 +1,4 @@
-import { Country } from '../data/Country';
-import { data } from '../GameManager';
-import { DiplomacyJson, DIPLOMACY_TYPE, SaveDataType } from '../type/JsonType';
+import { DiplomacyJson, DIPLOMACY_TYPE } from '../type/JsonType';
 import { Diplomacy } from './Diplomacy';
 
 export class War extends Diplomacy {
@@ -14,7 +12,7 @@ export class War extends Diplomacy {
     return War.target_icon;
   }
 
-  toJson(as: SaveDataType): DiplomacyJson {
+  toJson(): DiplomacyJson {
     return {
       type: DIPLOMACY_TYPE.WAR,
       root: this._root,

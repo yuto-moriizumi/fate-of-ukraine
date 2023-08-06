@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { Button, Col, Container, ProgressBar, Row } from 'react-bootstrap';
-import { BsFillDashSquareFill, BsFillPlusSquareFill } from 'react-icons/bs';
 import { MainScene } from '../../game/scene/MainScene';
 
 export default function Timer(props: { scene: MainScene }) {
