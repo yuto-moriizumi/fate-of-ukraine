@@ -6,10 +6,11 @@ import {
   MOVE_TYPE,
 } from '../data/DivisionMovement';
 import { Province } from '../data/Provice';
-import { data, GameManager, loader } from '../GameManager';
+import { data, GameManager } from '../GameManager';
 import { MainScene } from '../scene/MainScene';
 import Util from '../util/Util';
 import { MapViewport } from './MapViewport';
+import { Assets } from 'pixi.js';
 
 export class Division extends PIXI.Container {
   private static readonly WIDTH = 10;
@@ -29,8 +30,8 @@ export class Division extends PIXI.Container {
     this.interactive = true;
     this.sortableChildren = true;
 
-    loader().load(Division.ICON, (resource) => {
-      const sprite = new PIXI.Sprite(resource.texture);
+    Assets.load<PIXI.Texture>(Division.ICON).then((resource) => {
+      const sprite = new PIXI.Sprite(resource);
       sprite.anchor.set(0.5);
       this.addChild(sprite);
       sprite.scale.set(Division.WIDTH / this.width);

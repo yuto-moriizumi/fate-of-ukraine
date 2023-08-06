@@ -143,13 +143,12 @@ test('汎用オブザーバブルのテスト', () => {
   expect(myMockFn).not.lastCalledWith(1);
 });
 
-import * as PIXI from 'pixi.js-legacy';
 import { TitleScene } from './game/scene/TitleScene';
 import { SelectionScene } from './game/scene/SelectionScene';
 import { MainScene } from './game/scene/MainScene';
 import dayjs from 'dayjs';
 import { InvisibleEvent } from './game/event/InvisibleEvent';
-PIXI.settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT = false;
+// PIXI.settings.FAIL_IF_MAJOR_PERFORMANCE_CAVEAT = false;
 
 describe('pixi.jsのテスト', () => {
   GameManager.start({

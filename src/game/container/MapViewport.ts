@@ -1,12 +1,18 @@
-import { data, GameManager, loader } from '../GameManager';
+import { data, GameManager } from '../GameManager';
 import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
-import { Point, Sprite, Texture } from 'pixi.js';
+import {
+  Assets,
+  FederatedPointerEvent,
+  Point,
+  Sprite,
+  Texture,
+  utils,
+} from 'pixi.js';
 import { ReducedColorMapFilter } from '../multi-color-replace-filter/ReducedColorMapFilter';
 import { hex2rgb } from '../util/Util';
 import { EditableTexture } from '../util/Texture';
-import { InteractionEvent, utils } from 'pixi.js';
 
 const PROVINCE_TEXTURE_SRC = 'provinces.png';
 const REMAP_TEXTURE_SRC = 'remapped-provinces.png';
@@ -31,25 +37,16 @@ export class MapViewport extends Viewport {
     return this._instance;
   }
 
-  public static async create(
-    provinceRef: Observable<Province>
-  ): Promise<MapViewport> {
-    return new Promise((resolve) => {
-      loader()
-        .loader.add(PROVINCE_TEXTURE_SRC)
-        .add(REMAP_TEXTURE_SRC)
-        .add(PALETTE_TEXTURE_SRC)
-        .load((rawLoader) => {
-          resolve(
-            new MapViewport(provinceRef, {
-              province: rawLoader.resources[PROVINCE_TEXTURE_SRC]
-                .texture as Texture,
-              remap: rawLoader.resources[REMAP_TEXTURE_SRC].texture as Texture,
-              palette: rawLoader.resources[PALETTE_TEXTURE_SRC]
-                .texture as Texture,
-            })
-          );
-        });
+  public static async create(provinceRef: Observable<Province>) {
+    const assets = await Assets.load<Texture>([
+      PROVINCE_TEXTURE_SRC,
+      REMAP_TEXTURE_SRC,
+      PALETTE_TEXTURE_SRC,
+    ]);
+    return new MapViewport(provinceRef, {
+      province: assets[PROVINCE_TEXTURE_SRC],
+      remap: assets[REMAP_TEXTURE_SRC],
+      palette: assets[PALETTE_TEXTURE_SRC],
     });
   }
 
@@ -61,8 +58,15 @@ export class MapViewport extends Viewport {
       palette: Texture;
     }
   ) {
-    super();
     const { renderer } = GameManager.instance.game;
+    super({
+      screenWidth: window.innerWidth,
+      screenHeight: window.innerHeight,
+      worldWidth: 1000,
+      worldHeight: 1000,
+      events: renderer.events,
+    });
+
     const remapTexture = textures.remap;
     MapViewport._instance = this;
     this.provinceAtLeftClick = provinceRef;
@@ -126,9 +130,9 @@ export class MapViewport extends Viewport {
     return provinceId;
   }
 
-  private getClickedProvince(e: InteractionEvent) {
+  private getClickedProvince(e: FederatedPointerEvent) {
     //Uinit8Array上でのインデックスを算出
-    const position = e.data.getLocalPosition(this);
+    const position = e.getLocalPosition(this);
     const province = this.getProvinceByPoint(position);
     console.log('clicked point', position.x, position.y);
     if (!province) return; //プロヴィンスが存在しなければ何もしない

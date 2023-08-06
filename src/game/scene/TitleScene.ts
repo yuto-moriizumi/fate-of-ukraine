@@ -34,7 +34,7 @@ export class TitleScene extends Scene {
     button.position.set(renderer.width * 0.5, renderer.height * 0.6);
     this.addChild(button);
     this.interactive = true;
-    this.buttonMode = true;
+    this.cursor = 'pointer';
     this.on('pointerdown', () => this.onPointerDown());
   }
 

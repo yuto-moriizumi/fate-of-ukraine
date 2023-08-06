@@ -8,6 +8,7 @@ import { data } from '../GameManager';
 import { CountryPlayerHandler, eventHandler } from '../handler/handlers';
 import { Observable } from '../util/Observable';
 import { Scene } from './Scene';
+import { DisplayObject } from 'pixi.js';
 
 export class MainScene extends Scene {
   private map!: MapViewport;
@@ -29,7 +30,7 @@ export class MainScene extends Scene {
       this.eventHandler(e);
       console.log('mainscene');
     });
-    this.addChild(this.map);
+    this.addChild(this.map as unknown as DisplayObject);
     this.map.provinceAtRightClick.addObserver((p) => {
       if (this.selectedDivision)
         this.selectedDivision.setDestination(p, MOVE_TYPE.MOVE);

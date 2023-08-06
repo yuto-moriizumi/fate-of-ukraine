@@ -3,47 +3,39 @@ import { SaveData } from './data/SaveData';
 import type { Scene } from './scene/Scene';
 import { TitleScene } from './scene/TitleScene';
 import { Observable } from './util/Observable';
-import { ResourceLoader } from './util/ResourceLoader';
+import { Assets } from 'pixi.js';
+import { SaveDataJson } from './type/JsonType';
+
+const GAMEDATA_FILE = 'GameData.json';
+const SAVEDATA_FILE = 'SaveData.json';
+const EVENT_FILE = 'EventData.json';
 
 export class GameManager {
   private static _instance: GameManager;
   public static onLoadEnd: () => void;
-  public readonly game: PIXI.Application;
+  public readonly game: PIXI.Application<HTMLCanvasElement>;
   public readonly data = new SaveData();
   public readonly scene = new Observable<Scene>();
-  public readonly loader: ResourceLoader;
 
   public static get instance() {
     return this._instance;
   }
 
-  constructor(app: PIXI.Application) {
+  constructor(app: PIXI.Application<HTMLCanvasElement>) {
     if (GameManager.instance) {
       throw new Error('GameManager can be instantiate only once');
     }
     this.game = app;
-
-    //ゲームデータのロード
-    const GAMEDATA_FILE = 'GameData.json';
-    const SAVEDATA_FILE = 'SaveData.json';
-    const EVENT_FILE = 'EventData.json';
-    const loader = app.loader;
-    this.loader = new ResourceLoader(loader);
-    loader
-      .add(GAMEDATA_FILE)
-      .add(SAVEDATA_FILE)
-      .add(EVENT_FILE)
-      .load(() => {
-        this.data
-          .loadJson(loader.resources[GAMEDATA_FILE].data)
-          .loadJson(loader.resources[SAVEDATA_FILE].data)
-          .loadJson(loader.resources[EVENT_FILE].data);
-        console.log(this.data);
-      })
-      .onComplete.add(() => this.data.onLoadEnd());
+    Assets.resolver.basePath = './assets';
+    Assets.load<SaveDataJson>([GAMEDATA_FILE, SAVEDATA_FILE, EVENT_FILE]).then(
+      (data) => {
+        Object.values(data).forEach((d) => this.data.loadJson(d));
+        this.data.onLoadEnd();
+      }
+    );
 
     this.game.ticker.add((delta: number) => {
-      if (this.scene) this.scene.val.update(delta);
+      this.scene.val.update(delta);
     });
 
     //右クリックのデフォ動作を力技で止める
@@ -65,13 +57,11 @@ export class GameManager {
     glHeight: number;
     backgroundColor: number;
   }): void {
-    const game = new PIXI.Application({
+    const game = new PIXI.Application<HTMLCanvasElement>({
       width: params.glWidth,
       height: params.glHeight,
       backgroundColor: params.backgroundColor,
     });
-    //PIXI.ApplicationインスタンスのloaderプロパティにbaseUrlを設定
-    game.loader.baseUrl = 'assets/';
     GameManager._instance = new GameManager(game);
     //Reactに初期イベントを通知
     if (GameManager.onLoadEnd) GameManager.onLoadEnd();
@@ -90,8 +80,4 @@ export class GameManager {
 
 export const data = () => {
   return GameManager.instance.data;
-};
-
-export const loader = () => {
-  return GameManager.instance.loader;
 };

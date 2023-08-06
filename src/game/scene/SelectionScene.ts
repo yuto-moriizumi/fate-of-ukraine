@@ -4,6 +4,7 @@ import { data, GameManager } from '../GameManager';
 import { Observable } from '../util/Observable';
 import { MainScene } from './MainScene';
 import { Scene } from './Scene';
+import { DisplayObject } from 'pixi.js';
 
 export class SelectionScene extends Scene {
   private map: MapViewport;
@@ -19,7 +20,8 @@ export class SelectionScene extends Scene {
     super();
     this.map = map;
     this.selectedProvince = selectedProvince;
-    this.addChild(this.map);
+    this.addChild(this.map as unknown as DisplayObject);
+
     console.log(data().events.get('donets_leaves_ukraine'));
   }
 
