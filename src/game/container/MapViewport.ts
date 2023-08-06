@@ -2,12 +2,11 @@ import { data, GameManager, loader } from '../GameManager';
 import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
-import { Simple } from 'pixi-cull';
 import { Point, Sprite, Texture } from 'pixi.js';
 import { ReducedColorMapFilter } from '../multi-color-replace-filter/ReducedColorMapFilter';
 import { hex2rgb } from '../util/Util';
 import { EditableTexture } from '../util/Texture';
-import { Container, InteractionEvent, utils } from 'pixi.js';
+import { InteractionEvent, utils } from 'pixi.js';
 
 const PROVINCE_TEXTURE_SRC = 'provinces.png';
 const REMAP_TEXTURE_SRC = 'remapped-provinces.png';
@@ -87,21 +86,10 @@ export class MapViewport extends Viewport {
       .setZoom(INITIAL_SCALE)
       .moveCenter(3200, 500);
 
-    const cull = new Simple();
-    cull.addList(
-      (this.children as Container[])
-        .map((layer) => {
-          return layer.children;
-        })
-        .flat()
-    );
-    cull.cull(this.getVisibleBounds());
-
     this.updateMap();
 
     this.on('moved', () => {
       if (!this.dirty) return;
-      cull.cull(this.getVisibleBounds());
       this.dirty = false;
     });
 
