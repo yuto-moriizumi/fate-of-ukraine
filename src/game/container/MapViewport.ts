@@ -60,10 +60,6 @@ export class MapViewport extends Viewport {
   ) {
     const { renderer } = GameManager.instance.game;
     super({
-      screenWidth: window.innerWidth,
-      screenHeight: window.innerHeight,
-      worldWidth: 1000,
-      worldHeight: 1000,
       events: renderer.events,
     });
 
