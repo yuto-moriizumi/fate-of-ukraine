@@ -10,7 +10,7 @@ import { Observable } from '../util/Observable';
 import { Scene } from './Scene';
 
 export class MainScene extends Scene {
-  private readonly map: MapViewport;
+  private map!: MapViewport;
   public readonly playAs: Country;
   public readonly selectedProvince = new Observable<Province>();
   public readonly datetime = new Observable<dayjs.Dayjs>(
@@ -29,11 +29,13 @@ export class MainScene extends Scene {
       this.eventHandler(e);
       console.log('mainscene');
     });
-    this.map = new MapViewport(this.selectedProvince);
     this.addChild(this.map);
     this.map.provinceAtRightClick.addObserver((p) => {
       if (this.selectedDivision)
         this.selectedDivision.setDestination(p, MOVE_TYPE.MOVE);
+    });
+    MapViewport.create(this.selectedProvince).then((mv) => {
+      this.map = mv;
     });
   }
 

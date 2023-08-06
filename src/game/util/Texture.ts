@@ -1,12 +1,12 @@
-import { Texture as PixiTexture, Point, Sprite, utils } from 'pixi.js';
+import { Texture, Point, Sprite, utils } from 'pixi.js';
 import { GameManager } from '../GameManager';
 
-export class Texture {
+export class EditableTexture {
   private readonly data: Uint8Array;
   private readonly width: number;
   private readonly height: number;
 
-  constructor(texture: PixiTexture) {
+  constructor(texture: Texture) {
     this.data = GameManager.instance.game.renderer.plugins.extract.pixels(
       new Sprite(texture)
     );
@@ -29,7 +29,7 @@ export class Texture {
   }
 
   public getTexture() {
-    return PixiTexture.fromBuffer(this.data, this.width, this.height);
+    return Texture.fromBuffer(this.data, this.width, this.height);
   }
 
   /** Generate reduced colored texture, used for creating remap image */
@@ -43,7 +43,7 @@ export class Texture {
     function string2rgb(str: string) {
       return utils.hex2rgb(utils.string2hex(str));
     }
-    const remapTextue = new Texture(this.getTexture());
+    const remapTextue = new EditableTexture(this.getTexture());
     for (let i = 0; i < this.data.length; i += 4) {
       const mainColor = Array.from(this.data.slice(i, i + 3)).map(
         (v) => v / 255

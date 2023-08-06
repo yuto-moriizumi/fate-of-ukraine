@@ -1,13 +1,13 @@
-import * as PIXI from 'pixi.js';
 import { data, GameManager, loader } from '../GameManager';
 import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
 import { Simple } from 'pixi-cull';
-import { Point } from 'pixi.js';
+import { Point, Sprite, Texture } from 'pixi.js';
 import { ReducedColorMapFilter } from '../multi-color-replace-filter/ReducedColorMapFilter';
 import { hex2rgb } from '../util/Util';
-import { Texture } from '../util/Texture';
+import { EditableTexture } from '../util/Texture';
+import { Container, InteractionEvent, utils } from 'pixi.js';
 
 const PROVINCE_TEXTURE_SRC = 'provinces.png';
 const REMAP_TEXTURE_SRC = 'remapped-provinces.png';
@@ -20,82 +20,90 @@ export class MapViewport extends Viewport {
   private provinceAtLeftClick: Observable<Province>;
 
   /** province image data, which is colored uniquely for each province with using various colors */
-  private provinceTexture!: Texture;
+  private provinceTexture: EditableTexture;
   /** province image data, which is colored uniquely for each province with using reduced colors (blue color must not be included) */
-  private remapTexture!: Texture;
+  private remapTexture: EditableTexture;
   /** palette image, which is colored differently by pixels for mapping each coordinate to target colors */
-  private paletteTexture!: Texture;
+  private paletteTexture: EditableTexture;
 
-  private remapSprite!: PIXI.Sprite;
+  private remapSprite: Sprite;
 
   public static get instance(): MapViewport {
     return this._instance;
   }
 
-  constructor(provinceRef: Observable<Province>) {
+  public static async create(
+    provinceRef: Observable<Province>
+  ): Promise<MapViewport> {
+    return new Promise((resolve) => {
+      loader()
+        .loader.add(PROVINCE_TEXTURE_SRC)
+        .add(REMAP_TEXTURE_SRC)
+        .add(PALETTE_TEXTURE_SRC)
+        .load((rawLoader) => {
+          resolve(
+            new MapViewport(provinceRef, {
+              province: rawLoader.resources[PROVINCE_TEXTURE_SRC]
+                .texture as Texture,
+              remap: rawLoader.resources[REMAP_TEXTURE_SRC].texture as Texture,
+              palette: rawLoader.resources[PALETTE_TEXTURE_SRC]
+                .texture as Texture,
+            })
+          );
+        });
+    });
+  }
+
+  private constructor(
+    provinceRef: Observable<Province>,
+    textures: {
+      province: Texture;
+      remap: Texture;
+      palette: Texture;
+    }
+  ) {
     super();
+    const { renderer } = GameManager.instance.game;
+    const remapTexture = textures.remap;
     MapViewport._instance = this;
     this.provinceAtLeftClick = provinceRef;
+    this.provinceTexture = new EditableTexture(textures.province);
+    this.remapTexture = new EditableTexture(remapTexture);
+    this.remapSprite = new Sprite(remapTexture);
+    this.addChild(this.remapSprite);
+    this.paletteTexture = new EditableTexture(textures.palette);
+    const { width, height } = renderer;
+    this.drag()
+      .pinch()
+      .wheel()
+      .clampZoom({
+        maxScale: 10,
+        minScale: Math.min(
+          width / remapTexture.width,
+          height / remapTexture.height
+        ),
+      })
+      .clamp({ direction: 'all' })
+      .setZoom(INITIAL_SCALE)
+      .moveCenter(3200, 500);
 
-    loader()
-      .loader.add(PROVINCE_TEXTURE_SRC)
-      .add(REMAP_TEXTURE_SRC)
-      .add(PALETTE_TEXTURE_SRC)
-      .load((rawLoader) => {
-        const colorMap = rawLoader.resources[PALETTE_TEXTURE_SRC].texture;
-        if (!colorMap) throw new Error('Failed to load ColorMap image');
+    const cull = new Simple();
+    cull.addList(
+      (this.children as Container[])
+        .map((layer) => {
+          return layer.children;
+        })
+        .flat()
+    );
+    cull.cull(this.getVisibleBounds());
 
-        const { renderer } = GameManager.instance.game;
+    this.updateMap();
 
-        this.provinceTexture = new Texture(
-          rawLoader.resources[PROVINCE_TEXTURE_SRC].texture as PIXI.Texture
-        );
-
-        const remapTexture = rawLoader.resources[REMAP_TEXTURE_SRC]
-          .texture as PIXI.Texture;
-        this.remapTexture = new Texture(remapTexture);
-        this.remapSprite = new PIXI.Sprite(remapTexture);
-        this.addChild(this.remapSprite);
-
-        this.paletteTexture = new Texture(
-          rawLoader.resources[PALETTE_TEXTURE_SRC].texture as PIXI.Texture
-        );
-
-        const { width, height } = renderer;
-
-        this.drag()
-          .pinch()
-          .wheel()
-          .clampZoom({
-            maxScale: 10,
-            minScale: Math.min(
-              width / remapTexture.width,
-              height / remapTexture.height
-            ),
-          })
-          .clamp({ direction: 'all' })
-          .setZoom(INITIAL_SCALE)
-          .moveCenter(3200, 500);
-
-        const cull = new Simple();
-        cull.addList(
-          (this.children as PIXI.Container[])
-            .map((layer) => {
-              return layer.children;
-            })
-            .flat()
-        );
-        cull.cull(this.getVisibleBounds());
-
-        this.on('moved', () => {
-          if (this.dirty) {
-            cull.cull(this.getVisibleBounds());
-            this.dirty = false;
-          }
-        });
-
-        this.updateMap();
-      });
+    this.on('moved', () => {
+      if (!this.dirty) return;
+      cull.cull(this.getVisibleBounds());
+      this.dirty = false;
+    });
 
     this.on('click', (e) => {
       const p = this.getClickedProvince(e);
@@ -113,7 +121,7 @@ export class MapViewport extends Viewport {
       const [indexR, indexG] = this.remapTexture.getColor(new Point(p.x, p.y));
       this.paletteTexture.setColor(
         new Point(indexR, indexG),
-        hex2rgb(PIXI.utils.string2hex(p.owner.color).toString(16))
+        hex2rgb(utils.string2hex(p.owner.color).toString(16))
       );
     });
     this.remapSprite.filters = [
@@ -121,16 +129,16 @@ export class MapViewport extends Viewport {
     ];
   }
 
-  private getProvinceIdFromPoint(position: PIXI.Point): string {
+  private getProvinceIdFromPoint(position: Point): string {
     const [r, g, b] = this.provinceTexture.getColor(position);
     //プロヴィンスIDに変換
-    const provinceId = PIXI.utils.hex2string(
-      PIXI.utils.rgb2hex([r / 255, g / 255, b / 255])
+    const provinceId = utils.hex2string(
+      utils.rgb2hex([r / 255, g / 255, b / 255])
     );
     return provinceId;
   }
 
-  private getClickedProvince(e: PIXI.InteractionEvent) {
+  private getClickedProvince(e: InteractionEvent) {
     //Uinit8Array上でのインデックスを算出
     const position = e.data.getLocalPosition(this);
     const province = this.getProvinceByPoint(position);
@@ -142,7 +150,7 @@ export class MapViewport extends Viewport {
     return province;
   }
 
-  private getProvinceByPoint(position: PIXI.Point): Province {
+  private getProvinceByPoint(position: Point): Province {
     const provinceId = this.getProvinceIdFromPoint(position);
     const provinces = data().provinces;
 

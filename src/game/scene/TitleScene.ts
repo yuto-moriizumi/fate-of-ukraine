@@ -5,39 +5,15 @@ import { SelectionScene } from './SelectionScene';
 
 export class TitleScene extends Scene {
   private text!: PIXI.Text;
-  private readonly textAppealDuration: number = 150;
 
   constructor() {
     super();
     this.onResourceLoaded();
-    //onResourceLoadedは本来、Pixi.jsが提供するリソースローダがロード終わったときにリソースが呼び出される想定です。
-    //ただここでは簡便のためシーンインスタンス生成時に直接呼び出しています。
-  }
-
-  //リソースリストを作成し返却する
-  createInitialResourceList() {
-    // const assets = super.createInitialResourceList();
-    //assets.push(staticResource.Audio.Bgm.Title);
-    // assets.push(Resource.Title.Bg);
-    // assets.push(Resource.gamedata);
-    // assets.push(Resource.savedata);
-    //console.log(assets);
-    // return assets;
   }
 
   //リソースがロードされたときのコールバック
   protected onResourceLoaded(): void {
-    // GameManager.instance.game.loader.add('$Hime.png').load(setup);
-
-    // super.onResourceLoaded();
-    const resources = GameManager.instance.game.loader.resources;
     const renderer = GameManager.instance.game.renderer;
-
-    //背景
-    // const sprite = new PIXI.Sprite(resources[Resource.Title.Bg].texture);
-    // sprite.width = renderer.width;
-    // sprite.height = renderer.height;
-    // this.addChild(sprite);
 
     const text = new PIXI.Text(
       'ウクライナ人民共和国ゲーム',
@@ -68,10 +44,6 @@ export class TitleScene extends Scene {
     this.interactive = true;
     this.buttonMode = true;
     this.on('pointerdown', () => this.onPointerDown());
-
-    //セーブデータ読み込み
-    // GameManager.instance.data.load(resources[Resource.gamedata].data);
-    // GameManager.instance.data.load(resources[Resource.savedata].data);
   }
 
   private onPointerDown() {
