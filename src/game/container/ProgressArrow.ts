@@ -1,6 +1,5 @@
-import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace';
-import { Container, Graphics, ProjectionSystem } from 'pixi.js';
-import { MoveType, MOVE_TYPE } from '../data/DivisionMovement';
+import { Container, Graphics } from 'pixi.js';
+import { MoveType } from '../data/DivisionMovement';
 import { Province } from '../data/Provice';
 
 export class ProgressArrow extends Container {
