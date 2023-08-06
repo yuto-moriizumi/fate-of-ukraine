@@ -117,7 +117,7 @@ test('イベントのロードができる', () => {
 });
 
 describe('データのダウンロード', () => {
-  window.URL.createObjectURL = jest.fn();
+  window.URL.createObjectURL = jest.fn<typeof window.URL.createObjectURL>();
 
   afterEach(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
