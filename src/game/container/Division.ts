@@ -1,4 +1,3 @@
-import * as PIXI from 'pixi.js';
 import { Country } from '../data/Country';
 import {
   DivisionMovement,
@@ -10,9 +9,9 @@ import { data, GameManager } from '../GameManager';
 import { MainScene } from '../scene/MainScene';
 import Util from '../util/Util';
 import { MapViewport } from './MapViewport';
-import { Assets } from 'pixi.js';
+import { Assets, Container, Texture, Sprite } from 'pixi.js';
 
-export class Division extends PIXI.Container {
+export class Division extends Container {
   private static readonly WIDTH = 10;
   private static readonly ICON = 'Light Infantry.png';
   private _hp = 100;
@@ -30,8 +29,8 @@ export class Division extends PIXI.Container {
     this.interactive = true;
     this.sortableChildren = true;
 
-    Assets.load<PIXI.Texture>(Division.ICON).then((resource) => {
-      const sprite = new PIXI.Sprite(resource);
+    Assets.load<Texture>(Division.ICON).then((resource) => {
+      const sprite = new Sprite(resource);
       sprite.anchor.set(0.5);
       this.addChild(sprite);
       sprite.scale.set(Division.WIDTH / this.width);

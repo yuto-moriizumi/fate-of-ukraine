@@ -1,9 +1,8 @@
-import * as PIXI from 'pixi.js';
 import { SaveData } from './data/SaveData';
 import type { Scene } from './scene/Scene';
 import { TitleScene } from './scene/TitleScene';
 import { Observable } from './util/Observable';
-import { Assets } from 'pixi.js';
+import { Assets, Application } from 'pixi.js';
 import { SaveDataJson } from './type/JsonType';
 
 const GAMEDATA_FILE = 'GameData.json';
@@ -13,7 +12,7 @@ const EVENT_FILE = 'EventData.json';
 export class GameManager {
   private static _instance: GameManager;
   public static onLoadEnd: () => void;
-  public readonly game: PIXI.Application<HTMLCanvasElement>;
+  public readonly game: Application<HTMLCanvasElement>;
   public readonly data = new SaveData();
   public readonly scene = new Observable<Scene>();
 
@@ -21,7 +20,7 @@ export class GameManager {
     return this._instance;
   }
 
-  constructor(app: PIXI.Application<HTMLCanvasElement>) {
+  constructor(app: Application<HTMLCanvasElement>) {
     if (GameManager.instance) {
       throw new Error('GameManager can be instantiate only once');
     }
@@ -55,7 +54,7 @@ export class GameManager {
     glHeight: number;
     backgroundColor: number;
   }): void {
-    const game = new PIXI.Application<HTMLCanvasElement>({
+    const game = new Application<HTMLCanvasElement>({
       width: params.glWidth,
       height: params.glHeight,
       backgroundColor: params.backgroundColor,

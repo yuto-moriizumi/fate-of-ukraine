@@ -2,17 +2,10 @@ import { data, GameManager } from '../GameManager';
 import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
-import {
-  Assets,
-  FederatedPointerEvent,
-  Point,
-  Sprite,
-  Texture,
-  utils,
-} from 'pixi.js';
+import { Assets, FederatedPointerEvent, Point, Sprite, Texture } from 'pixi.js';
 import { ReducedColorMapFilter } from '../multi-color-replace-filter/ReducedColorMapFilter';
-import { hex2rgb } from '../util/Util';
 import { EditableTexture } from '../util/Texture';
+import { Color } from '../util/Color';
 
 const PROVINCE_TEXTURE_SRC = 'provinces.png';
 const REMAP_TEXTURE_SRC = 'remapped-provinces.png';
@@ -106,24 +99,17 @@ export class MapViewport extends Viewport {
   public updateMap() {
     Array.from(data().provinces.values()).forEach((p) => {
       if (!p.owner) return;
-      const [indexR, indexG] = this.remapTexture.getColor(new Point(p.x, p.y));
+      const [indexR, indexG] = this.remapTexture
+        .getColor(new Point(p.x, p.y))
+        .toUint8RgbArray();
       this.paletteTexture.setColor(
         new Point(indexR, indexG),
-        hex2rgb(utils.string2hex(p.owner.color).toString(16))
+        new Color(p.owner.color)
       );
     });
     this.remapSprite.filters = [
       new ReducedColorMapFilter(this.paletteTexture.getTexture()),
     ];
-  }
-
-  private getProvinceIdFromPoint(position: Point): string {
-    const [r, g, b] = this.provinceTexture.getColor(position);
-    //プロヴィンスIDに変換
-    const provinceId = utils.hex2string(
-      utils.rgb2hex([r / 255, g / 255, b / 255])
-    );
-    return provinceId;
   }
 
   private getClickedProvince(e: FederatedPointerEvent) {
@@ -134,12 +120,12 @@ export class MapViewport extends Viewport {
     if (!province) return; //プロヴィンスが存在しなければ何もしない
 
     console.log('selected province', province);
-    console.log('targetColor', province.owner && hex2rgb(province.owner.color));
     return province;
   }
 
   private getProvinceByPoint(position: Point): Province {
-    const provinceId = this.getProvinceIdFromPoint(position);
+    const provinceId = this.provinceTexture.getColor(position).toHex();
+    console.log({ provinceId });
     const provinces = data().provinces;
 
     let province = provinces.get(provinceId);
@@ -159,7 +145,7 @@ export class MapViewport extends Viewport {
       this.provinceTexture.generateRemapTexture()
     );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    canvas.toBlob((blob: any) => {
+    canvas.toBlob?.((blob: any) => {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'remapTexture.png';

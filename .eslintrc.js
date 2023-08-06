@@ -19,5 +19,18 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react', '@typescript-eslint'],
-  rules: { 'no-array-constructor': 'error' },
+  rules: {
+    'no-array-constructor': 'error',
+    'no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          {
+            name: 'pixi.js',
+            importNames: ['Color'],
+          },
+        ],
+      },
+    ],
+  },
 };
