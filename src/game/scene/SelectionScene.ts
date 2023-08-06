@@ -6,15 +6,20 @@ import { MainScene } from './MainScene';
 import { Scene } from './Scene';
 
 export class SelectionScene extends Scene {
-  private map!: MapViewport;
-  public readonly selectedProvince = new Observable<Province>();
+  private map: MapViewport;
+  public readonly selectedProvince;
 
-  constructor() {
+  public static async create() {
+    const selectedProvince = new Observable<Province>();
+    const mv = await MapViewport.create(selectedProvince);
+    return new SelectionScene(mv, selectedProvince);
+  }
+
+  constructor(map: MapViewport, selectedProvince: Observable<Province>) {
     super();
-    MapViewport.create(this.selectedProvince).then((mv) => {
-      this.map = mv;
-      this.addChild(this.map);
-    });
+    this.map = map;
+    this.selectedProvince = selectedProvince;
+    this.addChild(this.map);
     console.log(data().events.get('donets_leaves_ukraine'));
   }
 
