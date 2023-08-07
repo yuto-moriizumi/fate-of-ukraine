@@ -3,7 +3,7 @@ import { Province } from '../data/Provice';
 import { Viewport } from 'pixi-viewport';
 import { Observable } from '../util/Observable';
 import { Assets, FederatedPointerEvent, Point, Sprite, Texture } from 'pixi.js';
-import { ReducedColorMapFilter } from '../multi-color-replace-filter/ReducedColorMapFilter';
+import { ReducedColorMapFilter } from '../filter/ReducedColorMapFilter';
 import { EditableTexture } from '../util/Texture';
 import { Color } from '../util/Color';
 
