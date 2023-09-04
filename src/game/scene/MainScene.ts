@@ -8,36 +8,41 @@ import { data } from '../GameManager';
 import { CountryPlayerHandler, eventHandler } from '../handler/handlers';
 import { Observable } from '../util/Observable';
 import { Scene } from './Scene';
-import { DisplayObject } from 'pixi.js';
+
+const START_DATE = '1917/11/07 1:00';
 
 export class MainScene extends Scene {
-  private map!: MapViewport;
   public readonly playAs: Country;
-  public readonly selectedProvince = new Observable<Province>();
-  public readonly datetime = new Observable<dayjs.Dayjs>(
-    dayjs('1917/11/07 1:00')
-  );
+  public readonly selectedProvince: Observable<Province>;
+  public readonly datetime = new Observable<dayjs.Dayjs>(dayjs(START_DATE));
   public readonly MAX_SPEED = 5;
   public readonly speed = new Observable<number>(3);
   public readonly pause = new Observable<boolean>(true);
   public selectedDivision?: Division;
-  public eventHandler!: eventHandler;
 
-  constructor(playAs: Country) {
+  public static async create(playAs: Country) {
+    const selectedProvince = new Observable<Province>();
+    const map = await MapViewport.create(selectedProvince);
+    return new MainScene(playAs, map, selectedProvince);
+  }
+
+  constructor(
+    playAs: Country,
+    map: MapViewport,
+    selectedProvince: Observable<Province>
+  ) {
     super();
+    this.selectedProvince = selectedProvince;
     this.playAs = playAs;
-    playAs.handler = new CountryPlayerHandler(playAs, (e) => {
-      this.eventHandler(e);
-      console.log('mainscene');
-    });
-    MapViewport.create(this.selectedProvince).then((mv) => {
-      this.map = mv;
-      this.addChild(mv as unknown as DisplayObject);
-      mv.provinceAtRightClick.addObserver((p) => {
-        if (this.selectedDivision)
-          this.selectedDivision.setDestination(p, MOVE_TYPE.MOVE);
-      });
-    });
+
+    this.addChild(map);
+    map.provinceAtRightClick.addObserver((p) =>
+      this.selectedDivision?.setDestination(p, MOVE_TYPE.MOVE)
+    );
+  }
+
+  public setEventHandler(handler: eventHandler): void {
+    this.playAs.handler = new CountryPlayerHandler(this.playAs, handler);
   }
 
   update() {

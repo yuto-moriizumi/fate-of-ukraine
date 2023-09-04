@@ -24,7 +24,7 @@ export default function MainSceneUI(props: {
 
   useEffect(() => {
     scene.selectedProvince.addObserver(setSelectedProvince);
-    scene.eventHandler = onEvent;
+    scene.setEventHandler(onEvent);
     const nameObserver = () => setName(myCountry.name.val);
     myCountry.name.addObserver(nameObserver);
     return () => myCountry.name.removeObserver(nameObserver);

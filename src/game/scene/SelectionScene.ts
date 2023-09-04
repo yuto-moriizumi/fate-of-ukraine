@@ -27,6 +27,9 @@ export class SelectionScene extends Scene {
 
   public play() {
     const playAs = this.selectedProvince.val.owner;
-    if (playAs) GameManager.instance.loadScene(new MainScene(playAs));
+    if (!playAs) return;
+    MainScene.create(playAs).then((scene) =>
+      GameManager.instance.loadScene(scene)
+    );
   }
 }
