@@ -30,13 +30,13 @@ export class MainScene extends Scene {
       this.eventHandler(e);
       console.log('mainscene');
     });
-    this.addChild(this.map as unknown as DisplayObject);
-    this.map.provinceAtRightClick.addObserver((p) => {
-      if (this.selectedDivision)
-        this.selectedDivision.setDestination(p, MOVE_TYPE.MOVE);
-    });
     MapViewport.create(this.selectedProvince).then((mv) => {
       this.map = mv;
+      this.addChild(mv as unknown as DisplayObject);
+      mv.provinceAtRightClick.addObserver((p) => {
+        if (this.selectedDivision)
+          this.selectedDivision.setDestination(p, MOVE_TYPE.MOVE);
+      });
     });
   }
 
