@@ -5,6 +5,22 @@ import App from './ui/App';
 import reportWebVitals from './ui/reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { GameManager } from './game/GameManager';
+import { create } from 'zustand';
+
+export type Count = {
+  count: number;
+  increaseCount: () => void;
+  resetCount: () => void;
+};
+
+export const useStore = create<Count>((set) => ({
+  count: 0,
+  increaseCount: () =>
+    set((state) => {
+      return { count: state.count + 1 };
+    }),
+  resetCount: () => set({ count: 0 }),
+}));
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -21,9 +37,12 @@ root.render(
 reportWebVitals();
 
 window.onload = () => {
-  GameManager.start({
-    glWidth: document.body.offsetWidth,
-    glHeight: document.body.offsetHeight,
-    backgroundColor: 0x222222,
-  });
+  GameManager.start(
+    {
+      glWidth: document.body.offsetWidth,
+      glHeight: document.body.offsetHeight,
+      backgroundColor: 0x222222,
+    },
+    useStore
+  );
 };

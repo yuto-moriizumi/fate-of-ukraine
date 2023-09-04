@@ -3,6 +3,7 @@ import { Row, Col, Button } from 'react-bootstrap';
 import { SelectionScene } from '../../game/scene/SelectionScene';
 import { Province } from '../../game/data/Provice';
 import DebugSidebar from './sidebar/DebugSidebar';
+import { useStore } from '../..';
 
 export default function SelectionSceneUI(props: { scene: SelectionScene }) {
   const [selectedProvince, setSelectedProvince] = useState<Province>();
@@ -11,6 +12,8 @@ export default function SelectionSceneUI(props: { scene: SelectionScene }) {
   useEffect(() => {
     props.scene.selectedProvince.addObserver(setSelectedProvince);
   }, []);
+
+  const count = useStore((state) => state.count);
 
   return (
     <>
@@ -34,7 +37,7 @@ export default function SelectionSceneUI(props: { scene: SelectionScene }) {
             className="ms-auto"
             onClick={() => setIsDebugSidebarOpen(!isDebugSidebarOpen)}
           >
-            DEBUG
+            DEBUG {count}
           </Button>
         </Col>
         <Col className="d-flex align-items-center" xs="auto">

@@ -89,6 +89,7 @@ export class MapViewport extends Viewport {
     this.on('click', (e) => {
       const p = this.getClickedProvince(e);
       if (p) this.provinceAtLeftClick.val = p;
+      GameManager.instance.store.getState().increaseCount();
     });
     this.on('rightclick', (e) => {
       const p = this.getClickedProvince(e);
