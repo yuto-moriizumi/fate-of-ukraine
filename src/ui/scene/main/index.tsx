@@ -1,52 +1,38 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Row, Col, Button, Image } from 'react-bootstrap';
-import { Province } from '../../game/data/Provice';
-import DebugSidebar from './sidebar/DebugSidebar';
-import { MainScene } from '../../game/scene/MainScene';
-import Timer from './Timer';
-import { eventHandler } from '../../game/handler/CountryPlayerHandler';
-import DiplomacySidebar from './sidebar/DiplomacySidebar';
-import { SIDEBAR, Sidebar } from './sidebar/sidebar';
-import ProductionSidebar from './sidebar/ProductionSidebar';
+import DebugSidebar from '../../component/DebugSidebar';
+import Timer from './component/Timer';
+import DiplomacySidebar from './component/sidebar/DiplomacySidebar';
+import { SIDEBAR, Sidebar } from './component/sidebar/sidebar';
+import ProductionSidebar from './component/sidebar/ProductionSidebar';
+import { useStore } from '../../../store';
 
-export default function MainSceneUI(props: {
-  scene: MainScene;
-  onEvent: eventHandler;
-}) {
-  const { scene, onEvent } = props;
-
-  const [selectedProvince, setSelectedProvince] = useState<Province>();
+export default function MainSceneUI() {
   const [currentSidebar, setCurrentSidebar] = useState<Sidebar>(SIDEBAR.NONE);
-  const [myCountry] = useState(scene.playAs);
-  const [name, setName] = useState(myCountry.name.val);
+  const root = useStore((state) => state.country.root.val);
+  const province = useStore((state) => state.province.val);
 
   const close = useCallback(() => setCurrentSidebar(SIDEBAR.NONE), []);
 
   useEffect(() => {
-    scene.selectedProvince.addObserver(setSelectedProvince);
-    scene.setEventHandler(onEvent);
-    const nameObserver = () => setName(myCountry.name.val);
-    myCountry.name.addObserver(nameObserver);
-    return () => myCountry.name.removeObserver(nameObserver);
-  }, []);
+    province?.owner !== undefined && setCurrentSidebar(SIDEBAR.DIPLOMACY);
+  }, [province]);
 
-  useEffect(() => {
-    selectedProvince?.owner !== undefined &&
-      setCurrentSidebar(SIDEBAR.DIPLOMACY);
-  }, [myCountry, selectedProvince]);
+  // MainSceneではrootには必ず値があるが、ここで型保障する
+  if (!root) return null;
 
   const sidebar = () => {
     switch (currentSidebar) {
       case SIDEBAR.DEBUG:
-        return <DebugSidebar province={selectedProvince} close={close} />;
+        return <DebugSidebar province={province} close={close} />;
       case SIDEBAR.PRODUCTION:
-        return <ProductionSidebar country={myCountry} close={close} />;
+        return <ProductionSidebar country={root} close={close} />;
       case SIDEBAR.DIPLOMACY:
-        if (selectedProvince?.owner)
+        if (province?.owner)
           return (
             <DiplomacySidebar
-              root={myCountry}
-              target={selectedProvince.owner}
+              root={root}
+              target={province.owner}
               close={close}
             />
           );
@@ -65,12 +51,12 @@ export default function MainSceneUI(props: {
       <Row style={{ height: '10%' }} className="clickable bg-danger">
         <Col xs="auto" className="mh-100">
           <Image
-            src={'./assets/flags/' + scene.playAs.id + '.png'}
+            src={'./assets/flags/' + root.id + '.png'}
             className="mh-100"
           />
         </Col>
         <Col className="d-flex align-items-center">
-          <h1>{name}</h1>
+          <h1>{root.name}</h1>
         </Col>
         <Col className="d-flex align-items-center" xs="auto">
           <Button
@@ -91,7 +77,7 @@ export default function MainSceneUI(props: {
           </Button>
         </Col>
         <Col className="d-flex align-items-center" xs="auto">
-          <Timer scene={scene}></Timer>
+          <Timer />
         </Col>
       </Row>
       <Row style={{ height: '85%' }}>{sidebar()}</Row>

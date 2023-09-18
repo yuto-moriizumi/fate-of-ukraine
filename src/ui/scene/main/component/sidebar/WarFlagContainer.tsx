@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Col, Image } from 'react-bootstrap';
 import { GiCrossedSwords } from 'react-icons/gi';
-import { Country } from '../../../game/data/Country';
-import { War } from '../../../game/diplomacy/War';
-import { data } from '../../../game/GameManager';
+import { Country } from '../../../../../game/data/Country';
+import { War } from '../../../../../game/diplomacy/War';
+import { data } from '../../../../../game/GameManager';
 
 export default function WarFlagContainer(props: {
   target: Country;

@@ -5,8 +5,7 @@ import {
   MOVE_TYPE,
 } from '../data/DivisionMovement';
 import { Province } from '../data/Provice';
-import { data, GameManager } from '../GameManager';
-import { MainScene } from '../scene/MainScene';
+import { data } from '../GameManager';
 import Util from '../util/Util';
 import { MapViewport } from './MapViewport';
 import { Assets, Container, Texture, Sprite } from 'pixi.js';
@@ -38,9 +37,10 @@ export class Division extends Container {
     });
 
     this.on('click', () => {
-      const scene = GameManager.instance.scene;
-      if (!(scene.val instanceof MainScene)) return;
-      scene.val.selectedDivision = this;
+      // const scene = GameManager.instance.scene;
+      // if (!(scene.val instanceof MainScene)) return;
+      // scene.val.selectedDivision = this;
+      // TODO: 師団選択をストアに突っ込む
     });
   }
 

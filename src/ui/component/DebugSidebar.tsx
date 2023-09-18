@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { BsXLg } from 'react-icons/bs';
-import { Country } from '../../../game/data/Country';
-import { Province } from '../../../game/data/Provice';
-import { data } from '../../../game/GameManager';
-import { SAVEDATA_TYPE } from '../../../game/type/JsonType';
-import { MapViewport } from '../../../game/container/MapViewport';
+import { Country } from '../../game/data/Country';
+import { Province } from '../../game/data/Provice';
+import { data } from '../../game/GameManager';
+import { SAVEDATA_TYPE } from '../../game/type/JsonType';
+import { MapViewport } from '../../game/container/MapViewport';
 
 export default function DebugSidebar(props: {
   province: Province | undefined;
@@ -26,7 +26,7 @@ export default function DebugSidebar(props: {
           <BsXLg />
         </Button>
       </Row>
-      <p>{selectedCountry?.name.val}</p>
+      <p>{selectedCountry?.name}</p>
       <Col xs={12} className="d-grid mb-2">
         <Button onClick={() => setSelectedCountry(province?.owner)}>
           この国を選択

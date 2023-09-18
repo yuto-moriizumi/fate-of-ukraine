@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Col, Image } from 'react-bootstrap';
 import { FaRoad } from 'react-icons/fa';
-import { Country } from '../../../game/data/Country';
-import { Access } from '../../../game/diplomacy/Access';
-import { data } from '../../../game/GameManager';
+import { Country } from '../../../../../game/data/Country';
+import { Access } from '../../../../../game/diplomacy/Access';
+import { data } from '../../../../../game/GameManager';
 
 export default function AccessFlagsContainer(props: {
   target: Country;

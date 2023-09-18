@@ -11,7 +11,7 @@ export default class ChangeName extends Effect {
   }
 
   public activate() {
-    if (this.country) this.country.name.val = this.name;
+    if (this.country) this.country.name = this.name;
   }
 
   public toJson(): ChangeNameJson {

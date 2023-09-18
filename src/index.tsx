@@ -5,6 +5,7 @@ import App from './ui/App';
 import reportWebVitals from './ui/reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { GameManager } from './game/GameManager';
+import { useStore } from './store';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -21,9 +22,12 @@ root.render(
 reportWebVitals();
 
 window.onload = () => {
-  GameManager.start({
-    glWidth: document.body.offsetWidth,
-    glHeight: document.body.offsetHeight,
-    backgroundColor: 0x222222,
-  });
+  GameManager.start(
+    {
+      glWidth: document.body.offsetWidth,
+      glHeight: document.body.offsetHeight,
+      backgroundColor: 0x222222,
+    },
+    useStore
+  );
 };
