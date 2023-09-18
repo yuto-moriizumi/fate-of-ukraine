@@ -6,20 +6,25 @@ import reportWebVitals from './ui/reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { GameManager } from './game/GameManager';
 import { create } from 'zustand';
+import { Scene } from './game/scene/Scene';
+import { produce } from 'immer';
 
 export type Count = {
-  count: number;
-  increaseCount: () => void;
-  resetCount: () => void;
+  scene: {
+    val?: Scene;
+    set: (val: Scene) => void;
+  };
 };
 
-export const useStore = create<Count>((set) => ({
-  count: 0,
-  increaseCount: () =>
-    set((state) => {
-      return { count: state.count + 1 };
-    }),
-  resetCount: () => set({ count: 0 }),
+export const useStore = create<Count>((update) => ({
+  scene: {
+    set: (scene: Scene) =>
+      update(
+        produce((state: Count) => {
+          state.scene.val = scene;
+        })
+      ),
+  },
 }));
 
 const root = ReactDOM.createRoot(

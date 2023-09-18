@@ -1,7 +1,6 @@
 import { SaveData } from './data/SaveData';
 import type { Scene } from './scene/Scene';
 import { TitleScene } from './scene/TitleScene';
-import { Observable } from './util/Observable';
 import { Assets, Application } from 'pixi.js';
 import { SaveDataJson } from './type/JsonType';
 import { StoreApi, UseBoundStore } from 'zustand';
@@ -16,8 +15,8 @@ export class GameManager {
   public static onLoadEnd: () => void;
   public readonly game: Application<HTMLCanvasElement>;
   public readonly data = new SaveData();
-  public readonly scene = new Observable<Scene>();
   public readonly store: UseBoundStore<StoreApi<Count>>;
+  private scene?: Scene;
 
   public static get instance() {
     return this._instance;
@@ -40,7 +39,7 @@ export class GameManager {
       }
     );
 
-    this.game.ticker.add(() => this.scene.val.update());
+    this.game.ticker.add(() => this.scene?.update());
 
     //右クリックのデフォ動作を力技で止める
     document.body.addEventListener(
@@ -77,11 +76,12 @@ export class GameManager {
   }
 
   public loadScene(newScene: Scene): void {
-    if (this.scene.val) {
-      this.scene.val.destroy();
+    if (this.scene) {
+      this.scene.destroy();
     }
-    this.scene.val = newScene;
+    this.scene = newScene;
     this.game.stage.addChild(newScene);
+    this.store.getState().scene.set(newScene);
   }
 }
 

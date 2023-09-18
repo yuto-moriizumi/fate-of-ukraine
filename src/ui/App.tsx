@@ -1,45 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { Container } from 'react-bootstrap';
-import { GameManager } from '../game/GameManager';
-import { Scene } from '../game/scene/Scene';
 import { SelectionScene } from '../game/scene/SelectionScene';
 import SelectionSceneUI from './component/SelectionSceneUI';
 import MainSceneUI from './component/MainSceneUI';
 import { MainScene } from '../game/scene/MainScene';
 import EventDialog from './component/EventDialog';
 import { VisibleEvent } from '../game/event/VisibleEvent';
+import { useStore } from '..';
 
 function App() {
-  const [currentScene, setCurrentScene] = useState<Scene>();
   const [events, setEvents] = useState<VisibleEvent[]>([]);
-
-  const addSceneObserver = () => {
-    GameManager.instance.scene.addObserver(setCurrentScene);
-  };
-
-  useEffect(() => {
-    if (!GameManager.instance)
-      // ゲームのロードが終わって居ない場合はコールバック関数を追加
-      GameManager.onLoadEnd = addSceneObserver;
-    else addSceneObserver(); // ゲームのロードが終わっている場合は即座にオブザーバを追加
-  }, []);
-
-  const addEvent = (e: VisibleEvent) => {
-    setEvents([...events, e]);
-    console.log('App');
-    console.log(e);
-    console.log(events);
-  };
+  const scene = useStore((state) => state.scene.val);
 
   return (
     <>
       <Container fluid className="h-100">
-        {currentScene instanceof SelectionScene ? (
-          <SelectionSceneUI scene={currentScene} />
+        {scene instanceof SelectionScene ? (
+          <SelectionSceneUI scene={scene} />
         ) : (
-          currentScene instanceof MainScene && (
-            <MainSceneUI scene={currentScene} onEvent={addEvent} />
+          scene instanceof MainScene && (
+            <MainSceneUI
+              scene={scene}
+              onEvent={(e) => setEvents([...events, e])}
+            />
           )
         )}
       </Container>
