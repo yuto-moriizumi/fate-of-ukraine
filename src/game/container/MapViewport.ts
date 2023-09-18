@@ -15,7 +15,6 @@ const INITIAL_SCALE = 5;
 export class MapViewport extends Viewport {
   private static _instance: MapViewport;
   public readonly provinceAtRightClick = new Observable<Province>();
-  private provinceAtLeftClick: Observable<Province>;
 
   /** province image data, which is colored uniquely for each province with using various colors */
   private provinceTexture: EditableTexture;
@@ -30,40 +29,32 @@ export class MapViewport extends Viewport {
     return this._instance;
   }
 
-  public static async create(provinceRef: Observable<Province>) {
+  public static async create() {
     const assets = await Assets.load<Texture>([
       PROVINCE_TEXTURE_SRC,
       REMAP_TEXTURE_SRC,
       PALETTE_TEXTURE_SRC,
     ]);
-    return new MapViewport(provinceRef, {
-      province: assets[PROVINCE_TEXTURE_SRC],
-      remap: assets[REMAP_TEXTURE_SRC],
-      palette: assets[PALETTE_TEXTURE_SRC],
-    });
+    return new MapViewport(
+      assets[PROVINCE_TEXTURE_SRC],
+      assets[REMAP_TEXTURE_SRC],
+      assets[PALETTE_TEXTURE_SRC]
+    );
   }
 
-  private constructor(
-    provinceRef: Observable<Province>,
-    textures: {
-      province: Texture;
-      remap: Texture;
-      palette: Texture;
-    }
-  ) {
+  private constructor(province: Texture, remap: Texture, palette: Texture) {
     const { renderer } = GameManager.instance.game;
     super({
       events: renderer.events,
     });
 
-    const remapTexture = textures.remap;
+    const remapTexture = remap;
     MapViewport._instance = this;
-    this.provinceAtLeftClick = provinceRef;
-    this.provinceTexture = new EditableTexture(textures.province);
+    this.provinceTexture = new EditableTexture(province);
     this.remapTexture = new EditableTexture(remapTexture);
     this.remapSprite = new Sprite(remapTexture);
     this.addChild(this.remapSprite);
-    this.paletteTexture = new EditableTexture(textures.palette);
+    this.paletteTexture = new EditableTexture(palette);
     const { width, height } = renderer;
     this.drag()
       .pinch()
@@ -88,7 +79,7 @@ export class MapViewport extends Viewport {
 
     this.on('click', (e) => {
       const p = this.getClickedProvince(e);
-      if (p) this.provinceAtLeftClick.val = p;
+      if (p) GameManager.instance.store.getState().province.set(p);
     });
     this.on('rightclick', (e) => {
       const p = this.getClickedProvince(e);

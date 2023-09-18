@@ -1,16 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { SelectionScene } from '../../game/scene/SelectionScene';
-import { Province } from '../../game/data/Provice';
 import DebugSidebar from './sidebar/DebugSidebar';
+import { useStore } from '../..';
 
 export default function SelectionSceneUI(props: { scene: SelectionScene }) {
-  const [selectedProvince, setSelectedProvince] = useState<Province>();
   const [isDebugSidebarOpen, setIsDebugSidebarOpen] = useState(false);
-
-  useEffect(() => {
-    props.scene.selectedProvince.addObserver(setSelectedProvince);
-  }, []);
+  const province = useStore((state) => state.province.val);
 
   return (
     <>
@@ -19,14 +15,14 @@ export default function SelectionSceneUI(props: { scene: SelectionScene }) {
           <img
             src={
               './assets/flags/' +
-              (selectedProvince ? selectedProvince.owner?.id : 'Rebels') +
+              (province ? province.owner?.id : 'Rebels') +
               '.png'
             }
             className="mh-100"
           ></img>
         </Col>
         <Col className="d-flex align-items-center">
-          <h1>{selectedProvince?.owner?.name.val}</h1>
+          <h1>{province?.owner?.name.val}</h1>
         </Col>
         <Col className="d-flex align-items-center" xs="auto">
           <Button
@@ -50,7 +46,7 @@ export default function SelectionSceneUI(props: { scene: SelectionScene }) {
       <Row style={{ height: '85%' }}>
         {isDebugSidebarOpen && (
           <DebugSidebar
-            province={selectedProvince}
+            province={province}
             close={() => setIsDebugSidebarOpen(false)}
           />
         )}

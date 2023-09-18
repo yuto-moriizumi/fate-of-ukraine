@@ -4,7 +4,7 @@ import { TitleScene } from './scene/TitleScene';
 import { Assets, Application } from 'pixi.js';
 import { SaveDataJson } from './type/JsonType';
 import { StoreApi, UseBoundStore } from 'zustand';
-import { Count } from '..';
+import { Store } from '..';
 
 const GAMEDATA_FILE = 'GameData.json';
 const SAVEDATA_FILE = 'SaveData.json';
@@ -15,7 +15,7 @@ export class GameManager {
   public static onLoadEnd: () => void;
   public readonly game: Application<HTMLCanvasElement>;
   public readonly data = new SaveData();
-  public readonly store: UseBoundStore<StoreApi<Count>>;
+  public readonly store: UseBoundStore<StoreApi<Store>>;
   private scene?: Scene;
 
   public static get instance() {
@@ -24,7 +24,7 @@ export class GameManager {
 
   constructor(
     app: Application<HTMLCanvasElement>,
-    store: UseBoundStore<StoreApi<Count>>
+    store: UseBoundStore<StoreApi<Store>>
   ) {
     if (GameManager.instance) {
       throw new Error('GameManager can be instantiate only once');
@@ -61,7 +61,7 @@ export class GameManager {
       glHeight: number;
       backgroundColor: number;
     },
-    store: UseBoundStore<StoreApi<Count>>
+    store: UseBoundStore<StoreApi<Store>>
   ): void {
     const game = new Application<HTMLCanvasElement>({
       width: params.glWidth,
@@ -85,6 +85,5 @@ export class GameManager {
   }
 }
 
-export const data = () => {
-  return GameManager.instance.data;
-};
+export const data = () => GameManager.instance.data;
+export const getStore = () => GameManager.instance.store.getState();

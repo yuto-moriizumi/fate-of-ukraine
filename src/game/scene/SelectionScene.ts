@@ -1,32 +1,25 @@
 import { MapViewport } from '../container/MapViewport';
-import type { Province } from '../data/Provice';
-import { data, GameManager } from '../GameManager';
-import { Observable } from '../util/Observable';
+import { data, GameManager, getStore } from '../GameManager';
 import { MainScene } from './MainScene';
 import { Scene } from './Scene';
 import { DisplayObject } from 'pixi.js';
 
 export class SelectionScene extends Scene {
   private map: MapViewport;
-  public readonly selectedProvince;
 
   public static async create() {
-    const selectedProvince = new Observable<Province>();
-    const mv = await MapViewport.create(selectedProvince);
-    return new SelectionScene(mv, selectedProvince);
+    return new SelectionScene(await MapViewport.create());
   }
 
-  constructor(map: MapViewport, selectedProvince: Observable<Province>) {
+  constructor(map: MapViewport) {
     super();
     this.map = map;
-    this.selectedProvince = selectedProvince;
     this.addChild(this.map as unknown as DisplayObject);
-
     console.log(data().events.get('donets_leaves_ukraine'));
   }
 
   public play() {
-    const playAs = this.selectedProvince.val.owner;
+    const playAs = getStore().province.val?.owner;
     if (!playAs) return;
     MainScene.create(playAs).then((scene) =>
       GameManager.instance.loadScene(scene)

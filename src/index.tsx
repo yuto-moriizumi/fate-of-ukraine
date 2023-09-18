@@ -8,24 +8,32 @@ import { GameManager } from './game/GameManager';
 import { create } from 'zustand';
 import { Scene } from './game/scene/Scene';
 import { produce } from 'immer';
+import { Province } from './game/data/Provice';
 
-export type Count = {
-  scene: {
-    val?: Scene;
-    set: (val: Scene) => void;
-  };
+type SettableValue<T> = {
+  val?: T;
+  set: (val: T) => void;
 };
 
-export const useStore = create<Count>((update) => ({
-  scene: {
-    set: (scene: Scene) =>
+export type Store = {
+  scene: SettableValue<Scene>;
+  province: SettableValue<Province>;
+};
+
+export const useStore = create<Store>((update) => {
+  const getSetterObject = (key: keyof Store) => ({
+    set: (val: Store[typeof key]['val']) =>
       update(
-        produce((state: Count) => {
-          state.scene.val = scene;
+        produce((state: Store) => {
+          state[key].val = val;
         })
       ),
-  },
-}));
+  });
+  return {
+    scene: getSetterObject('scene'),
+    province: getSetterObject('province'),
+  };
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
