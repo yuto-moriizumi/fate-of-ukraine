@@ -85,7 +85,7 @@ test('国データのロードができる', () => {
   const data = new SaveData(testCountries);
   const countries = data.countries;
   expect(countries.get('ABU')).not.toBeNull();
-  expect(countries.get('ABU')?.name.val).toBe(testCountry.ABU.name);
+  expect(countries.get('ABU')?.name).toBe(testCountry.ABU.name);
   expect(data.toJson(SAVEDATA_TYPE.GAMEDATA).countries).toStrictEqual(
     testCountry
   );

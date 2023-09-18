@@ -7,22 +7,19 @@ import { useStore } from '../..';
 export default function SelectionSceneUI(props: { scene: SelectionScene }) {
   const [isDebugSidebarOpen, setIsDebugSidebarOpen] = useState(false);
   const province = useStore((state) => state.province.val);
+  const target = useStore((state) => state.country.target.val);
 
   return (
     <>
       <Row style={{ height: '10%' }} className="clickable bg-danger">
         <Col xs="auto" className="mh-100">
           <img
-            src={
-              './assets/flags/' +
-              (province ? province.owner?.id : 'Rebels') +
-              '.png'
-            }
+            src={'./assets/flags/' + (target?.id ?? 'Rebels') + '.png'}
             className="mh-100"
           ></img>
         </Col>
         <Col className="d-flex align-items-center">
-          <h1>{province?.owner?.name.val}</h1>
+          <h1>{target?.name}</h1>
         </Col>
         <Col className="d-flex align-items-center" xs="auto">
           <Button

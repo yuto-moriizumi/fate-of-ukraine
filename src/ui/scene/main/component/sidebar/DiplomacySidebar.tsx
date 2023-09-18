@@ -6,6 +6,7 @@ import { BsXLg } from 'react-icons/bs';
 import WarFlagContainer from './WarFlagContainer';
 import AllyFlagContainer from './AllyFlagContainer';
 import AccessFlagsContainer from './AccessFlagsContainer';
+
 export default function DiplomacySidebar(props: {
   root: Country;
   target: Country;
@@ -13,24 +14,21 @@ export default function DiplomacySidebar(props: {
 }) {
   const { root, target, close } = props;
   const [rootHasWar, setRootHasWar] = useState(false);
-  const [targetName, setTargetName] = useState(target.name.val);
+
   useEffect(() => {
     const diplomacy = data().diplomacy;
     const observer = () => setRootHasWar(root.hasWar(target));
     diplomacy.addObserver(observer);
     observer();
-    const nameObserver = () => setTargetName(target.name.val);
-    target.name.addObserver(nameObserver);
     return () => {
       diplomacy.removeObserver(observer);
-      target.name.removeObserver(nameObserver);
     };
   }, []);
-  useEffect(() => setTargetName(target.name.val), [target]);
+  if (!target) return null;
   return (
     <Col className="bg-warning clickable" xs={2}>
       <Row>
-        <h2 className="col-auto">{targetName}</h2>
+        <h2 className="col-auto">{target.name}</h2>
         <Button
           variant="danger"
           className="col-auto ms-auto m-1 py-2"

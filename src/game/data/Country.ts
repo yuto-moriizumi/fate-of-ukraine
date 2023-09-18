@@ -12,7 +12,6 @@ import Util from '../util/Util';
 import { Access } from '../diplomacy/Access';
 import { Alliance } from '../diplomacy/Alliance';
 import { Province } from './Provice';
-import { Observable } from '../util/Observable';
 
 export class Country implements Serializable {
   /**
@@ -22,7 +21,7 @@ export class Country implements Serializable {
    * @memberof Country
    */
   public readonly id!: string;
-  public readonly name = new Observable<string>('');
+  public name = '';
   private _color!: string;
   private _money = 0;
   public readonly divisions = new Set<Division>();
@@ -175,7 +174,7 @@ export class Country implements Serializable {
     if (this.hasWar(target)) return;
     data().diplomacy.add(new War(this.id, target.id));
     console.log(
-      `${this.name.val} declared war against ${target.name.val}, call allies? ${callAllies}`
+      `${this.name} declared war against ${target.name}, call allies? ${callAllies}`
     );
     if (callAllies)
       this.allies.forEach((ally) => ally.declareWar(target, false)); //味方同盟国が参戦
@@ -195,7 +194,7 @@ export class Country implements Serializable {
   public toJson(as: SaveDataType): CountryJson | undefined {
     switch (as) {
       case SAVEDATA_TYPE.GAMEDATA:
-        return { name: this.name.val, color: this._color };
+        return { name: this.name, color: this._color };
       case SAVEDATA_TYPE.SAVEDATA:
         return { money: this._money };
     }
@@ -204,7 +203,7 @@ export class Country implements Serializable {
 
   public loadJson(json: CountryJson) {
     if ('name' in json) {
-      this.name.val = json.name;
+      this.name = json.name;
       this._color = json.color;
     } else if ('money' in json) this._money = json.money;
     return this;

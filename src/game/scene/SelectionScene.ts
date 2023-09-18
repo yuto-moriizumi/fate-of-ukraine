@@ -21,8 +21,7 @@ export class SelectionScene extends Scene {
   public play() {
     const playAs = getStore().province.val?.owner;
     if (!playAs) return;
-    MainScene.create(playAs).then((scene) =>
-      GameManager.instance.loadScene(scene)
-    );
+    getStore().country.root.set(playAs);
+    MainScene.create().then((scene) => GameManager.instance.loadScene(scene));
   }
 }

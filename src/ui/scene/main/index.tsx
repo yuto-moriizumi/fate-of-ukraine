@@ -11,33 +11,29 @@ import { useStore } from '../../..';
 export default function MainSceneUI(props: { scene: MainScene }) {
   const { scene } = props;
   const [currentSidebar, setCurrentSidebar] = useState<Sidebar>(SIDEBAR.NONE);
-  const [myCountry] = useState(scene.playAs);
-  const [name, setName] = useState(myCountry.name.val);
+  const root = useStore((state) => state.country.root.val);
   const province = useStore((state) => state.province.val);
 
   const close = useCallback(() => setCurrentSidebar(SIDEBAR.NONE), []);
 
   useEffect(() => {
-    const nameObserver = () => setName(myCountry.name.val);
-    myCountry.name.addObserver(nameObserver);
-    return () => myCountry.name.removeObserver(nameObserver);
-  }, []);
-
-  useEffect(() => {
     province?.owner !== undefined && setCurrentSidebar(SIDEBAR.DIPLOMACY);
-  }, [myCountry, province]);
+  }, [province]);
+
+  // MainSceneではrootには必ず値があるが、ここで型保障する
+  if (!root) return null;
 
   const sidebar = () => {
     switch (currentSidebar) {
       case SIDEBAR.DEBUG:
         return <DebugSidebar province={province} close={close} />;
       case SIDEBAR.PRODUCTION:
-        return <ProductionSidebar country={myCountry} close={close} />;
+        return <ProductionSidebar country={root} close={close} />;
       case SIDEBAR.DIPLOMACY:
         if (province?.owner)
           return (
             <DiplomacySidebar
-              root={myCountry}
+              root={root}
               target={province.owner}
               close={close}
             />
@@ -57,12 +53,12 @@ export default function MainSceneUI(props: { scene: MainScene }) {
       <Row style={{ height: '10%' }} className="clickable bg-danger">
         <Col xs="auto" className="mh-100">
           <Image
-            src={'./assets/flags/' + scene.playAs.id + '.png'}
+            src={'./assets/flags/' + root.id + '.png'}
             className="mh-100"
           />
         </Col>
         <Col className="d-flex align-items-center">
-          <h1>{name}</h1>
+          <h1>{root.name}</h1>
         </Col>
         <Col className="d-flex align-items-center" xs="auto">
           <Button
