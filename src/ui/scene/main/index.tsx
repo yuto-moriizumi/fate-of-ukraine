@@ -6,7 +6,7 @@ import Timer from './component/Timer';
 import DiplomacySidebar from './component/sidebar/DiplomacySidebar';
 import { SIDEBAR, Sidebar } from './component/sidebar/sidebar';
 import ProductionSidebar from './component/sidebar/ProductionSidebar';
-import { useStore } from '../../..';
+import { useStore } from '../../../store';
 
 export default function MainSceneUI(props: { scene: MainScene }) {
   const { scene } = props;

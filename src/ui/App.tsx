@@ -5,7 +5,7 @@ import SelectionSceneUI from './scene/Selection';
 import MainSceneUI from './scene/main';
 import { MainScene } from '../game/scene/MainScene';
 import EventDialog from './component/EventDialog';
-import { useStore } from '..';
+import { useStore } from '../store';
 
 function App() {
   const scene = useStore((state) => state.scene.val);

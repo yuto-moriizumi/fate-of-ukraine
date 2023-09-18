@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { SelectionScene } from '../../game/scene/SelectionScene';
 import DebugSidebar from '../component/DebugSidebar';
-import { useStore } from '../..';
+import { useStore } from '../../store';
 
 export default function SelectionSceneUI(props: { scene: SelectionScene }) {
   const [isDebugSidebarOpen, setIsDebugSidebarOpen] = useState(false);

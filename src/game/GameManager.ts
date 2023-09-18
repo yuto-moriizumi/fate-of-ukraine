@@ -4,7 +4,7 @@ import { TitleScene } from './scene/TitleScene';
 import { Assets, Application } from 'pixi.js';
 import { SaveDataJson } from './type/JsonType';
 import { StoreApi, UseBoundStore } from 'zustand';
-import { Store } from '..';
+import { Store } from '../store';
 
 const GAMEDATA_FILE = 'GameData.json';
 const SAVEDATA_FILE = 'SaveData.json';
