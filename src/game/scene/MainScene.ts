@@ -3,8 +3,8 @@ import { Division } from '../container/Division';
 import { MapViewport } from '../container/MapViewport';
 import type { Country } from '../data/Country';
 import { MOVE_TYPE } from '../data/DivisionMovement';
-import { data } from '../GameManager';
-import { CountryPlayerHandler, eventHandler } from '../handler/handlers';
+import { data, getStore } from '../GameManager';
+import { CountryPlayerHandler } from '../handler/handlers';
 import { Observable } from '../util/Observable';
 import { Scene } from './Scene';
 
@@ -30,10 +30,9 @@ export class MainScene extends Scene {
     map.provinceAtRightClick.addObserver((p) =>
       this.selectedDivision?.setDestination(p, MOVE_TYPE.MOVE)
     );
-  }
-
-  public setEventHandler(handler: eventHandler): void {
-    this.playAs.handler = new CountryPlayerHandler(this.playAs, handler);
+    this.playAs.handler = new CountryPlayerHandler(this.playAs, (e) =>
+      getStore().events.add(e)
+    );
   }
 
   update() {

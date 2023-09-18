@@ -9,6 +9,7 @@ import { create } from 'zustand';
 import { Scene } from './game/scene/Scene';
 import { produce } from 'immer';
 import { Province } from './game/data/Provice';
+import { VisibleEvent } from './game/event/VisibleEvent';
 
 type SettableValue<T> = {
   val?: T;
@@ -18,6 +19,11 @@ type SettableValue<T> = {
 export type Store = {
   scene: SettableValue<Scene>;
   province: SettableValue<Province>;
+  events: {
+    val: VisibleEvent[];
+    add: (event: VisibleEvent) => void;
+    remove: (event: VisibleEvent) => void;
+  };
 };
 
 export const useStore = create<Store>((update) => {
@@ -32,6 +38,21 @@ export const useStore = create<Store>((update) => {
   return {
     scene: getSetterObject('scene'),
     province: getSetterObject('province'),
+    events: {
+      val: [],
+      add: (event) =>
+        update(
+          produce((state: Store) => {
+            state.events.val.push(event);
+          })
+        ),
+      remove: (event) =>
+        update(
+          produce((state: Store) => {
+            state.events.val = state.events.val.filter((e) => e !== event);
+          })
+        ),
+    },
   };
 });
 

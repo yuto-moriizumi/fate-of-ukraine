@@ -3,17 +3,13 @@ import { Row, Col, Button, Image } from 'react-bootstrap';
 import DebugSidebar from '../../component/DebugSidebar';
 import { MainScene } from '../../../game/scene/MainScene';
 import Timer from './component/Timer';
-import { eventHandler } from '../../../game/handler/CountryPlayerHandler';
 import DiplomacySidebar from './component/sidebar/DiplomacySidebar';
 import { SIDEBAR, Sidebar } from './component/sidebar/sidebar';
 import ProductionSidebar from './component/sidebar/ProductionSidebar';
 import { useStore } from '../../..';
 
-export default function MainSceneUI(props: {
-  scene: MainScene;
-  onEvent: eventHandler;
-}) {
-  const { scene, onEvent } = props;
+export default function MainSceneUI(props: { scene: MainScene }) {
+  const { scene } = props;
   const [currentSidebar, setCurrentSidebar] = useState<Sidebar>(SIDEBAR.NONE);
   const [myCountry] = useState(scene.playAs);
   const [name, setName] = useState(myCountry.name.val);
@@ -22,7 +18,6 @@ export default function MainSceneUI(props: {
   const close = useCallback(() => setCurrentSidebar(SIDEBAR.NONE), []);
 
   useEffect(() => {
-    scene.setEventHandler(onEvent);
     const nameObserver = () => setName(myCountry.name.val);
     myCountry.name.addObserver(nameObserver);
     return () => myCountry.name.removeObserver(nameObserver);
