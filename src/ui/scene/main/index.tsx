@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Row, Col, Button, Image } from 'react-bootstrap';
 import DebugSidebar from '../../component/DebugSidebar';
-import { MainScene } from '../../../game/scene/MainScene';
 import Timer from './component/Timer';
 import DiplomacySidebar from './component/sidebar/DiplomacySidebar';
 import { SIDEBAR, Sidebar } from './component/sidebar/sidebar';
 import ProductionSidebar from './component/sidebar/ProductionSidebar';
 import { useStore } from '../../../store';
 
-export default function MainSceneUI(props: { scene: MainScene }) {
-  const { scene } = props;
+export default function MainSceneUI() {
   const [currentSidebar, setCurrentSidebar] = useState<Sidebar>(SIDEBAR.NONE);
   const root = useStore((state) => state.country.root.val);
   const province = useStore((state) => state.province.val);
@@ -79,7 +77,7 @@ export default function MainSceneUI(props: { scene: MainScene }) {
           </Button>
         </Col>
         <Col className="d-flex align-items-center" xs="auto">
-          <Timer scene={scene}></Timer>
+          <Timer />
         </Col>
       </Row>
       <Row style={{ height: '85%' }}>{sidebar()}</Row>

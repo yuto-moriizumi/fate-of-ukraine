@@ -14,7 +14,7 @@ function App() {
   const SceneComponent = (() => {
     if (scene instanceof SelectionScene)
       return <SelectionSceneUI scene={scene} />;
-    if (scene instanceof MainScene) return <MainSceneUI scene={scene} />;
+    if (scene instanceof MainScene) return <MainSceneUI />;
     return null;
   })();
 
