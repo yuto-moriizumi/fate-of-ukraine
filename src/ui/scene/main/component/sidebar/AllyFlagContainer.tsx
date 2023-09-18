@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Col, Image } from 'react-bootstrap';
 import { GiFlyingFlag } from 'react-icons/gi';
-import { Country } from '../../../game/data/Country';
-import { Alliance } from '../../../game/diplomacy/Alliance';
-import { data } from '../../../game/GameManager';
+import { Country } from '../../../../../game/data/Country';
+import { Alliance } from '../../../../../game/diplomacy/Alliance';
+import { data } from '../../../../../game/GameManager';
 
 export default function AllyFlagContainer(props: {
   target: Country;

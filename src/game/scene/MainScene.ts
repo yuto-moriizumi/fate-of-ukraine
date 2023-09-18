@@ -3,7 +3,6 @@ import { Division } from '../container/Division';
 import { MapViewport } from '../container/MapViewport';
 import type { Country } from '../data/Country';
 import { MOVE_TYPE } from '../data/DivisionMovement';
-import type { Province } from '../data/Provice';
 import { data } from '../GameManager';
 import { CountryPlayerHandler, eventHandler } from '../handler/handlers';
 import { Observable } from '../util/Observable';
@@ -13,7 +12,6 @@ const START_DATE = '1917/11/07 1:00';
 
 export class MainScene extends Scene {
   public readonly playAs: Country;
-  public readonly selectedProvince: Observable<Province>;
   public readonly datetime = new Observable<dayjs.Dayjs>(dayjs(START_DATE));
   public readonly MAX_SPEED = 5;
   public readonly speed = new Observable<number>(3);
@@ -21,18 +19,11 @@ export class MainScene extends Scene {
   public selectedDivision?: Division;
 
   public static async create(playAs: Country) {
-    const selectedProvince = new Observable<Province>();
-    const map = await MapViewport.create(selectedProvince);
-    return new MainScene(playAs, map, selectedProvince);
+    return new MainScene(playAs, await MapViewport.create());
   }
 
-  constructor(
-    playAs: Country,
-    map: MapViewport,
-    selectedProvince: Observable<Province>
-  ) {
+  constructor(playAs: Country, map: MapViewport) {
     super();
-    this.selectedProvince = selectedProvince;
     this.playAs = playAs;
 
     this.addChild(map);

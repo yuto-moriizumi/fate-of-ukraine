@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { SelectionScene } from '../../game/scene/SelectionScene';
-import DebugSidebar from './sidebar/DebugSidebar';
+import DebugSidebar from '../component/DebugSidebar';
 import { useStore } from '../..';
 
 export default function SelectionSceneUI(props: { scene: SelectionScene }) {

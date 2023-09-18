@@ -1,29 +1,27 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Row, Col, Button, Image } from 'react-bootstrap';
-import { Province } from '../../game/data/Provice';
-import DebugSidebar from './sidebar/DebugSidebar';
-import { MainScene } from '../../game/scene/MainScene';
-import Timer from './Timer';
-import { eventHandler } from '../../game/handler/CountryPlayerHandler';
-import DiplomacySidebar from './sidebar/DiplomacySidebar';
-import { SIDEBAR, Sidebar } from './sidebar/sidebar';
-import ProductionSidebar from './sidebar/ProductionSidebar';
+import DebugSidebar from '../../component/DebugSidebar';
+import { MainScene } from '../../../game/scene/MainScene';
+import Timer from './component/Timer';
+import { eventHandler } from '../../../game/handler/CountryPlayerHandler';
+import DiplomacySidebar from './component/sidebar/DiplomacySidebar';
+import { SIDEBAR, Sidebar } from './component/sidebar/sidebar';
+import ProductionSidebar from './component/sidebar/ProductionSidebar';
+import { useStore } from '../../..';
 
 export default function MainSceneUI(props: {
   scene: MainScene;
   onEvent: eventHandler;
 }) {
   const { scene, onEvent } = props;
-
-  const [selectedProvince, setSelectedProvince] = useState<Province>();
   const [currentSidebar, setCurrentSidebar] = useState<Sidebar>(SIDEBAR.NONE);
   const [myCountry] = useState(scene.playAs);
   const [name, setName] = useState(myCountry.name.val);
+  const province = useStore((state) => state.province.val);
 
   const close = useCallback(() => setCurrentSidebar(SIDEBAR.NONE), []);
 
   useEffect(() => {
-    scene.selectedProvince.addObserver(setSelectedProvince);
     scene.setEventHandler(onEvent);
     const nameObserver = () => setName(myCountry.name.val);
     myCountry.name.addObserver(nameObserver);
@@ -31,22 +29,21 @@ export default function MainSceneUI(props: {
   }, []);
 
   useEffect(() => {
-    selectedProvince?.owner !== undefined &&
-      setCurrentSidebar(SIDEBAR.DIPLOMACY);
-  }, [myCountry, selectedProvince]);
+    province?.owner !== undefined && setCurrentSidebar(SIDEBAR.DIPLOMACY);
+  }, [myCountry, province]);
 
   const sidebar = () => {
     switch (currentSidebar) {
       case SIDEBAR.DEBUG:
-        return <DebugSidebar province={selectedProvince} close={close} />;
+        return <DebugSidebar province={province} close={close} />;
       case SIDEBAR.PRODUCTION:
         return <ProductionSidebar country={myCountry} close={close} />;
       case SIDEBAR.DIPLOMACY:
-        if (selectedProvince?.owner)
+        if (province?.owner)
           return (
             <DiplomacySidebar
               root={myCountry}
-              target={selectedProvince.owner}
+              target={province.owner}
               close={close}
             />
           );

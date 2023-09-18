@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Col, Image, Row } from 'react-bootstrap';
-import { Country } from '../../../game/data/Country';
-import { data } from '../../../game/GameManager';
+import { Country } from '../../../../../game/data/Country';
+import { data } from '../../../../../game/GameManager';
 import { BsXLg } from 'react-icons/bs';
 import WarFlagContainer from './WarFlagContainer';
 import AllyFlagContainer from './AllyFlagContainer';

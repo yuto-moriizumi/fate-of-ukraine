@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { BsXLg } from 'react-icons/bs';
-import { Country } from '../../../game/data/Country';
-import { Province } from '../../../game/data/Provice';
-import { data } from '../../../game/GameManager';
-import { SAVEDATA_TYPE } from '../../../game/type/JsonType';
-import { MapViewport } from '../../../game/container/MapViewport';
+import { Country } from '../../game/data/Country';
+import { Province } from '../../game/data/Provice';
+import { data } from '../../game/GameManager';
+import { SAVEDATA_TYPE } from '../../game/type/JsonType';
+import { MapViewport } from '../../game/container/MapViewport';
 
 export default function DebugSidebar(props: {
   province: Province | undefined;

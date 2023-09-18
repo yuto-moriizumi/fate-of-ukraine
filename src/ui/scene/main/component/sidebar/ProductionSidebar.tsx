@@ -1,6 +1,6 @@
 import { Button, Col, Row } from 'react-bootstrap';
 import { BsXLg } from 'react-icons/bs';
-import { Country } from '../../../game/data/Country';
+import { Country } from '../../../../../game/data/Country';
 
 export default function ProductionSidebar(props: {
   country: Country;
